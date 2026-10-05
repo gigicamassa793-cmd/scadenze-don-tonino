@@ -1,59 +1,923 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#8b1e1e">
-  <title>Scadenze Don Tonino</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#8b1e1e">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f7f3ec;
-      color: #333;
-      text-align: center;
-    }
+<title>Scadenze Don Tonino</title>
 
-    .box {
-      max-width: 500px;
-      margin: 80px auto;
-      padding: 30px;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,.12);
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    h1 {
-      color: #8b1e1e;
-      margin-bottom: 10px;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f1eb;
+  color: #333;
+}
 
-    p {
-      font-size: 18px;
-    }
+header {
+  background: #8b1e1e;
+  color: white;
+  padding: 18px 20px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,.15);
+}
 
-    .ok {
-      margin-top: 25px;
-      padding: 15px;
-      border-radius: 12px;
-      background: #e8f5e9;
-      color: #2e7d32;
-      font-weight: bold;
-    }
-  </style>
+header h1 {
+  margin: 0;
+  font-size: 25px;
+}
+
+header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  opacity: .9;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.08);
+  text-align: center;
+}
+
+.card .number {
+  font-size: 32px;
+  font-weight: bold;
+  color: #8b1e1e;
+}
+
+.card .label {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.menu button {
+  border: none;
+  border-radius: 12px;
+  padding: 15px 8px;
+  background: white;
+  color: #8b1e1e;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.menu button:hover {
+  background: #8b1e1e;
+  color: white;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+.box {
+  background: white;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 12px rgba(0,0,0,.08);
+}
+
+.box h2 {
+  margin-top: 0;
+  color: #8b1e1e;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-weight: bold;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.field input,
+.field select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+.primary {
+  margin-top: 20px;
+  background: #8b1e1e;
+  color: white;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.secondary {
+  margin-top: 20px;
+  background: #777;
+  color: white;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+th {
+  color: #8b1e1e;
+}
+
+.warning {
+  color: #d67b00;
+  font-weight: bold;
+}
+
+.danger {
+  color: #c62828;
+  font-weight: bold;
+}
+
+.ok {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.empty {
+  text-align: center;
+  padding: 30px;
+  color: #777;
+}
+
+@media (max-width: 800px) {
+
+  .dashboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .menu {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  th,
+  td {
+    padding: 9px 5px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="box">
-    <h1>Scadenze Don Tonino</h1>
-    <p>La nuova app è online.</p>
+<header>
+  <h1>Scadenze Don Tonino</h1>
+  <p>Gestione prodotti • scadenze • movimenti • tracciabilità</p>
+</header>
 
-    <div class="ok">
-      TEST PWA RIUSCITO ✅
+<div class="container">
+
+  <div class="dashboard">
+
+    <div class="card">
+      <div class="number" id="totaleProdotti">0</div>
+      <div class="label">Prodotti</div>
     </div>
+
+    <div class="card">
+      <div class="number" id="scadenzeImminenti">0</div>
+      <div class="label">Scadenze imminenti</div>
+    </div>
+
+    <div class="card">
+      <div class="number" id="scaduti">0</div>
+      <div class="label">Scaduti</div>
+    </div>
+
+    <div class="card">
+      <div class="number" id="quantitaTotale">0</div>
+      <div class="label">Quantità totale</div>
+    </div>
+
   </div>
+
+  <div class="menu">
+
+    <button onclick="mostraSezione('nuovo')">
+      ➕<br>Nuovo prodotto
+    </button>
+
+    <button onclick="mostraSezione('prodotti')">
+      📋<br>Prodotti
+    </button>
+
+    <button onclick="mostraSezione('scadenze')">
+      ⚠️<br>Scadenze
+    </button>
+
+    <button onclick="mostraSezione('movimenti')">
+      🔄<br>Movimenti
+    </button>
+
+    <button onclick="mostraSezione('tracciabilita')">
+      🔎<br>Tracciabilità
+    </button>
+
+  </div>
+
+
+  <!-- NUOVO PRODOTTO -->
+
+  <section id="nuovo" class="section active">
+
+    <div class="box">
+
+      <h2>➕ Nuovo prodotto</h2>
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label>Nome prodotto</label>
+          <input id="nome" type="text" placeholder="Es. Pasticciotto crema">
+        </div>
+
+        <div class="field">
+          <label>Stato</label>
+          <select id="stato">
+            <option value="FRESCO">FRESCO</option>
+            <option value="COTTO">COTTO</option>
+            <option value="SCONGELATO">SCONGELATO</option>
+            <option value="ABBATTUTO +3°">ABBATTUTO +3°</option>
+            <option value="ABBATTUTO -18°">ABBATTUTO -18°</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Conservazione</label>
+          <select id="conservazione">
+            <option value="FRIGORIFERO +4°">FRIGORIFERO +4°</option>
+            <option value="BANCO +4°">BANCO +4°</option>
+            <option value="CONGELATORE -16°">CONGELATORE -16°</option>
+            <option value="DISPENSA">DISPENSA</option>
+            <option value="SCAFFALI">SCAFFALI</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Data operazione</label>
+          <input id="dataOperazione" type="date">
+        </div>
+
+        <div class="field">
+          <label>Data scadenza</label>
+          <input id="dataScadenza" type="date">
+        </div>
+
+        <div class="field">
+          <label>Lotto</label>
+          <input id="lotto" type="text" placeholder="Es. LOT123">
+        </div>
+
+        <div class="field">
+          <label>Formato</label>
+          <select id="formato">
+            <option value="CONFEZIONE">Confezione</option>
+            <option value="VASSOIO">Vassoio</option>
+            <option value="VASCHETTA 6 PORZIONI">Vaschetta 6 porzioni</option>
+            <option value="VASCHETTA 2 PORZIONI">Vaschetta 2 porzioni</option>
+            <option value="VASCHETTA 1 PORZIONE">Vaschetta 1 porzione</option>
+            <option value="CARTONE">Cartone</option>
+            <option value="SFUSO">Sfuso</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Quantità</label>
+          <input id="quantita" type="number" min="0" step="0.01" placeholder="0">
+        </div>
+
+        <div class="field">
+          <label>Unità</label>
+          <select id="unita">
+            <option value="PZ">Pezzi</option>
+            <option value="KG">Kg</option>
+            <option value="G">Grammi</option>
+            <option value="L">Litri</option>
+            <option value="ML">Millilitri</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button class="primary" onclick="salvaProdotto()">
+        SALVA PRODOTTO
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- PRODOTTI -->
+
+  <section id="prodotti" class="section">
+
+    <div class="box">
+
+      <h2>📋 Prodotti registrati</h2>
+
+      <div id="listaProdotti"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SCADENZE -->
+
+  <section id="scadenze" class="section">
+
+    <div class="box">
+
+      <h2>⚠️ Controllo scadenze</h2>
+
+      <div id="listaScadenze"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- MOVIMENTI -->
+
+  <section id="movimenti" class="section">
+
+    <div class="box">
+
+      <h2>🔄 Movimenti</h2>
+
+      <p>
+        In questa sezione registreremo gli spostamenti dei prodotti
+        tra frigorifero, banco, congelatore, dispensa e scaffali.
+      </p>
+
+      <div id="listaMovimenti" class="empty">
+        Nessun movimento registrato.
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- TRACCIABILITÀ -->
+
+  <section id="tracciabilita" class="section">
+
+    <div class="box">
+
+      <h2>🔎 Tracciabilità</h2>
+
+      <p>
+        Qui verranno registrati i lotti utilizzati nelle preparazioni
+        e nei prodotti finiti.
+      </p>
+
+      <div id="listaTracciabilita" class="empty">
+        Nessuna registrazione di tracciabilità.
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<script>
+
+let prodotti = JSON.parse(
+  localStorage.getItem("donToninoProdotti") || "[]"
+);
+
+let movimenti = JSON.parse(
+  localStorage.getItem("donToninoMovimenti") || "[]"
+);
+
+let tracciabilita = JSON.parse(
+  localStorage.getItem("donToninoTracciabilita") || "[]"
+);
+
+
+// DATA DI OGGI
+
+document.getElementById("dataOperazione").value =
+  new Date().toISOString().split("T")[0];
+
+
+// CAMBIO SEZIONE
+
+function mostraSezione(nome) {
+
+  document.querySelectorAll(".section").forEach(function(section) {
+    section.classList.remove("active");
+  });
+
+  document.getElementById(nome).classList.add("active");
+
+  aggiornaInterfaccia();
+}
+
+
+// SALVA PRODOTTO
+
+function salvaProdotto() {
+
+  const nome = document.getElementById("nome").value.trim();
+
+  if (!nome) {
+    alert("Inserisci il nome del prodotto.");
+    return;
+  }
+
+  const prodotto = {
+
+    id: Date.now(),
+
+    name: nome,
+
+    state: document.getElementById("stato").value,
+
+    storage: document.getElementById("conservazione").value,
+
+    operationDate:
+      document.getElementById("dataOperazione").value,
+
+    expiry:
+      document.getElementById("dataScadenza").value,
+
+    lotto:
+      document.getElementById("lotto").value,
+
+    format:
+      document.getElementById("formato").value,
+
+    qty:
+      Number(document.getElementById("quantita").value) || 0,
+
+    qtyUnit:
+      document.getElementById("unita").value,
+
+    createdAt:
+      new Date().toISOString()
+
+  };
+
+
+  prodotti.push(prodotto);
+
+  localStorage.setItem(
+    "donToninoProdotti",
+    JSON.stringify(prodotti)
+  );
+
+
+  alert("Prodotto salvato correttamente.");
+
+
+  document.getElementById("nome").value = "";
+  document.getElementById("lotto").value = "";
+  document.getElementById("quantita").value = "";
+  document.getElementById("dataScadenza").value = "";
+
+
+  aggiornaInterfaccia();
+
+  mostraSezione("prodotti");
+}
+
+
+// ELIMINA PRODOTTO
+
+function eliminaProdotto(id) {
+
+  if (!confirm("Vuoi eliminare questo prodotto?")) {
+    return;
+  }
+
+  prodotti = prodotti.filter(function(p) {
+    return p.id !== id;
+  });
+
+  localStorage.setItem(
+    "donToninoProdotti",
+    JSON.stringify(prodotti)
+  );
+
+  aggiornaInterfaccia();
+}
+
+
+// FORMATTA DATA
+
+function formattaData(data) {
+
+  if (!data) return "-";
+
+  const parti = data.split("-");
+
+  if (parti.length !== 3) return data;
+
+  return parti[2] + "/" + parti[1] + "/" + parti[0];
+}
+
+
+// GIORNI ALLA SCADENZA
+
+function giorniAllaScadenza(data) {
+
+  if (!data) return null;
+
+  const oggi = new Date();
+
+  oggi.setHours(0,0,0,0);
+
+  const scadenza = new Date(data + "T00:00:00");
+
+  return Math.ceil(
+    (scadenza - oggi) / (1000 * 60 * 60 * 24)
+  );
+}
+
+
+// STATO SCADENZA
+
+function statoScadenza(data) {
+
+  const giorni = giorniAllaScadenza(data);
+
+  if (giorni === null) {
+
+    return {
+      testo: "Nessuna data",
+      classe: ""
+    };
+
+  }
+
+  if (giorni < 0) {
+
+    return {
+      testo: "SCADUTO",
+      classe: "danger"
+    };
+
+  }
+
+  if (giorni <= 3) {
+
+    return {
+      testo: "URGENTE",
+      classe: "danger"
+    };
+
+  }
+
+  if (giorni <= 7) {
+
+    return {
+      testo: "In scadenza",
+      classe: "warning"
+    };
+
+  }
+
+  return {
+    testo: "OK",
+    classe: "ok"
+  };
+}
+
+
+// LISTA PRODOTTI
+
+function aggiornaListaProdotti() {
+
+  const contenitore =
+    document.getElementById("listaProdotti");
+
+  if (!prodotti.length) {
+
+    contenitore.innerHTML =
+      '<div class="empty">Nessun prodotto registrato.</div>';
+
+    return;
+  }
+
+
+  prodotti.sort(function(a,b) {
+    return a.name.localeCompare(b.name);
+  });
+
+
+  let html = `
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Prodotto</th>
+          <th>Stato</th>
+          <th>Conservazione</th>
+          <th>Scadenza</th>
+          <th>Quantità</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+
+  prodotti.forEach(function(p) {
+
+    const stato = statoScadenza(p.expiry);
+
+    html += `
+
+      <tr>
+
+        <td>
+          <strong>${escapeHtml(p.name)}</strong>
+          ${p.lotto ? "<br><small>Lotto: " + escapeHtml(p.lotto) + "</small>" : ""}
+        </td>
+
+        <td>
+          ${escapeHtml(p.state)}
+        </td>
+
+        <td>
+          ${escapeHtml(p.storage)}
+        </td>
+
+        <td class="${stato.classe}">
+          ${formattaData(p.expiry)}
+          <br>
+          <small>${stato.testo}</small>
+        </td>
+
+        <td>
+          ${p.qty} ${escapeHtml(p.qtyUnit)}
+        </td>
+
+        <td>
+          <button
+            onclick="eliminaProdotto(${p.id})"
+            style="
+              border:none;
+              background:#c62828;
+              color:white;
+              padding:7px 10px;
+              border-radius:7px;
+              cursor:pointer;
+            ">
+            Elimina
+          </button>
+        </td>
+
+      </tr>
+    `;
+  });
+
+
+  html += `
+      </tbody>
+    </table>
+    </div>
+  `;
+
+
+  contenitore.innerHTML = html;
+}
+
+
+// LISTA SCADENZE
+
+function aggiornaListaScadenze() {
+
+  const contenitore =
+    document.getElementById("listaScadenze");
+
+
+  const ordinati = [...prodotti]
+    .filter(function(p) {
+      return p.expiry;
+    })
+    .sort(function(a,b) {
+      return a.expiry.localeCompare(b.expiry);
+    });
+
+
+  if (!ordinati.length) {
+
+    contenitore.innerHTML =
+      '<div class="empty">Nessuna scadenza registrata.</div>';
+
+    return;
+  }
+
+
+  let html = `
+    <div style="overflow-x:auto">
+    <table>
+      <thead>
+        <tr>
+          <th>Prodotto</th>
+          <th>Scadenza</th>
+          <th>Stato</th>
+          <th>Conservazione</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+
+  ordinati.forEach(function(p) {
+
+    const stato = statoScadenza(p.expiry);
+
+    html += `
+
+      <tr>
+
+        <td>
+          <strong>${escapeHtml(p.name)}</strong>
+        </td>
+
+        <td>
+          ${formattaData(p.expiry)}
+        </td>
+
+        <td class="${stato.classe}">
+          ${stato.testo}
+        </td>
+
+        <td>
+          ${escapeHtml(p.storage)}
+        </td>
+
+      </tr>
+    `;
+  });
+
+
+  html += `
+      </tbody>
+    </table>
+    </div>
+  `;
+
+
+  contenitore.innerHTML = html;
+}
+
+
+// DASHBOARD
+
+function aggiornaDashboard() {
+
+  document.getElementById("totaleProdotti").textContent =
+    prodotti.length;
+
+
+  const imminenti = prodotti.filter(function(p) {
+
+    const giorni = giorniAllaScadenza(p.expiry);
+
+    return giorni !== null &&
+           giorni >= 0 &&
+           giorni <= 7;
+
+  }).length;
+
+
+  const scaduti = prodotti.filter(function(p) {
+
+    const giorni = giorniAllaScadenza(p.expiry);
+
+    return giorni !== null &&
+           giorni < 0;
+
+  }).length;
+
+
+  const quantita =
+    prodotti.reduce(function(totale,p) {
+
+      return totale + (Number(p.qty) || 0);
+
+    },0);
+
+
+  document.getElementById("scadenzeImminenti").textContent =
+    imminenti;
+
+
+  document.getElementById("scaduti").textContent =
+    scaduti;
+
+
+  document.getElementById("quantitaTotale").textContent =
+    quantita;
+}
+
+
+// AGGIORNA TUTTO
+
+function aggiornaInterfaccia() {
+
+  aggiornaDashboard();
+
+  aggiornaListaProdotti();
+
+  aggiornaListaScadenze();
+
+}
+
+
+// SICUREZZA HTML
+
+function escapeHtml(value) {
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+// AVVIO
+
+aggiornaInterfaccia();
+
+</script>
 
 </body>
 </html>
