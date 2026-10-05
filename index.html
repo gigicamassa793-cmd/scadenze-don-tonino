@@ -4,920 +4,367 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#8b1e1e">
-
 <title>Scadenze Don Tonino</title>
-
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f1eb;color:#333}
+header{background:#8b1e1e;color:#fff;padding:18px 20px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+header h1{margin:0;font-size:26px}
+header p{margin:5px 0 0;font-size:14px}
+.container{max-width:1200px;margin:auto;padding:20px}
+.dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.card,.box{background:#fff;border-radius:16px;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+.card{padding:18px;text-align:center}
+.number{font-size:31px;font-weight:bold;color:#8b1e1e}
+.label{margin-top:5px}
+.menu{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px}
+.menu button{border:0;border-radius:12px;padding:14px 7px;background:#fff;color:#8b1e1e;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.menu button:hover,.menu button.active{background:#8b1e1e;color:#fff}
+.section{display:none}.section.active{display:block}
+.box{padding:22px;margin-bottom:20px}
+.box h2{margin-top:0;color:#8b1e1e}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.field{display:flex;flex-direction:column}
+.field label{font-weight:bold;font-size:14px;margin-bottom:6px}
+.field input,.field select{padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:#fff}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.primary,.secondary,.dangerBtn{border:0;border-radius:10px;padding:13px 18px;font-size:15px;font-weight:bold;cursor:pointer}
+.primary{background:#8b1e1e;color:#fff}.secondary{background:#777;color:#fff}.dangerBtn{background:#c62828;color:#fff}
+.tableWrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:11px 8px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}
+th{color:#8b1e1e}
+.warning{color:#d67b00;font-weight:bold}.danger{color:#c62828;font-weight:bold}.ok{color:#2e7d32;font-weight:bold}
+.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#eee;font-size:12px;font-weight:bold}
+.empty{text-align:center;padding:30px;color:#777}
+.notice{padding:12px 14px;border-radius:10px;background:#f7f0e6;margin-bottom:15px}
+.search{width:100%;padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;margin-bottom:15px}
+.small{font-size:12px;color:#666}
+@media(max-width:850px){
+ .dashboard{grid-template-columns:repeat(2,1fr)}
+ .menu{grid-template-columns:repeat(3,1fr)}
+ .form-grid{grid-template-columns:1fr}
 }
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f1eb;
-  color: #333;
-}
-
-header {
-  background: #8b1e1e;
-  color: white;
-  padding: 18px 20px;
-  text-align: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,.15);
-}
-
-header h1 {
-  margin: 0;
-  font-size: 25px;
-}
-
-header p {
-  margin: 5px 0 0;
-  font-size: 14px;
-  opacity: .9;
-}
-
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
-}
-
-.dashboard {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  margin-bottom: 25px;
-}
-
-.card {
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
-  text-align: center;
-}
-
-.card .number {
-  font-size: 32px;
-  font-weight: bold;
-  color: #8b1e1e;
-}
-
-.card .label {
-  margin-top: 5px;
-  font-size: 14px;
-}
-
-.menu {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.menu button {
-  border: none;
-  border-radius: 12px;
-  padding: 15px 8px;
-  background: white;
-  color: #8b1e1e;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,.08);
-}
-
-.menu button:hover {
-  background: #8b1e1e;
-  color: white;
-}
-
-.section {
-  display: none;
-}
-
-.section.active {
-  display: block;
-}
-
-.box {
-  background: white;
-  border-radius: 16px;
-  padding: 22px;
-  margin-bottom: 20px;
-  box-shadow: 0 3px 12px rgba(0,0,0,.08);
-}
-
-.box h2 {
-  margin-top: 0;
-  color: #8b1e1e;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-}
-
-.field label {
-  font-weight: bold;
-  margin-bottom: 6px;
-  font-size: 14px;
-}
-
-.field input,
-.field select {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 9px;
-  font-size: 16px;
-}
-
-.primary {
-  margin-top: 20px;
-  background: #8b1e1e;
-  color: white;
-  border: none;
-  padding: 14px 22px;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.secondary {
-  margin-top: 20px;
-  background: #777;
-  color: white;
-  border: none;
-  padding: 14px 22px;
-  border-radius: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 12px 8px;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-}
-
-th {
-  color: #8b1e1e;
-}
-
-.warning {
-  color: #d67b00;
-  font-weight: bold;
-}
-
-.danger {
-  color: #c62828;
-  font-weight: bold;
-}
-
-.ok {
-  color: #2e7d32;
-  font-weight: bold;
-}
-
-.empty {
-  text-align: center;
-  padding: 30px;
-  color: #777;
-}
-
-@media (max-width: 800px) {
-
-  .dashboard {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .menu {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  table {
-    font-size: 13px;
-  }
-
-  th,
-  td {
-    padding: 9px 5px;
-  }
+@media(max-width:560px){
+ .container{padding:12px}
+ header h1{font-size:22px}
+ .dashboard{gap:8px}.card{padding:13px 8px}
+ .number{font-size:25px}
+ .menu{grid-template-columns:repeat(2,1fr)}
+ .menu button{padding:12px 5px}
+ .box{padding:16px}
+ th,td{font-size:13px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
   <h1>Scadenze Don Tonino</h1>
-  <p>Gestione prodotti • scadenze • movimenti • tracciabilità</p>
+  <p>Magazzino • scadenze • movimenti • tracciabilità</p>
 </header>
 
 <div class="container">
-
   <div class="dashboard">
-
-    <div class="card">
-      <div class="number" id="totaleProdotti">0</div>
-      <div class="label">Prodotti</div>
-    </div>
-
-    <div class="card">
-      <div class="number" id="scadenzeImminenti">0</div>
-      <div class="label">Scadenze imminenti</div>
-    </div>
-
-    <div class="card">
-      <div class="number" id="scaduti">0</div>
-      <div class="label">Scaduti</div>
-    </div>
-
-    <div class="card">
-      <div class="number" id="quantitaTotale">0</div>
-      <div class="label">Quantità totale</div>
-    </div>
-
+    <div class="card"><div class="number" id="totaleGiacenze">0</div><div class="label">Giacenze</div></div>
+    <div class="card"><div class="number" id="scadenzeImminenti">0</div><div class="label">Scadenze ≤ 7 giorni</div></div>
+    <div class="card"><div class="number" id="scaduti">0</div><div class="label">Scaduti</div></div>
+    <div class="card"><div class="number" id="quantitaTotale">0</div><div class="label">Quantità totale</div></div>
   </div>
 
   <div class="menu">
-
-    <button onclick="mostraSezione('nuovo')">
-      ➕<br>Nuovo prodotto
-    </button>
-
-    <button onclick="mostraSezione('prodotti')">
-      📋<br>Prodotti
-    </button>
-
-    <button onclick="mostraSezione('scadenze')">
-      ⚠️<br>Scadenze
-    </button>
-
-    <button onclick="mostraSezione('movimenti')">
-      🔄<br>Movimenti
-    </button>
-
-    <button onclick="mostraSezione('tracciabilita')">
-      🔎<br>Tracciabilità
-    </button>
-
+    <button id="btnCarica" onclick="mostra('carica')">📦<br>Carica</button>
+    <button id="btnMagazzino" onclick="mostra('magazzino')">📋<br>Magazzino</button>
+    <button id="btnUtilizza" onclick="mostra('utilizza')">➖<br>Utilizza</button>
+    <button id="btnScadenze" onclick="mostra('scadenze')">⚠️<br>Scadenze</button>
+    <button id="btnMovimenti" onclick="mostra('movimenti')">🔄<br>Movimenti</button>
+    <button id="btnTraccia" onclick="mostra('tracciabilita')">🔎<br>Tracciabilità</button>
   </div>
 
-
-  <!-- NUOVO PRODOTTO -->
-
-  <section id="nuovo" class="section active">
-
+  <section id="carica" class="section active">
     <div class="box">
-
-      <h2>➕ Nuovo prodotto</h2>
-
+      <h2>📦 Carica prodotto in magazzino</h2>
+      <div class="notice">Ogni carico crea una giacenza separata. Se lo stesso prodotto ha più lotti, i lotti rimangono distinti.</div>
       <div class="form-grid">
-
-        <div class="field">
-          <label>Nome prodotto</label>
-          <input id="nome" type="text" placeholder="Es. Pasticciotto crema">
-        </div>
-
-        <div class="field">
-          <label>Stato</label>
-          <select id="stato">
-            <option value="FRESCO">FRESCO</option>
-            <option value="COTTO">COTTO</option>
-            <option value="SCONGELATO">SCONGELATO</option>
-            <option value="ABBATTUTO +3°">ABBATTUTO +3°</option>
-            <option value="ABBATTUTO -18°">ABBATTUTO -18°</option>
+        <div class="field"><label>Nome prodotto</label><input id="c_nome" placeholder="Es. Pasticciotto crema"></div>
+        <div class="field"><label>Lotto</label><input id="c_lotto" placeholder="Es. LOT001"></div>
+        <div class="field"><label>Stato</label>
+          <select id="c_stato">
+            <option>FRESCO</option><option>COTTO</option><option>SCONGELATO</option>
+            <option>ABBATTUTO +3°</option><option>ABBATTUTO -18°</option>
           </select>
         </div>
-
-        <div class="field">
-          <label>Conservazione</label>
-          <select id="conservazione">
-            <option value="FRIGORIFERO +4°">FRIGORIFERO +4°</option>
-            <option value="BANCO +4°">BANCO +4°</option>
-            <option value="CONGELATORE -16°">CONGELATORE -16°</option>
-            <option value="DISPENSA">DISPENSA</option>
-            <option value="SCAFFALI">SCAFFALI</option>
+        <div class="field"><label>Conservazione</label>
+          <select id="c_storage">
+            <option>FRIGORIFERO +4°</option><option>BANCO +4°</option><option>CONGELATORE -16°</option>
+            <option>DISPENSA</option><option>SCAFFALI</option>
           </select>
         </div>
-
-        <div class="field">
-          <label>Data operazione</label>
-          <input id="dataOperazione" type="date">
-        </div>
-
-        <div class="field">
-          <label>Data scadenza</label>
-          <input id="dataScadenza" type="date">
-        </div>
-
-        <div class="field">
-          <label>Lotto</label>
-          <input id="lotto" type="text" placeholder="Es. LOT123">
-        </div>
-
-        <div class="field">
-          <label>Formato</label>
-          <select id="formato">
-            <option value="CONFEZIONE">Confezione</option>
-            <option value="VASSOIO">Vassoio</option>
-            <option value="VASCHETTA 6 PORZIONI">Vaschetta 6 porzioni</option>
-            <option value="VASCHETTA 2 PORZIONI">Vaschetta 2 porzioni</option>
-            <option value="VASCHETTA 1 PORZIONE">Vaschetta 1 porzione</option>
-            <option value="CARTONE">Cartone</option>
-            <option value="SFUSO">Sfuso</option>
+        <div class="field"><label>Data carico</label><input id="c_data" type="date"></div>
+        <div class="field"><label>Data scadenza</label><input id="c_scadenza" type="date"></div>
+        <div class="field"><label>Formato</label>
+          <select id="c_formato">
+            <option>CONFEZIONE</option><option>VASSOIO</option><option>VASCHETTA 6 PORZIONI</option>
+            <option>VASCHETTA 2 PORZIONI</option><option>VASCHETTA 1 PORZIONE</option>
+            <option>CARTONE</option><option>SFUSO</option>
           </select>
         </div>
-
-        <div class="field">
-          <label>Quantità</label>
-          <input id="quantita" type="number" min="0" step="0.01" placeholder="0">
-        </div>
-
-        <div class="field">
-          <label>Unità</label>
-          <select id="unita">
-            <option value="PZ">Pezzi</option>
-            <option value="KG">Kg</option>
-            <option value="G">Grammi</option>
-            <option value="L">Litri</option>
-            <option value="ML">Millilitri</option>
+        <div class="field"><label>Quantità caricata</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0"></div>
+        <div class="field"><label>Unità</label>
+          <select id="c_unit"><option>PZ</option><option>KG</option><option>G</option><option>L</option><option>ML</option>
           </select>
         </div>
-
       </div>
-
-      <button class="primary" onclick="salvaProdotto()">
-        SALVA PRODOTTO
-      </button>
-
+      <div class="actions"><button class="primary" onclick="caricaProdotto()">SALVA CARICO</button></div>
     </div>
-
   </section>
 
-
-  <!-- PRODOTTI -->
-
-  <section id="prodotti" class="section">
-
+  <section id="magazzino" class="section">
     <div class="box">
-
-      <h2>📋 Prodotti registrati</h2>
-
-      <div id="listaProdotti"></div>
-
+      <h2>📋 Magazzino</h2>
+      <input class="search" id="cercaMagazzino" oninput="renderMagazzino()" placeholder="Cerca prodotto, lotto o posizione...">
+      <div id="listaMagazzino"></div>
     </div>
-
   </section>
 
-
-  <!-- SCADENZE -->
+  <section id="utilizza" class="section">
+    <div class="box">
+      <h2>➖ Utilizza prodotto</h2>
+      <div class="notice">Qui puoi utilizzare solo prodotti che sono già presenti in magazzino. La giacenza verrà diminuita automaticamente.</div>
+      <div class="form-grid">
+        <div class="field"><label>Prodotto / lotto</label><select id="u_stock" onchange="mostraDisponibilita()"></select></div>
+        <div class="field"><label>Quantità disponibile</label><input id="u_disponibile" readonly></div>
+        <div class="field"><label>Quantità da utilizzare</label><input id="u_qty" type="number" min="0.01" step="0.01" placeholder="0"></div>
+        <div class="field"><label>Motivo / destinazione</label><input id="u_motivo" placeholder="Es. Preparazione torta"></div>
+        <div class="field"><label>Data utilizzo</label><input id="u_data" type="date"></div>
+      </div>
+      <div class="actions"><button class="primary" onclick="utilizzaProdotto()">SCARICA GIACENZA</button></div>
+    </div>
+  </section>
 
   <section id="scadenze" class="section">
-
     <div class="box">
-
-      <h2>⚠️ Controllo scadenze</h2>
-
+      <h2>⚠️ Scadenze</h2>
       <div id="listaScadenze"></div>
-
     </div>
-
   </section>
-
-
-  <!-- MOVIMENTI -->
 
   <section id="movimenti" class="section">
-
     <div class="box">
-
       <h2>🔄 Movimenti</h2>
-
-      <p>
-        In questa sezione registreremo gli spostamenti dei prodotti
-        tra frigorifero, banco, congelatore, dispensa e scaffali.
-      </p>
-
-      <div id="listaMovimenti" class="empty">
-        Nessun movimento registrato.
-      </div>
-
+      <div id="listaMovimenti"></div>
     </div>
-
   </section>
-
-
-  <!-- TRACCIABILITÀ -->
 
   <section id="tracciabilita" class="section">
-
     <div class="box">
-
       <h2>🔎 Tracciabilità</h2>
-
-      <p>
-        Qui verranno registrati i lotti utilizzati nelle preparazioni
-        e nei prodotti finiti.
-      </p>
-
-      <div id="listaTracciabilita" class="empty">
-        Nessuna registrazione di tracciabilità.
-      </div>
-
+      <div class="notice">Per ora vengono registrati automaticamente i prodotti e i lotti scaricati. La fase successiva collegherà questi movimenti alle preparazioni e ai prodotti finiti.</div>
+      <div id="listaTracciabilita"></div>
     </div>
-
   </section>
-
 </div>
 
-
 <script>
+const KEY_STOCK="donToninoStock_v2";
+const KEY_MOV="donToninoMovimenti_v2";
+const KEY_TRACE="donToninoTracciabilita_v2";
 
-let prodotti = JSON.parse(
-  localStorage.getItem("donToninoProdotti") || "[]"
-);
+let stock=JSON.parse(localStorage.getItem(KEY_STOCK)||"[]");
+let movimenti=JSON.parse(localStorage.getItem(KEY_MOV)||"[]");
+let tracciabilita=JSON.parse(localStorage.getItem(KEY_TRACE)||"[]");
 
-let movimenti = JSON.parse(
-  localStorage.getItem("donToninoMovimenti") || "[]"
-);
+function today(){
+  return new Date().toISOString().slice(0,10);
+}
+document.getElementById("c_data").value=today();
+document.getElementById("u_data").value=today();
 
-let tracciabilita = JSON.parse(
-  localStorage.getItem("donToninoTracciabilita") || "[]"
-);
-
-
-// DATA DI OGGI
-
-document.getElementById("dataOperazione").value =
-  new Date().toISOString().split("T")[0];
-
-
-// CAMBIO SEZIONE
-
-function mostraSezione(nome) {
-
-  document.querySelectorAll(".section").forEach(function(section) {
-    section.classList.remove("active");
-  });
-
-  document.getElementById(nome).classList.add("active");
-
-  aggiornaInterfaccia();
+function saveAll(){
+  localStorage.setItem(KEY_STOCK,JSON.stringify(stock));
+  localStorage.setItem(KEY_MOV,JSON.stringify(movimenti));
+  localStorage.setItem(KEY_TRACE,JSON.stringify(tracciabilita));
 }
 
+function uid(){return Date.now()+"_"+Math.random().toString(36).slice(2,8)}
 
-// SALVA PRODOTTO
+function esc(v){
+  return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
 
-function salvaProdotto() {
+function fmtDate(v){
+  if(!v)return "-";
+  const p=v.split("-");
+  return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:v;
+}
 
-  const nome = document.getElementById("nome").value.trim();
+function daysTo(v){
+  if(!v)return null;
+  const a=new Date(); a.setHours(0,0,0,0);
+  const b=new Date(v+"T00:00:00");
+  return Math.ceil((b-a)/86400000);
+}
 
-  if (!nome) {
-    alert("Inserisci il nome del prodotto.");
-    return;
-  }
+function expiryState(v){
+  const d=daysTo(v);
+  if(d===null)return {text:"N/D",cls:""};
+  if(d<0)return {text:"SCADUTO",cls:"danger"};
+  if(d<=3)return {text:"URGENTE",cls:"danger"};
+  if(d<=7)return {text:"IN SCADENZA",cls:"warning"};
+  return {text:"OK",cls:"ok"};
+}
 
-  const prodotto = {
+function mostra(id){
+  document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".menu button").forEach(x=>x.classList.remove("active"));
+  const map={carica:"btnCarica",magazzino:"btnMagazzino",utilizza:"btnUtilizza",scadenze:"btnScadenze",movimenti:"btnMovimenti",tracciabilita:"btnTraccia"};
+  document.getElementById(map[id]).classList.add("active");
+  if(id==="utilizza")populateUtilizzo();
+  renderAll();
+}
 
-    id: Date.now(),
+function caricaProdotto(){
+  const name=document.getElementById("c_nome").value.trim();
+  const lotto=document.getElementById("c_lotto").value.trim();
+  const qty=Number(document.getElementById("c_qty").value);
+  if(!name){alert("Inserisci il nome del prodotto.");return}
+  if(!lotto){alert("Inserisci il lotto.");return}
+  if(!qty||qty<=0){alert("Inserisci una quantità valida.");return}
 
-    name: nome,
-
-    state: document.getElementById("stato").value,
-
-    storage: document.getElementById("conservazione").value,
-
-    operationDate:
-      document.getElementById("dataOperazione").value,
-
-    expiry:
-      document.getElementById("dataScadenza").value,
-
-    lotto:
-      document.getElementById("lotto").value,
-
-    format:
-      document.getElementById("formato").value,
-
-    qty:
-      Number(document.getElementById("quantita").value) || 0,
-
-    qtyUnit:
-      document.getElementById("unita").value,
-
-    createdAt:
-      new Date().toISOString()
-
+  const item={
+    id:uid(),name,lotto,
+    state:document.getElementById("c_stato").value,
+    storage:document.getElementById("c_storage").value,
+    date:document.getElementById("c_data").value||today(),
+    expiry:document.getElementById("c_scadenza").value,
+    format:document.getElementById("c_formato").value,
+    qty,initialQty:qty,unit:document.getElementById("c_unit").value,
+    createdAt:new Date().toISOString()
   };
+  stock.push(item);
+  movimenti.unshift({id:uid(),type:"CARICO",stockId:item.id,name,lotto,qty,unit:item.unit,date:item.date,note:"Caricamento in magazzino"});
+  saveAll();
 
-
-  prodotti.push(prodotto);
-
-  localStorage.setItem(
-    "donToninoProdotti",
-    JSON.stringify(prodotti)
-  );
-
-
-  alert("Prodotto salvato correttamente.");
-
-
-  document.getElementById("nome").value = "";
-  document.getElementById("lotto").value = "";
-  document.getElementById("quantita").value = "";
-  document.getElementById("dataScadenza").value = "";
-
-
-  aggiornaInterfaccia();
-
-  mostraSezione("prodotti");
+  document.getElementById("c_nome").value="";
+  document.getElementById("c_lotto").value="";
+  document.getElementById("c_qty").value="";
+  document.getElementById("c_scadenza").value="";
+  alert("Carico registrato. La giacenza è ora disponibile in Magazzino e in Utilizza prodotto.");
+  mostra("magazzino");
 }
 
-
-// ELIMINA PRODOTTO
-
-function eliminaProdotto(id) {
-
-  if (!confirm("Vuoi eliminare questo prodotto?")) {
-    return;
-  }
-
-  prodotti = prodotti.filter(function(p) {
-    return p.id !== id;
+function populateUtilizzo(){
+  const sel=document.getElementById("u_stock");
+  const old=sel.value;
+  sel.innerHTML='<option value="">Seleziona un prodotto esistente...</option>';
+  stock.filter(x=>Number(x.qty)>0).sort((a,b)=>a.name.localeCompare(b.name)||a.lotto.localeCompare(b.lotto)).forEach(x=>{
+    const o=document.createElement("option");
+    o.value=x.id;
+    o.textContent=`${x.name} — Lotto ${x.lotto} — ${x.qty} ${x.unit}`;
+    sel.appendChild(o);
   });
-
-  localStorage.setItem(
-    "donToninoProdotti",
-    JSON.stringify(prodotti)
-  );
-
-  aggiornaInterfaccia();
+  if([...sel.options].some(o=>o.value===old))sel.value=old;
+  mostraDisponibilita();
 }
 
-
-// FORMATTA DATA
-
-function formattaData(data) {
-
-  if (!data) return "-";
-
-  const parti = data.split("-");
-
-  if (parti.length !== 3) return data;
-
-  return parti[2] + "/" + parti[1] + "/" + parti[0];
+function mostraDisponibilita(){
+  const id=document.getElementById("u_stock").value;
+  const item=stock.find(x=>x.id===id);
+  document.getElementById("u_disponibile").value=item?`${item.qty} ${item.unit}`:"";
 }
 
+function utilizzaProdotto(){
+  const id=document.getElementById("u_stock").value;
+  const item=stock.find(x=>x.id===id);
+  if(!item){alert("Seleziona un prodotto già presente in magazzino.");return}
+  const qty=Number(document.getElementById("u_qty").value);
+  if(!qty||qty<=0){alert("Inserisci una quantità da utilizzare.");return}
+  if(qty>Number(item.qty)){alert(`Quantità insufficiente. Disponibile: ${item.qty} ${item.unit}.`);return}
 
-// GIORNI ALLA SCADENZA
+  item.qty=Number((Number(item.qty)-qty).toFixed(6));
+  const data=document.getElementById("u_data").value||today();
+  const motivo=document.getElementById("u_motivo").value.trim()||"Utilizzo prodotto";
 
-function giorniAllaScadenza(data) {
+  movimenti.unshift({id:uid(),type:"SCARICO",stockId:item.id,name:item.name,lotto:item.lotto,qty,unit:item.unit,date:data,note:motivo,remainingQty:item.qty});
+  tracciabilita.unshift({id:uid(),name:item.name,lotto:item.lotto,qty,unit:item.unit,date:data,note:motivo});
 
-  if (!data) return null;
-
-  const oggi = new Date();
-
-  oggi.setHours(0,0,0,0);
-
-  const scadenza = new Date(data + "T00:00:00");
-
-  return Math.ceil(
-    (scadenza - oggi) / (1000 * 60 * 60 * 24)
-  );
+  saveAll();
+  document.getElementById("u_qty").value="";
+  document.getElementById("u_motivo").value="";
+  alert(`Scarico effettuato.\n\n${item.name}\nLotto: ${item.lotto}\nUtilizzati: ${qty} ${item.unit}\nGiacenza residua: ${item.qty} ${item.unit}`);
+  populateUtilizzo();
+  renderAll();
 }
 
-
-// STATO SCADENZA
-
-function statoScadenza(data) {
-
-  const giorni = giorniAllaScadenza(data);
-
-  if (giorni === null) {
-
-    return {
-      testo: "Nessuna data",
-      classe: ""
-    };
-
-  }
-
-  if (giorni < 0) {
-
-    return {
-      testo: "SCADUTO",
-      classe: "danger"
-    };
-
-  }
-
-  if (giorni <= 3) {
-
-    return {
-      testo: "URGENTE",
-      classe: "danger"
-    };
-
-  }
-
-  if (giorni <= 7) {
-
-    return {
-      testo: "In scadenza",
-      classe: "warning"
-    };
-
-  }
-
-  return {
-    testo: "OK",
-    classe: "ok"
-  };
+function eliminaGiacenza(id){
+  const item=stock.find(x=>x.id===id);
+  if(!item)return;
+  if(!confirm(`Eliminare la giacenza "${item.name}" lotto ${item.lotto}?`))return;
+  stock=stock.filter(x=>x.id!==id);
+  movimenti.unshift({id:uid(),type:"ELIMINAZIONE",stockId:id,name:item.name,lotto:item.lotto,qty:item.qty,unit:item.unit,date:today(),note:"Eliminazione manuale"});
+  saveAll(); renderAll(); populateUtilizzo();
 }
 
-
-// LISTA PRODOTTI
-
-function aggiornaListaProdotti() {
-
-  const contenitore =
-    document.getElementById("listaProdotti");
-
-  if (!prodotti.length) {
-
-    contenitore.innerHTML =
-      '<div class="empty">Nessun prodotto registrato.</div>';
-
-    return;
-  }
-
-
-  prodotti.sort(function(a,b) {
-    return a.name.localeCompare(b.name);
+function renderMagazzino(){
+  const q=(document.getElementById("cercaMagazzino")?.value||"").toLowerCase();
+  const arr=stock.filter(x=>[x.name,x.lotto,x.storage,x.state].join(" ").toLowerCase().includes(q));
+  const el=document.getElementById("listaMagazzino");
+  if(!arr.length){el.innerHTML='<div class="empty">Nessuna giacenza presente.</div>';return}
+  let h='<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Posizione</th><th>Scadenza</th><th>Giacenza</th><th></th></tr></thead><tbody>';
+  arr.sort((a,b)=>a.name.localeCompare(b.name)||a.lotto.localeCompare(b.lotto)).forEach(x=>{
+    const s=expiryState(x.expiry);
+    h+=`<tr><td><strong>${esc(x.name)}</strong><br><span class="small">${esc(x.state)} · ${esc(x.format)}</span></td>
+    <td>${esc(x.lotto)}</td><td>${esc(x.storage)}</td>
+    <td class="${s.cls}">${fmtDate(x.expiry)}<br><span class="small">${s.text}</span></td>
+    <td><strong>${x.qty}</strong> ${esc(x.unit)}<br><span class="small">caricati: ${x.initialQty}</span></td>
+    <td><button class="dangerBtn" onclick="eliminaGiacenza('${x.id}')">Elimina</button></td></tr>`;
   });
-
-
-  let html = `
-    <div style="overflow-x:auto">
-    <table>
-      <thead>
-        <tr>
-          <th>Prodotto</th>
-          <th>Stato</th>
-          <th>Conservazione</th>
-          <th>Scadenza</th>
-          <th>Quantità</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-
-  prodotti.forEach(function(p) {
-
-    const stato = statoScadenza(p.expiry);
-
-    html += `
-
-      <tr>
-
-        <td>
-          <strong>${escapeHtml(p.name)}</strong>
-          ${p.lotto ? "<br><small>Lotto: " + escapeHtml(p.lotto) + "</small>" : ""}
-        </td>
-
-        <td>
-          ${escapeHtml(p.state)}
-        </td>
-
-        <td>
-          ${escapeHtml(p.storage)}
-        </td>
-
-        <td class="${stato.classe}">
-          ${formattaData(p.expiry)}
-          <br>
-          <small>${stato.testo}</small>
-        </td>
-
-        <td>
-          ${p.qty} ${escapeHtml(p.qtyUnit)}
-        </td>
-
-        <td>
-          <button
-            onclick="eliminaProdotto(${p.id})"
-            style="
-              border:none;
-              background:#c62828;
-              color:white;
-              padding:7px 10px;
-              border-radius:7px;
-              cursor:pointer;
-            ">
-            Elimina
-          </button>
-        </td>
-
-      </tr>
-    `;
-  });
-
-
-  html += `
-      </tbody>
-    </table>
-    </div>
-  `;
-
-
-  contenitore.innerHTML = html;
+  el.innerHTML=h+"</tbody></table></div>";
 }
 
-
-// LISTA SCADENZE
-
-function aggiornaListaScadenze() {
-
-  const contenitore =
-    document.getElementById("listaScadenze");
-
-
-  const ordinati = [...prodotti]
-    .filter(function(p) {
-      return p.expiry;
-    })
-    .sort(function(a,b) {
-      return a.expiry.localeCompare(b.expiry);
-    });
-
-
-  if (!ordinati.length) {
-
-    contenitore.innerHTML =
-      '<div class="empty">Nessuna scadenza registrata.</div>';
-
-    return;
-  }
-
-
-  let html = `
-    <div style="overflow-x:auto">
-    <table>
-      <thead>
-        <tr>
-          <th>Prodotto</th>
-          <th>Scadenza</th>
-          <th>Stato</th>
-          <th>Conservazione</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-
-  ordinati.forEach(function(p) {
-
-    const stato = statoScadenza(p.expiry);
-
-    html += `
-
-      <tr>
-
-        <td>
-          <strong>${escapeHtml(p.name)}</strong>
-        </td>
-
-        <td>
-          ${formattaData(p.expiry)}
-        </td>
-
-        <td class="${stato.classe}">
-          ${stato.testo}
-        </td>
-
-        <td>
-          ${escapeHtml(p.storage)}
-        </td>
-
-      </tr>
-    `;
-  });
-
-
-  html += `
-      </tbody>
-    </table>
-    </div>
-  `;
-
-
-  contenitore.innerHTML = html;
+function renderScadenze(){
+  const el=document.getElementById("listaScadenze");
+  const arr=[...stock].filter(x=>x.expiry).sort((a,b)=>a.expiry.localeCompare(b.expiry));
+  if(!arr.length){el.innerHTML='<div class="empty">Nessuna scadenza registrata.</div>';return}
+  let h='<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Scadenza</th><th>Stato</th><th>Giacenza</th></tr></thead><tbody>';
+  arr.forEach(x=>{const s=expiryState(x.expiry);h+=`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto)}</td><td>${fmtDate(x.expiry)}</td><td class="${s.cls}">${s.text}</td><td>${x.qty} ${esc(x.unit)}</td></tr>`});
+  el.innerHTML=h+"</tbody></table></div>";
 }
 
-
-// DASHBOARD
-
-function aggiornaDashboard() {
-
-  document.getElementById("totaleProdotti").textContent =
-    prodotti.length;
-
-
-  const imminenti = prodotti.filter(function(p) {
-
-    const giorni = giorniAllaScadenza(p.expiry);
-
-    return giorni !== null &&
-           giorni >= 0 &&
-           giorni <= 7;
-
-  }).length;
-
-
-  const scaduti = prodotti.filter(function(p) {
-
-    const giorni = giorniAllaScadenza(p.expiry);
-
-    return giorni !== null &&
-           giorni < 0;
-
-  }).length;
-
-
-  const quantita =
-    prodotti.reduce(function(totale,p) {
-
-      return totale + (Number(p.qty) || 0);
-
-    },0);
-
-
-  document.getElementById("scadenzeImminenti").textContent =
-    imminenti;
-
-
-  document.getElementById("scaduti").textContent =
-    scaduti;
-
-
-  document.getElementById("quantitaTotale").textContent =
-    quantita;
+function renderMovimenti(){
+  const el=document.getElementById("listaMovimenti");
+  if(!movimenti.length){el.innerHTML='<div class="empty">Nessun movimento registrato.</div>';return}
+  let h='<div class="tableWrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Prodotto</th><th>Lotto</th><th>Quantità</th><th>Giacenza residua</th><th>Note</th></tr></thead><tbody>';
+  movimenti.forEach(m=>{h+=`<tr><td>${fmtDate(m.date)}</td><td><span class="badge">${esc(m.type)}</span></td><td>${esc(m.name)}</td><td>${esc(m.lotto)}</td><td>${m.qty} ${esc(m.unit)}</td><td>${m.remainingQty===undefined?"-":m.remainingQty+" "+esc(m.unit)}</td><td>${esc(m.note)}</td></tr>`});
+  el.innerHTML=h+"</tbody></table></div>";
 }
 
-
-// AGGIORNA TUTTO
-
-function aggiornaInterfaccia() {
-
-  aggiornaDashboard();
-
-  aggiornaListaProdotti();
-
-  aggiornaListaScadenze();
-
+function renderTracciabilita(){
+  const el=document.getElementById("listaTracciabilita");
+  if(!tracciabilita.length){el.innerHTML='<div class="empty">Nessun utilizzo registrato.</div>';return}
+  let h='<div class="tableWrap"><table><thead><tr><th>Data</th><th>Prodotto</th><th>Lotto</th><th>Quantità utilizzata</th><th>Destinazione</th></tr></thead><tbody>';
+  tracciabilita.forEach(t=>{h+=`<tr><td>${fmtDate(t.date)}</td><td>${esc(t.name)}</td><td>${esc(t.lotto)}</td><td>${t.qty} ${esc(t.unit)}</td><td>${esc(t.note)}</td></tr>`});
+  el.innerHTML=h+"</tbody></table></div>";
 }
 
-
-// SICUREZZA HTML
-
-function escapeHtml(value) {
-
-  return String(value || "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+function renderDashboard(){
+  document.getElementById("totaleGiacenze").textContent=stock.filter(x=>Number(x.qty)>0).length;
+  document.getElementById("scadenzeImminenti").textContent=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d>=0&&d<=7&&Number(x.qty)>0}).length;
+  document.getElementById("scaduti").textContent=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d<0&&Number(x.qty)>0}).length;
+  document.getElementById("quantitaTotale").textContent=stock.reduce((s,x)=>s+(Number(x.qty)||0),0);
 }
 
+function renderAll(){
+  renderDashboard();
+  renderMagazzino();
+  renderScadenze();
+  renderMovimenti();
+  renderTracciabilita();
+}
 
-// AVVIO
-
-aggiornaInterfaccia();
-
+renderAll();
+document.getElementById("btnCarica").classList.add("active");
 </script>
-
 </body>
 </html>
