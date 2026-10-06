@@ -7,7 +7,24 @@
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f1eb;color:#333}header{background:#8b1e1e;color:#fff;padding:18px 20px;text-align:center;box-shadow:0 3px 10px #0002;position:sticky;top:0;z-index:20}header h1{margin:0;font-size:26px}header p{margin:5px 0 0;font-size:14px}.container{max-width:1250px;margin:auto;padding:20px}.dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.card,.box{background:#fff;border-radius:16px;box-shadow:0 3px 12px #0001}.card{padding:18px;text-align:center;cursor:pointer}.card:hover{transform:translateY(-1px)}.number{font-size:31px;font-weight:bold;color:#8b1e1e}.label{margin-top:5px}.menu{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}.menu button,.homeBtn{border:0;border-radius:12px;padding:14px 7px;background:#fff;color:#8b1e1e;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #0001}.menu button.active,.menu button:hover,.homeBtn:hover{background:#8b1e1e;color:#fff}.section{display:none}.section.active{display:block}.box{padding:22px;margin-bottom:20px}.box h2{margin-top:0;color:#8b1e1e}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field{display:flex;flex-direction:column}.field label{font-weight:bold;font-size:14px;margin-bottom:6px}.field input,.field select,.field textarea{padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:#fff}.field textarea{min-height:75px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.primary,.secondary,.dangerBtn,.editBtn,.smallBtn{border:0;border-radius:10px;padding:11px 15px;font-size:14px;font-weight:bold;cursor:pointer}.primary{background:#8b1e1e;color:#fff}.secondary{background:#777;color:#fff}.dangerBtn{background:#c62828;color:#fff}.editBtn{background:#1976d2;color:#fff}.smallBtn{background:#eee;color:#333}.tableWrap{overflow-x:auto}table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}th{color:#8b1e1e}.warning{color:#d67b00;font-weight:bold}.danger{color:#c62828;font-weight:bold}.ok{color:#2e7d32;font-weight:bold}.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#eee;font-size:12px;font-weight:bold}.empty{text-align:center;padding:30px;color:#777}.notice{padding:12px 14px;border-radius:10px;background:#f7f0e6;margin-bottom:15px}.searchWrap{position:relative;margin-bottom:15px}.searchIcon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none}.search{width:100%;padding:12px 12px 12px 40px;border:1px solid #ccc;border-radius:9px;font-size:16px;margin-bottom:15px}.small{font-size:12px;color:#666}.escbar{display:flex;justify-content:flex-end;margin-bottom:10px}.subbox{border:1px solid #e5ded4;border-radius:12px;padding:15px;margin-top:15px;background:#fcfaf7}.subbox h3{margin:0 0 12px;color:#8b1e1e}.row3{display:grid;grid-template-columns:2fr 1fr auto;gap:10px;align-items:end;margin-bottom:10px}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:100;padding:15px}.modal.active{display:flex}.modalCard{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow:auto;padding:22px}.modalCard h2{margin-top:0;color:#8b1e1e}.closeX{float:right;border:0;background:#eee;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px}.chip{display:inline-block;background:#f1e5d8;border-radius:15px;padding:5px 9px;margin:3px;font-size:12px}.homeText{background:#fff;border-radius:16px;padding:22px;box-shadow:0 3px 12px #0001;margin-bottom:20px}.hidden{display:none!important}
 @media(max-width:900px){.dashboard{grid-template-columns:repeat(2,1fr)}.menu{grid-template-columns:repeat(3,1fr)}.form-grid{grid-template-columns:1fr}.row3{grid-template-columns:1fr}}
 @media(max-width:560px){.container{padding:12px}header h1{font-size:22px}.dashboard{gap:8px}.card{padding:13px 8px}.number{font-size:25px}.menu{grid-template-columns:repeat(2,1fr)}.box{padding:16px}th,td{font-size:13px}}
-</style></head>
+</style>
+<style id="printStyles">
+@media print{
+  body{background:#fff!important;color:#000!important}
+  header, nav, .menu, .topbar, .actions, .no-print,
+  button, input[type="button"], input[type="submit"]{display:none!important}
+  .section{display:none!important}
+  .section.active{display:block!important}
+  .card,.box,.report,.table-wrap{box-shadow:none!important;border:1px solid #bbb!important}
+  .print-title{display:block!important}
+  table{width:100%!important;border-collapse:collapse!important}
+  th,td{border:1px solid #999!important;padding:6px!important}
+  @page{margin:12mm}
+}
+.print-title{display:none}
+</style>
+
+</head>
 <body>
 <header><h1>Scadenze Don Tonino</h1><p>Magazzino • scadenze • movimenti • tracciabilità</p></header>
 <div class="container">
@@ -15,7 +32,8 @@
 <div class="dashboard">
 <div class="card" onclick="mostra('magazzino')"><div class="number" id="totaleGiacenze">0</div><div class="label">Giacenze</div></div>
 <div class="card" onclick="mostra('scadenze')"><div class="number" id="scadenzeImminenti">0</div><div class="label">Scadenze ≤ 7 giorni</div></div>
-<div class="card" onclick="mostra('scaduti')"><div class="number" id="scaduti">0</div><div class="label">Scaduti</div></div>
+<div class="card" onclick="mostra('scaduti')"><div class="number" id="scaduti">
+<div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa prodotti scaduti')">🖨️ Stampa prodotti scaduti</button></div>0</div><div class="label">Scaduti</div></div>
 <div class="card" onclick="mostra('quantita')"><div class="number" id="quantitaTotale">0</div><div class="label">Quantità totale</div></div></div>
 <div class="menu"><button id="btnCarica" onclick="mostra('carica')">📦<br>Nuovo prodotto</button><button id="btnMagazzino" onclick="mostra('magazzino')">📋<br>Magazzino</button><button id="btnScadenze" onclick="mostra('scadenze')">⚠️<br>Scadenze</button><button id="btnMovimenti" onclick="mostra('movimenti')">🔄<br>Movimenti</button><button id="btnTraccia" onclick="mostra('tracciabilita')">🔎<br>Tracciabilità</button><button id="btnIngredienti" onclick="mostra('ingredienti')">🥚<br>Ingredienti</button></div>
 
@@ -35,13 +53,19 @@
 <div class="subbox"><h3>➖ Utilizza prodotti esistenti per questa preparazione</h3><div class="notice">Se, per esempio, la torta usa 30 pasticciotti su 100, alla conferma la giacenza diventa 70. Se utilizzi tutto, la giacenza va a zero e il movimento viene registrato come esaurito.</div><div id="utilizziNuovo"></div><button class="secondary" onclick="aggiungiUtilizzoRiga()">+ Utilizza prodotto esistente</button></div>
 <div class="actions"><button class="primary" onclick="caricaProdotto()">SALVA PRODOTTO</button></div></div></section>
 
-<section id="magazzino" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📋 Magazzino</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaMagazzino" oninput="renderMagazzino()" placeholder="Cerca prodotto, lotto, posizione o stato..."></div><div id="listaMagazzino"></div></div></section>
-<section id="scadenze" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>⚠️ Scadenze entro 7 giorni</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaScadenze" oninput="renderScadenze()" placeholder="Cerca prodotto o lotto..."></div><div id="listaScadenze"></div></div></section>
+<section id="magazzino" class="section">
+<div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa giacenze')">🖨️ Stampa giacenze</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📋 Magazzino</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaMagazzino" oninput="renderMagazzino()" placeholder="Cerca prodotto, lotto, posizione o stato..."></div><div id="listaMagazzino"></div></div></section>
+<section id="scadenze" class="section">
+<div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa scadenze')">🖨️ Stampa scadenze</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>⚠️ Scadenze entro 7 giorni</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaScadenze" oninput="renderScadenze()" placeholder="Cerca prodotto o lotto..."></div><div id="listaScadenze"></div></div></section>
 <section id="scaduti" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>⛔ Scaduti</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaScaduti" oninput="renderScaduti()" placeholder="Cerca prodotto o lotto..."></div><div id="listaScaduti"></div></div></section>
-<section id="quantita" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📊 Quantità totale</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaQuantita" oninput="renderQuantita()" placeholder="Cerca prodotto o lotto..."></div><div id="riepilogoQuantita"></div></div></section>
-<section id="movimenti" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🔄 Movimenti</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaMovimenti" oninput="renderMovimenti()" placeholder="Cerca prodotto, lotto o tipo movimento..."></div><div id="listaMovimenti"></div></div></section>
-<section id="tracciabilita" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🔎 Tracciabilità</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaTracciabilita" oninput="renderTracciabilita()" placeholder="Cerca prodotto, lotto o preparazione..."></div><div id="listaTracciabilita"></div></div></section>
-<section id="ingredienti" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🥚 Ingredienti / allergeni</h2><div class="notice">Questa anagrafica può essere alimentata anche indipendentemente dall'inserimento dei prodotti.</div><div class="form-grid"><div class="field"><label>Nome ingrediente / allergene</label><input id="i_nome" placeholder="Es. Latte"></div><div class="field"><label>Tipo</label><select id="i_tipo"><option>ALLERGENE</option><option>INGREDIENTE</option></select></div></div><div class="actions"><button class="primary" onclick="salvaIngredienteAnagrafica()">AGGIUNGI</button></div><div class="searchWrap" style="margin-top:18px"><span class="searchIcon">🔍</span><input class="search" id="cercaIngredienti" oninput="renderIngredienti()" placeholder="Cerca ingrediente o allergene..."></div><div id="listaIngredienti"></div></div></section>
+<section id="quantita" class="section">
+<div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa quantità totale')">🖨️ Stampa quantità totale</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📊 Quantità totale</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaQuantita" oninput="renderQuantita()" placeholder="Cerca prodotto o lotto..."></div><div id="riepilogoQuantita"></div></div></section>
+<section id="movimenti" class="section">
+<div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa movimenti')">🖨️ Stampa movimenti</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🔄 Movimenti</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaMovimenti" oninput="renderMovimenti()" placeholder="Cerca prodotto, lotto o tipo movimento..."></div><div id="listaMovimenti"></div></div></section>
+<section id="tracciabilita" class="section">
+<div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa tracciabilità')">🖨️ Stampa tracciabilità</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🔎 Tracciabilità</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaTracciabilita" oninput="renderTracciabilita()" placeholder="Cerca prodotto, lotto o preparazione..."></div><div id="listaTracciabilita"></div></div></section>
+<section id="ingredienti" class="section">
+<div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa ingredienti')">🖨️ Stampa ingredienti</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🥚 Ingredienti / allergeni</h2><div class="notice">Questa anagrafica può essere alimentata anche indipendentemente dall'inserimento dei prodotti.</div><div class="form-grid"><div class="field"><label>Nome ingrediente / allergene</label><input id="i_nome" placeholder="Es. Latte"></div><div class="field"><label>Tipo</label><select id="i_tipo"><option>ALLERGENE</option><option>INGREDIENTE</option></select></div></div><div class="actions"><button class="primary" onclick="salvaIngredienteAnagrafica()">AGGIUNGI</button></div><div class="searchWrap" style="margin-top:18px"><span class="searchIcon">🔍</span><input class="search" id="cercaIngredienti" oninput="renderIngredienti()" placeholder="Cerca ingrediente o allergene..."></div><div id="listaIngredienti"></div></div></section>
 </div>
 
 <div id="editModal" class="modal"><div class="modalCard"><button class="closeX" onclick="chiudiModal()">×</button><h2>✏️ Modifica prodotto</h2><div id="editForm"></div><div class="actions"><button class="primary" onclick="salvaModifica()">SALVA MODIFICHE</button><button class="secondary" onclick="chiudiModal()">ANNULLA</button></div></div></div>
@@ -70,14 +94,111 @@ function eliminaIngrediente(id){ingredienti=ingredienti.filter(i=>String(i.id)!=
 function modificaProdotto(id){const x=stock.find(p=>p.id===id);if(!x)return;editingId=id;$('editForm').innerHTML=`<div class="form-grid"><div class="field"><label>Nome</label><input id="e_nome" value="${esc(x.name)}"></div><div class="field"><label>Lotto</label><input id="e_lotto" value="${esc(x.lotto||'')}"></div><div class="field"><label>Stato</label><select id="e_stato">${['FRESCO','COTTO','SCONGELATO','ABBATTUTO +3°C','ABBATTUTO -18°C'].map(v=>`<option ${x.state===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>Conservazione</label><select id="e_storage">${['FRIGORIFERO +4°C','BANCO +4°C','CONGELATORE -16°C','DISPENSA','SCAFFALI'].map(v=>`<option ${x.storage===v?'selected':''}>${v}</option>`).join('')}</select></div><div class="field"><label>Data carico</label><input id="e_date" type="date" value="${x.date||''}"></div><div class="field"><label>Scadenza produttore</label><input id="e_maker" type="date" value="${x.makerExpiry||''}"></div><div class="field"><label>Preparazione</label><input id="e_prep" type="date" value="${x.preparation||''}"></div><div class="field"><label>Abbattimento</label><input id="e_blast" type="date" value="${x.blast||''}"></div><div class="field"><label>Scongelamento / ingresso frigo</label><input id="e_thaw" type="date" value="${x.thaw||''}"></div><div class="field"><label>Scadenza</label><input id="e_expiry" type="date" value="${x.expiry||''}"></div><div class="field"><label>Formato</label><input id="e_format" value="${esc(x.format||'')}"></div><div class="field"><label>Quantità</label><input id="e_qty" type="number" min="0" step="0.01" value="${x.qty}"></div><div class="field"><label>Unità</label><input id="e_unit" value="${esc(x.unit||'')}"></div></div><div class="subbox"><h3>Ingredienti / allergeni</h3><div id="editIngredients">${(x.ingredients||[]).map(i=>`<div class="row3 editIngRow"><div class="field"><label>Nome</label><input class="e_ing_name" value="${esc(i.name)}"></div><div class="field"><label>Tipo</label><select class="e_ing_type"><option ${i.type==='ALLERGENE'?'selected':''}>ALLERGENE</option><option ${i.type!=='ALLERGENE'?'selected':''}>INGREDIENTE</option></select></div><button type="button" class="dangerBtn" onclick="this.parentElement.remove()">Rimuovi</button></div>`).join('')}</div><button type="button" class="secondary" onclick="aggiungiIngredienteModifica()">+ Aggiungi ingrediente</button></div>`;$('editModal').classList.add('active')}
 function salvaModifica(){const x=stock.find(p=>p.id===editingId);if(!x)return;const old=x.qty;x.name=$('e_nome').value.trim();x.lotto=$('e_lotto').value.trim();x.state=$('e_stato').value;x.storage=$('e_storage').value;x.date=$('e_date').value;x.makerExpiry=$('e_maker').value;x.preparation=$('e_prep').value;x.blast=$('e_blast').value;x.thaw=$('e_thaw').value;x.expiry=$('e_expiry').value;x.format=$('e_format').value;x.qty=Number($('e_qty').value)||0;x.unit=$('e_unit').value;x.ingredients=[...document.querySelectorAll('#editIngredients .editIngRow')].map(r=>({name:r.querySelector('.e_ing_name').value.trim(),type:r.querySelector('.e_ing_type').value})).filter(i=>i.name);ensureIngredients(x.ingredients);x.updatedAt=new Date().toISOString();if(Number(old)!==Number(x.qty))movimenti.unshift({id:uid(),type:'MODIFICA GIACENZA',stockId:x.id,name:x.name,lotto:x.lotto,qty:x.qty,unit:x.unit,date:today(),note:`Da ${old} a ${x.qty}`,remainingQty:x.qty});saveAll();chiudiModal();renderAll()}
 function chiudiModal(){$('editModal').classList.remove('active');editingId=null}
-function eliminaProdotto(id){const x=stock.find(p=>String(p.id)===String(id));if(!x)return;const ok=confirm('ELIMINARE DEFINITIVAMENTE questo prodotto?\n\n'+x.name+(x.lotto?' — Lotto '+x.lotto:'')+'\n\nIl prodotto verrà rimosso dal magazzino e dallo storico dei movimenti e della tracciabilità collegati. Questa operazione non può essere annullata.');if(!ok)return;stock=stock.filter(p=>String(p.id)!==String(id));movimenti=movimenti.filter(m=>String(m.stockId)!==String(id)&&String(m.targetProductId)!==String(id));tracciabilita=tracciabilita.filter(t=>String(t.sourceStockId)!==String(id)&&String(t.targetProductId)!==String(id));saveAll();renderAll();alert('Prodotto eliminato definitivamente.');}
-function renderMagazzino(){const q=($('cercaMagazzino')?.value||'').toLowerCase(),arr=stock.filter(x=>[x.name,x.lotto,x.storage,x.state].join(' ').toLowerCase().includes(q));if(!arr.length){$('listaMagazzino').innerHTML='<div class="empty">Nessuna giacenza presente.</div>';return}let h='<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Posizione</th><th>Scadenza</th><th>Giacenza</th><th>Azioni</th></tr></thead><tbody>';arr.sort((a,b)=>a.name.localeCompare(b.name)||String(a.lotto).localeCompare(String(b.lotto))).forEach(x=>{const s=expiryState(x.expiry);h+=`<tr><td><b>${esc(x.name)}</b><br><span class="small">${esc(x.state)} · ${esc(x.format)}</span></td><td>${esc(x.lotto||'-')}</td><td>${esc(x.storage)}</td><td class="${s.cls}">${fmtDate(x.expiry)}<br><span class="small">${s.text} · ${esc(x.expirySource||'')}</span></td><td><b>${x.qty}</b> ${esc(x.unit)}<br><span class="small">caricati: ${x.initialQty}</span></td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`});$('listaMagazzino').innerHTML=h+'</tbody></table></div>'}
+
+function eliminaProdotto(id){
+  const x = stock.find(p => String(p.id) === String(id));
+  if(!x) return;
+
+  const msg = `Eliminare definitivamente "${x.name}"${x.lotto ? ` (lotto ${x.lotto})` : ''}?\n\nIl prodotto verrà rimosso dal magazzino e dalle registrazioni dello storico/tracciabilità collegate.\n\nQuesta operazione NON è annullabile.`;
+  if(!confirm(msg)) return;
+
+  stock = stock.filter(p => String(p.id) !== String(id));
+  movimenti = movimenti.filter(m => String(m.stockId || '') !== String(id));
+  tracciabilita = tracciabilita.filter(t =>
+    String(t.sourceStockId || '') !== String(id) &&
+    String(t.targetStockId || '') !== String(id)
+  );
+
+  saveAll();
+  renderAll();
+  alert('Prodotto eliminato definitivamente.');
+}
+
+function renderMagazzino(){const q=($('cercaMagazzino')?.value||'').toLowerCase(),arr=stock.filter(x=>[x.name,x.lotto,x.storage,x.state].join(' ').toLowerCase().includes(q));if(!arr.length){$('listaMagazzino').innerHTML='<div class="empty">Nessuna giacenza presente.</div>';return}let h='<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Posizione</th><th>Scadenza</th><th>Giacenza</th><th>Azioni</th></tr></thead><tbody>';arr.sort((a,b)=>a.name.localeCompare(b.name)||String(a.lotto).localeCompare(String(b.lotto))).forEach(x=>{const s=expiryState(x.expiry);h+=`<tr><td><b>${esc(x.name)}</b><br><span class="small">${esc(x.state)} · ${esc(x.format)}</span></td><td>${esc(x.lotto||'-')}</td><td>${esc(x.storage)}</td><td class="${s.cls}">${fmtDate(x.expiry)}<br><span class="small">${s.text} · ${esc(x.expirySource||'')}</span></td><td><b>${x.qty}</b> ${esc(x.unit)}<br><span class="small">caricati: ${x.initialQty}</span></td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`});$('listaMagazzino').innerHTML=h+'</tbody></table></div>'}
 function matchSearch(x,q){return [x.name,x.lotto,x.storage,x.state,x.type,x.note,x.targetProductName,x.sourceName,x.sourceLotto].filter(Boolean).join(' ').toLowerCase().includes(q)}
-function renderScadenze(){const q=($('cercaScadenze')?.value||'').toLowerCase();const arr=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d>=0&&d<=7&&x.qty>0&&matchSearch(x,q)}).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));$('listaScadenze').innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Scadenza</th><th>Giacenza</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td class="warning">${fmtDate(x.expiry)}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessuna scadenza entro 7 giorni.</div>'}
-function renderScaduti(){const q=($('cercaScaduti')?.value||'').toLowerCase();const arr=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d<0&&x.qty>0&&matchSearch(x,q)}).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));$('listaScaduti').innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Scadenza</th><th>Giacenza</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td class="danger">${fmtDate(x.expiry)}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun prodotto scaduto con giacenza.</div>'}
-function renderQuantita(){const q=($('cercaQuantita')?.value||'').toLowerCase(),groups={};stock.forEach(x=>groups[x.unit]=(groups[x.unit]||0)+Number(x.qty||0));let h='<div class="notice">Totale complessivo delle giacenze attuali.</div><div class="tableWrap"><table><thead><tr><th>Unità</th><th>Totale</th></tr></thead><tbody>'+Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0],'it')).map(([u,v])=>`<tr><td>${esc(u)}</td><td><b>${v}</b></td></tr>`).join('')+'</tbody></table></div>';const arr=stock.filter(x=>x.qty>0&&matchSearch(x,q)).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));h+='<hr><div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Quantità</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>';$('riepilogoQuantita').innerHTML=h}
+function renderScadenze(){const q=($('cercaScadenze')?.value||'').toLowerCase();const arr=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d>=0&&d<=7&&x.qty>0&&matchSearch(x,q)}).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));$('listaScadenze').innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Scadenza</th><th>Giacenza</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td class="warning">${fmtDate(x.expiry)}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessuna scadenza entro 7 giorni.</div>'}
+function renderScaduti(){const q=($('cercaScaduti')?.value||'').toLowerCase();const arr=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d<0&&x.qty>0&&matchSearch(x,q)}).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));$('listaScaduti').innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Scadenza</th><th>Giacenza</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td class="danger">${fmtDate(x.expiry)}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun prodotto scaduto con giacenza.</div>'}
+function renderQuantita(){const q=($('cercaQuantita')?.value||'').toLowerCase(),groups={};stock.forEach(x=>groups[x.unit]=(groups[x.unit]||0)+Number(x.qty||0));let h='<div class="notice">Totale complessivo delle giacenze attuali.</div><div class="tableWrap"><table><thead><tr><th>Unità</th><th>Totale</th></tr></thead><tbody>'+Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0],'it')).map(([u,v])=>`<tr><td>${esc(u)}</td><td><b>${v}</b></td></tr>`).join('')+'</tbody></table></div>';const arr=stock.filter(x=>x.qty>0&&matchSearch(x,q)).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));h+='<hr><div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Quantità</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>';$('riepilogoQuantita').innerHTML=h}
 function renderMovimenti(){const q=($('cercaMovimenti')?.value||'').toLowerCase();const arr=movimenti.filter(m=>matchSearch(m,q)).sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'it')||String(b.date||'').localeCompare(String(a.date||'')));if(!arr.length){$('listaMovimenti').innerHTML='<div class="empty">Nessun movimento.</div>';return}$('listaMovimenti').innerHTML='<div class="tableWrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Prodotto</th><th>Lotto</th><th>Quantità</th><th>Residua</th><th>Note</th></tr></thead><tbody>'+arr.map(m=>`<tr><td>${fmtDate(m.date)}</td><td><span class="badge">${esc(m.type)}</span></td><td>${esc(m.name)}</td><td>${esc(m.lotto||'-')}</td><td>${m.qty} ${esc(m.unit||'')}</td><td>${m.remainingQty===undefined?'-':m.remainingQty+' '+esc(m.unit||'')}</td><td>${esc(m.note||'')}</td></tr>`).join('')+'</tbody></table></div>'}
 function renderTracciabilita(){const q=($('cercaTracciabilita')?.value||'').toLowerCase();const arr=tracciabilita.filter(t=>matchSearch(t,q)).sort((a,b)=>String(a.sourceName||'').localeCompare(String(b.sourceName||''),'it')||String(a.targetProductName||'').localeCompare(String(b.targetProductName||''),'it')||String(b.date||'').localeCompare(String(a.date||'')));if(!arr.length){$('listaTracciabilita').innerHTML='<div class="empty">Nessun utilizzo registrato.</div>';return}$('listaTracciabilita').innerHTML='<div class="tableWrap"><table><thead><tr><th>Data</th><th>Prodotto utilizzato</th><th>Lotto</th><th>Quantità</th><th>Utilizzato per</th></tr></thead><tbody>'+arr.map(t=>`<tr><td>${fmtDate(t.date)}</td><td>${esc(t.sourceName)}</td><td>${esc(t.sourceLotto||'-')}</td><td>${t.qty} ${esc(t.unit)}</td><td>${esc(t.targetProductName)}</td></tr>`).join('')+'</tbody></table></div>'}
-function renderDashboard(){$('totaleGiacenze').textContent=stock.filter(x=>x.qty>0).length;$('scadenzeImminenti').textContent=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d>=0&&d<=7&&x.qty>0}).length;$('scaduti').textContent=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d<0&&x.qty>0}).length;$('quantitaTotale').textContent=stock.reduce((s,x)=>s+Number(x.qty||0),0)}function renderAll(){renderDashboard();renderMagazzino();renderScadenze();renderScaduti();renderQuantita();renderMovimenti();renderTracciabilita();renderIngredienti();renderDuplica()}
+function renderDashboard(){$('totaleGiacenze').textContent=stock.filter(x=>x.qty>0).length;$('scadenzeImminenti').textContent=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d>=0&&d<=7&&x.qty>0}).length;$('scaduti').textContent=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d<0&&x.qty>0}).length;$('quantitaTotale').textContent=stock.reduce((s,x)=>s+Number(x.qty||0),0)}
+function stampaSezione(titolo){
+  const active = document.querySelector('.section.active');
+  if(!active) return;
+  let old = active.querySelector('.print-title');
+  if(!old){
+    old = document.createElement('h2');
+    old.className = 'print-title';
+    active.prepend(old);
+  }
+  old.textContent = titolo || 'Scadenze Don Tonino';
+  window.print();
+}
+
+
+function stampaSchedaProdotto(id){
+  const p = stock.find(x => String(x.id) === String(id));
+  if(!p) return;
+
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+
+  const ingredienti = Array.isArray(p.ingredienti) ? p.ingredienti : [];
+  const rows = [
+    ['Nome prodotto', p.name],
+    ['Lotto', p.lotto || '—'],
+    ['Stato', p.state || '—'],
+    ['Conservazione', p.storage || '—'],
+    ['Data preparazione', p.preparationDate || '—'],
+    ['Data ingresso', p.loadDate || '—'],
+    ['Data abbattimento', p.blastDate || '—'],
+    ['Data scongelamento / ingresso frigo', p.thawDate || '—'],
+    ['Scadenza produttore', p.makerExpiry || '—'],
+    ['Scadenza applicata', p.expiry || '—'],
+    ['Formato', p.format || '—'],
+    ['Quantità', `${p.qty ?? '—'} ${p.unit || ''}`.trim()],
+    ['Ingredienti / allergeni', ingredienti.length ? ingredienti.join(', ') : '—']
+  ];
+
+  const w = window.open('', '_blank', 'width=900,height=900');
+  if(!w){
+    alert('La stampa è stata bloccata dal browser. Consenti le finestre popup per questa pagina.');
+    return;
+  }
+
+  w.document.write(`<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Scheda prodotto - ${esc(p.name)}</title>
+<style>
+body{font-family:Arial,sans-serif;margin:30px;color:#111}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:16px;font-weight:normal;margin:0 0 24px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #999;padding:9px;text-align:left;vertical-align:top}
+th{width:32%;font-weight:bold;background:#f3f3f3}
+.footer{margin-top:28px;font-size:11px;color:#555}
+@page{margin:15mm}
+</style>
+</head>
+<body>
+<h1>SCHEDA PRODOTTO</h1>
+<h2>DON TONINO</h2>
+<table>
+${rows.map(r => `<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join('')}
+</table>
+<div class="footer">Scheda stampata da Scadenze Don Tonino</div>
+<script>
+window.onload=function(){window.print();};
+window.onafterprint=function(){window.close();};
+<\/script>
+</body>
+</html>`);
+  w.document.close();
+}
+
+function renderAll(){renderDashboard();renderMagazzino();renderScadenze();renderScaduti();renderQuantita();renderMovimenti();renderTracciabilita();renderIngredienti();renderDuplica()}
 $('c_data').value=today();ricalcolaScadenzaUI();renderAll();home();
 </script></body></html>
