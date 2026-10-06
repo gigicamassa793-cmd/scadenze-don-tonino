@@ -144,7 +144,7 @@ function stampaSchedaProdotto(id){
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[c]));
 
-  const ingredienti = Array.isArray(p.ingredienti) ? p.ingredienti : [];
+ const ingredienti = Array.isArray(p.ingredients) ? p.ingredients : (Array.isArray(p.ingredienti) ? p.ingredienti : []);
   const rows = [
     ['Nome prodotto', p.name],
     ['Lotto', p.lotto || '—'],
