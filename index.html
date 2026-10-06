@@ -199,6 +199,29 @@ window.onafterprint=function(){window.close();};
   w.document.close();
 }
 
-function renderAll(){renderDashboard();renderMagazzino();renderScadenze();renderScaduti();renderQuantita();renderMovimenti();renderTracciabilita();renderIngredienti();renderDuplica()}
-$('c_data').value=today();ricalcolaScadenzaUI();renderAll();home();
+async function caricaDatabase(){
+  try{
+    const r=await fetch('https://script.google.com/macros/s/AKfycbzXW257ueOM8fajq3Szcc0StlA651wJ9uf3b8DX7NXXK5adwkyyCdl8fWNCj2PdaUZC/exec?action=getData');
+    const data=await r.json();
+
+    if(data.hasData){
+      stock=data.products||[];
+      ingredienti=data.ingredients||[];
+      movimenti=data.movements||[];
+      tracciabilita=data.traceability||[];
+
+      localStorage.setItem(KEY_STOCK,JSON.stringify(stock));
+      localStorage.setItem(KEY_MOV,JSON.stringify(movimenti));
+      localStorage.setItem(KEY_TRACE,JSON.stringify(tracciabilita));
+      localStorage.setItem(KEY_ING,JSON.stringify(ingredienti));
+    }
+
+    renderAll();
+  }catch(e){
+    console.error('Errore caricamento database:',e);
+    renderAll();
+  }
+}
+  function renderAll(){renderDashboard();renderMagazzino();renderScadenze();renderScaduti();renderQuantita();renderMovimenti();renderTracciabilita();renderIngredienti();renderDuplica()}
+$('c_data').value=today();ricalcolaScadenzaUI();caricaDatabase();home();
 </script></body></html>
