@@ -159,7 +159,7 @@ function stampaSchedaProdotto(id){
     ['Formato', p.format || '—'],
     ['Quantità', `${p.qty ?? '—'} ${p.unit || ''}`.trim()],
     ['Ingredienti / allergeni', ingredienti.length ? ingredienti.map(i => i.name + (i.type && i.type !== 'INGREDIENTE' ? ' — ' + i.type : '')).join(', ') : '-']
-
+];
   const w = window.open('', '_blank', 'width=900,height=900');
   if(!w){
     alert('La stampa è stata bloccata dal browser. Consenti le finestre popup per questa pagina.');
