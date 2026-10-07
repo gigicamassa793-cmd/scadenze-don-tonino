@@ -453,16 +453,7 @@ function renderDashboard(){
   $('numDispensa').textContent=conta('DISPENSA');
   $('numScaffali').textContent=conta('SCAFFALI');
 }
-  $('totaleGiacenze').textContent=stock.filter(x=>x.qty>0).length;
-  $('scadenzeImminenti').textContent=stock.filter(x=>{
-    const d=daysTo(x.expiry);
-    return d!==null&&d>=0&&d<=7&&x.qty>0
-  }).length;
-  $('scaduti').textContent=stock.filter(x=>{
-    const d=daysTo(x.expiry);
-    return d!==null&&d<0&&x.qty>0
-  }).length;
-}
+
 function stampaSezione(titolo){
   const active = document.querySelector('.section.active');
   if(!active) return;
