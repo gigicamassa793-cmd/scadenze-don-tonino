@@ -106,7 +106,10 @@
 </div>
 </section>
 
-<section id="carica" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📦 Nuovo prodotto / carico</h2><div class="notice">Il <b>lotto è facoltativo</b>. Se è presente la scadenza del produttore, quella ha priorità. Altrimenti l'app calcola la scadenza interna in base alle regole impostate.</div>
+<section id="carica" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📦 Nuovo prodotto / carico</h2><div class="notice">
+  📷 <b>FOTOGRAFA L'ETICHETTA SE DISPONIBILE</b><br>
+  <input id="c_etichetta" type="file" accept="image/*" capture="environment">
+</div>
 <div class="subbox"><h3>📋 Duplica prodotto esistente</h3><div class="notice">Puoi richiamare un prodotto già presente o già esistito nel magazzino, compresi quelli esauriti. Verranno copiati i dati e soprattutto gli ingredienti/allergeni; lotto, quantità e date resteranno da inserire.</div><div class="actions"><select id="c_duplica" style="flex:1;min-width:240px"><option value="">Seleziona un prodotto...</option></select><button class="secondary" type="button" onclick="duplicaProdottoSelezionato()">CARICA DATI</button></div></div>
 <div class="form-grid">
 <div class="field"><label>Nome prodotto *</label><input id="c_nome" placeholder="Es. Torta crema"></div><div class="field"><label>Lotto</label><input id="c_lotto" placeholder="Facoltativo"></div>
@@ -154,8 +157,188 @@ function elencoProdottiDuplicabili(){const m={};stock.forEach(x=>{if(!x.name)ret
 function renderDuplica(){const el=$('c_duplica');if(!el)return;const arr=elencoProdottiDuplicabili();el.innerHTML='<option value="">Seleziona un prodotto...</option>'+arr.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}${x.lotto?' · Lotto '+esc(x.lotto):''}</option>`).join('')}
 function duplicaProdottoSelezionato(){const id=$('c_duplica').value;const x=stock.find(p=>String(p.id)===String(id));if(!x)return alert('Seleziona prima un prodotto.');$('c_nome').value=x.name||'';$('c_lotto').value='';$('c_stato').value=x.state||'FRESCO';$('c_storage').value=x.storage||'FRIGORIFERO +4°C';$('c_formato').value=x.format||'CONFEZIONE';$('c_unit').value=x.unit||'PZ';$('c_qty').value='';$('c_data').value=today();$('c_scadenzaProduttore').value='';$('c_preparazione').value='';$('c_abbattimento').value='';$('c_scongelamento').value='';$('ingredientiNuovo').innerHTML='';(x.ingredients||[]).forEach(i=>aggiungiIngredienteRiga(i));$('utilizziNuovo').innerHTML='';ricalcolaScadenzaUI();alert('Dati e ingredienti copiati. Inserisci quantità, lotto e date necessarie, poi salva il nuovo prodotto.')}
 function aggiungiUtilizzoRiga(data={}){const row=document.createElement('div');row.className='row3';const opts=stock.filter(x=>Number(x.qty)>0).sort((a,b)=>a.name.localeCompare(b.name)).map(x=>`<option value="${x.id}" ${data.stockId===x.id?'selected':''}>${esc(x.name)}${x.lotto?' — Lotto '+esc(x.lotto):''} — ${x.qty} ${esc(x.unit)}</option>`).join('');row.innerHTML=`<div class="field"><label>Prodotto / lotto</label><select class="useStock" onchange="aggiornaUtilizzo(this)"><option value="">Seleziona...</option>${opts}</select><span class="small useAvail"></span></div><div class="field"><label>Quantità da utilizzare</label><input class="useQty" type="number" min="0.01" step="0.01" value="${data.qty||''}"></div><button class="dangerBtn" type="button" onclick="this.parentElement.remove()">Rimuovi</button>`;$('utilizziNuovo').appendChild(row);aggiornaUtilizzo(row.querySelector('.useStock'))}function aggiornaUtilizzo(sel){const row=sel.closest('.row3'),x=stock.find(p=>p.id===sel.value);row.querySelector('.useAvail').textContent=x?`Disponibile: ${x.qty} ${x.unit}`:'';if(x)row.querySelector('.useQty').max=x.qty}function getUtilizzi(){return [...document.querySelectorAll('#utilizziNuovo .row3')].map(r=>({stockId:r.querySelector('.useStock').value,qty:Number(r.querySelector('.useQty').value)})).filter(x=>x.stockId&&x.qty>0)}
-function caricaProdotto(){const name=$('c_nome').value.trim(),lotto=$('c_lotto').value.trim(),qty=Number($('c_qty').value);if(!name)return alert('Inserisci il nome del prodotto.');if(!qty||qty<=0)return alert('Inserisci una quantità valida.');const us=getUtilizzi();for(const u of us){const s=stock.find(x=>x.id===u.stockId);if(!s||u.qty>Number(s.qty))return alert('Quantità insufficiente per uno dei prodotti utilizzati.')}const ing=getIngredients();ensureIngredients(ing);const d={state:$('c_stato').value,storage:$('c_storage').value,carico:$('c_data').value||today(),maker:$('c_scadenzaProduttore').value,preparazione:$('c_preparazione').value,abbattimento:$('c_abbattimento').value,scongelamento:$('c_scongelamento').value};const sc=calcolaScadenza(d);const item={id:uid(),name,lotto,state:d.state,storage:d.storage,date:d.carico,makerExpiry:d.maker,preparation:d.preparazione,blast:d.abbattimento,thaw:d.scongelamento,expiry:sc.date,expirySource:sc.source,format:$('c_formato').value,qty,initialQty:qty,unit:$('c_unit').value,ingredients:ing,createdAt:new Date().toISOString()};stock.push(item);movimenti.unshift({id:uid(),type:'CARICO',stockId:item.id,name,lotto,qty,unit:item.unit,date:item.date,note:'Nuovo prodotto',remainingQty:qty});us.forEach(u=>{const s=stock.find(x=>x.id===u.stockId);s.qty=Number((s.qty-u.qty).toFixed(6));movimenti.unshift({id:uid(),type:'UTILIZZO',stockId:s.id,name:s.name,lotto:s.lotto,qty:u.qty,unit:s.unit,date:item.date,note:'Utilizzato per '+item.name,remainingQty:s.qty,targetProductId:item.id,targetProductName:item.name});tracciabilita.unshift({id:uid(),sourceStockId:s.id,sourceName:s.name,sourceLotto:s.lotto,qty:u.qty,unit:s.unit,date:item.date,targetProductId:item.id,targetProductName:item.name});if(s.qty<=0){s.qty=0;movimenti.unshift({id:uid(),type:'UTILIZZATO TUTTO',stockId:s.id,name:s.name,lotto:s.lotto,qty:0,unit:s.unit,date:item.date,note:'Giacenza esaurita',remainingQty:0,targetProductId:item.id})}});saveAll();resetNuovo();alert(sc.date?'Prodotto salvato. Scadenza: '+fmtDate(sc.date)+' ('+sc.source+').':'Prodotto salvato. Scadenza non calcolata: inserisci la scadenza del produttore o completa le date.');mostra('magazzino')}
-function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento'].forEach(id=>$(id).value='');$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('ingredientiNuovo').innerHTML='';$('utilizziNuovo').innerHTML='';ricalcolaScadenzaUI()}
+async function caricaProdotto(){
+  const name=$('c_nome').value.trim();
+  const lotto=$('c_lotto').value.trim();
+  const qty=Number($('c_qty').value);
+
+  if(!name)return alert('Inserisci il nome del prodotto.');
+  if(!qty||qty<=0)return alert('Inserisci una quantità valida.');
+
+  const us=getUtilizzi();
+
+  for(const u of us){
+    const s=stock.find(x=>x.id===u.stockId);
+    if(!s||u.qty>Number(s.qty)){
+      return alert('Quantità insufficiente per uno dei prodotti utilizzati.');
+    }
+  }
+
+  const ing=getIngredients();
+  ensureIngredients(ing);
+
+  /* FOTO ETICHETTA */
+  let fotoEtichetta='';
+
+  const file=$('c_etichetta')?.files?.[0];
+
+  if(file){
+    try{
+      fotoEtichetta=await new Promise(resolve=>{
+        const reader=new FileReader();
+
+        reader.onload=function(){
+          const img=new Image();
+
+          img.onload=function(){
+            const canvas=document.createElement('canvas');
+            const max=1200;
+
+            let w=img.width;
+            let h=img.height;
+
+            if(w>max){
+              h=Math.round(h*max/w);
+              w=max;
+            }
+
+            canvas.width=w;
+            canvas.height=h;
+
+            const ctx=canvas.getContext('2d');
+            ctx.drawImage(img,0,0,w,h);
+
+            resolve(canvas.toDataURL('image/jpeg',0.65));
+          };
+
+          img.onerror=function(){resolve('');};
+          img.src=reader.result;
+        };
+
+        reader.onerror=function(){resolve('');};
+        reader.readAsDataURL(file);
+      });
+    }catch(e){
+      fotoEtichetta='';
+    }
+  }
+
+  const d={
+    state:$('c_stato').value,
+    storage:$('c_storage').value,
+    carico:$('c_data').value||today(),
+    maker:$('c_scadenzaProduttore').value,
+    preparazione:$('c_preparazione').value,
+    abbattimento:$('c_abbattimento').value,
+    scongelamento:$('c_scongelamento').value
+  };
+
+  const item={
+    id:uid(),
+    name,
+    lotto,
+    state:d.state,
+    storage:d.storage,
+    date:d.carico,
+    makerExpiry:d.maker,
+    preparation:d.preparazione,
+    blast:d.abbattimento,
+    thaw:d.scongelamento,
+
+    /* SCADENZA INSERITA MANUALMENTE */
+    expiry:$('c_scadenza').value||'',
+    expirySource:$('c_scadenza').value?'INSERITA MANUALMENTE':'',
+
+    format:$('c_formato').value,
+    qty,
+    initialQty:qty,
+    unit:$('c_unit').value,
+    ingredients:ing,
+
+    /* FOTO ETICHETTA */
+    fotoEtichetta:fotoEtichetta,
+
+    createdAt:new Date().toISOString()
+  };
+
+  stock.push(item);
+
+  movimenti.unshift({
+    id:uid(),
+    type:'CARICO',
+    stockId:item.id,
+    name,
+    lotto,
+    qty,
+    unit:item.unit,
+    date:item.date,
+    note:'Nuovo prodotto',
+    remainingQty:qty
+  });
+
+  us.forEach(u=>{
+    const s=stock.find(x=>x.id===u.stockId);
+
+    s.qty=Number((s.qty-u.qty).toFixed(6));
+
+    movimenti.unshift({
+      id:uid(),
+      type:'UTILIZZO',
+      stockId:s.id,
+      name:s.name,
+      lotto:s.lotto,
+      qty:u.qty,
+      unit:s.unit,
+      date:item.date,
+      note:'Utilizzato per '+item.name,
+      remainingQty:s.qty,
+      targetProductId:item.id,
+      targetProductName:item.name
+    });
+
+    tracciabilita.unshift({
+      id:uid(),
+      sourceStockId:s.id,
+      sourceName:s.name,
+      sourceLotto:s.lotto,
+      qty:u.qty,
+      unit:s.unit,
+      date:item.date,
+      targetProductId:item.id,
+      targetProductName:item.name
+    });
+
+    if(s.qty<=0){
+      s.qty=0;
+
+      movimenti.unshift({
+        id:uid(),
+        type:'UTILIZZATO TUTTO',
+        stockId:s.id,
+        name:s.name,
+        lotto:s.lotto,
+        qty:0,
+        unit:s.unit,
+        date:item.date,
+        note:'Giacenza esaurita',
+        remainingQty:0,
+        targetProductId:item.id
+      });
+    }
+  });
+
+  saveAll();
+  resetNuovo();
+
+  alert(
+    item.expiry
+      ? 'Prodotto salvato. Scadenza: '+fmtDate(item.expiry)+'.'
+      : 'Prodotto salvato. Scadenza non inserita.'
+  );
+
+  mostra('magazzino');
+}
+function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza'].forEach(id=>$(id).value='');$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('c_etichetta').value='';$('ingredientiNuovo').innerHTML='';$('utilizziNuovo').innerHTML='';}
 function aggiungiIngredienteModifica(){const box=document.getElementById('editIngredients');const row=document.createElement('div');row.className='row3 editIngRow';row.innerHTML='<div class="field"><label>Nome</label><input class="e_ing_name" placeholder="Es. Latte"></div><div class="field"><label>Tipo</label><select class="e_ing_type"><option>ALLERGENE</option><option>INGREDIENTE</option></select></div><button type="button" class="dangerBtn" onclick="this.parentElement.remove()">Rimuovi</button>';box.appendChild(row)}
 function salvaIngredienteAnagrafica(){const name=$('i_nome').value.trim();if(!name)return alert('Inserisci il nome.');if(ingredienti.some(i=>i.name.toLowerCase()===name.toLowerCase()))return alert('Ingrediente già presente.');ingredienti.push({id:uid(),name,type:$('i_tipo').value});saveAll();$('i_nome').value='';renderIngredienti();alert('Ingrediente aggiunto.')}
 function renderIngredienti(){const el=$('listaIngredienti'),q=($('cercaIngredienti')?.value||'').toLowerCase();if(!ingredienti.length){el.innerHTML='<div class="empty">Nessun ingrediente registrato.</div>';return}const arr=[...ingredienti].filter(i=>(i.name+' '+(i.type||'')).toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Ingrediente</th><th>Tipo</th><th>Azioni</th></tr></thead><tbody>'+arr.map(i=>`<tr><td>${esc(i.name)}</td><td><span class="badge">${esc(i.type||'INGREDIENTE')}</span></td><td><button class="dangerBtn" onclick="eliminaIngrediente('${i.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun risultato.</div>'}
