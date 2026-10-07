@@ -160,7 +160,66 @@ const REGOLE=[['FRESCO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','FRIGORIF
 function addDays(s,n){if(!s)return'';const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}function calcolaScadenza(d){if(d.maker)return{date:d.maker,source:'PRODUTTORE'};const r=REGOLE.find(x=>x[0]===d.state&&x[1]===d.storage);if(!r)return{date:'',source:'NON CALCOLATA'};let base=d.carico;if(r[3]==='preparazione')base=d.preparazione||d.carico;if(r[3]==='scongelamento')base=d.scongelamento||d.carico;if(r[3]==='abbattimento')base=d.abbattimento||d.preparazione||d.carico;return{date:addDays(base,r[2]),source:'CALCOLATA +'+r[2]+' GG'}}
 function ricalcolaScadenzaUI(){}
 function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
-function aggiungiIngredienteRiga(data={}){const row=document.createElement('div');row.className='row3';row.innerHTML=`<div class="field"><label>Ingrediente / allergene</label><input class="ingName" list="ingredientList" value="${esc(data.name||'')}" placeholder="Es. latte"></div><div class="field"><label>Tipo</label><select class="ingType"><option ${data.type==='ALLERGENE'?'selected':''}>ALLERGENE</option><option ${data.type!=='ALLERGENE'?'selected':''}>INGREDIENTE</option></select></div><button class="dangerBtn" type="button" onclick="this.parentElement.remove()">Rimuovi</button>`;$('ingredientiNuovo').appendChild(row)}
+function aggiungiIngredienteRiga(data={}){
+  const row=document.createElement('div');
+  row.className='row3';
+
+  const opzioni=ingredienti
+    .slice()
+    .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'it'))
+    .map(i=>`<option value="${esc(i.name)}">${esc(i.name)}</option>`)
+    .join('');
+
+  row.innerHTML=`
+    <div class="field">
+      <label>Ingrediente / allergene</label>
+      <select class="ingName">
+        <option value="">Seleziona ingrediente...</option>
+        ${opzioni}
+        <option value="__NUOVO__">+ NUOVO INGREDIENTE</option>
+      </select>
+      <input class="ingNameNuovo" placeholder="Scrivi nuovo ingrediente" style="display:none;margin-top:6px">
+    </div>
+
+    <div class="field">
+      <label>Tipo</label>
+      <select class="ingType">
+        <option ${data.type==='ALLERGENE'?'selected':''}>ALLERGENE</option>
+        <option ${data.type!=='ALLERGENE'?'selected':''}>INGREDIENTE</option>
+      </select>
+    </div>
+
+    <button class="dangerBtn" type="button" onclick="this.parentElement.remove()">Rimuovi</button>
+  `;
+
+  const select=row.querySelector('.ingName');
+  const nuovo=row.querySelector('.ingNameNuovo');
+
+  select.addEventListener('change',function(){
+    if(this.value==='__NUOVO__'){
+      nuovo.style.display='block';
+      nuovo.focus();
+    }else{
+      nuovo.style.display='none';
+      nuovo.value='';
+    }
+  });
+
+  if(data.name){
+    const esistente=[...select.options]
+      .some(o=>o.value.toLowerCase()===String(data.name).toLowerCase());
+
+    if(esistente){
+      select.value=data.name;
+    }else{
+      select.value='__NUOVO__';
+      nuovo.style.display='block';
+      nuovo.value=data.name;
+    }
+  }
+
+  $('ingredientiNuovo').appendChild(row);
+}
 function getIngredients(){return [...document.querySelectorAll('#ingredientiNuovo .row3')].map(r=>({name:r.querySelector('.ingName').value.trim(),type:r.querySelector('.ingType').value})).filter(x=>x.name)}function ensureIngredients(a){a.forEach(x=>{if(!ingredienti.some(i=>i.name.toLowerCase()===x.name.toLowerCase()))ingredienti.push({id:uid(),name:x.name,type:x.type})})}
 function elencoProdottiDuplicabili(){const m={};stock.forEach(x=>{if(!x.name)return;const k=x.name.trim().toLowerCase();if(!m[k]||((x.ingredients||[]).length>(m[k].ingredients||[]).length))m[k]=x});return Object.values(m).sort((a,b)=>a.name.localeCompare(b.name,'it'))}
 function renderDuplica(){const el=$('c_duplica');if(!el)return;const arr=elencoProdottiDuplicabili();el.innerHTML='<option value="">Seleziona un prodotto...</option>'+arr.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}${x.lotto?' · Lotto '+esc(x.lotto):''}</option>`).join('')}
