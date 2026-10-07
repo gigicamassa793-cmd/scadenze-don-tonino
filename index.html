@@ -183,7 +183,59 @@ function eliminaProdotto(id){
   alert('Prodotto eliminato definitivamente.');
 }
 
-function renderMagazzino(){const q=($('cercaMagazzino')?.value||'').toLowerCase(),arr=stock.filter(x=>[x.name,x.lotto,x.storage,x.state].join(' ').toLowerCase().includes(q));if(!arr.length){$('listaMagazzino').innerHTML='<div class="empty">Nessuna giacenza presente.</div>';return}let h='<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Posizione</th><th>Scadenza</th><th>Giacenza</th><th>Azioni</th></tr></thead><tbody>';arr.sort((a,b)=>a.name.localeCompare(b.name)||String(a.lotto).localeCompare(String(b.lotto))).forEach(x=>{const s=expiryState(x.expiry);h+=`<tr><td><b>${esc(x.name)}</b><br><span class="small">${esc(x.state)} · ${esc(x.format)}</span></td><td>${esc(x.lotto||'-')}</td><td>${esc(x.storage)}</td><td class="${s.cls}">${fmtDate(x.expiry)}<br><span class="small">${s.text} · ${esc(x.expirySource||'')}</span></td><td><b>${x.qty}</b> ${esc(x.unit)}<br><span class="small">caricati: ${x.initialQty}</span></td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`});$('listaMagazzino').innerHTML=h+'</tbody></table></div>'}
+function filtraConservazione(storage){
+  window.filtroConservazioneAttivo=storage;
+  const input=$('cercaMagazzino');
+  if(input) input.value='';
+  mostra('magazzino');
+}
+
+function renderMagazzino(){
+  const q=($('cercaMagazzino')?.value||'').toLowerCase();
+  const filtro=window.filtroConservazioneAttivo||'';
+
+  let arr=stock.filter(x=>{
+    const testo=[x.name,x.lotto,x.storage,x.state].join(' ').toLowerCase();
+    const cercaOk=testo.includes(q);
+    const posizioneOk=!filtro || String(x.storage||'')===filtro;
+    return cercaOk && posizioneOk;
+  });
+
+  arr.sort((a,b)=>{
+    const scadenzaA=a.expiry||'9999-12-31';
+    const scadenzaB=b.expiry||'9999-12-31';
+
+    return scadenzaA.localeCompare(scadenzaB) ||
+           String(a.name||'').localeCompare(String(b.name||''),'it') ||
+           String(a.lotto||'').localeCompare(String(b.lotto||''),'it');
+  });
+
+  if(!arr.length){
+    $('listaMagazzino').innerHTML='<div class="empty">Nessuna giacenza presente.</div>';
+    return;
+  }
+
+  let h='<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Posizione</th><th>Scadenza</th><th>Giacenza</th><th>Azioni</th></tr></thead><tbody>';
+
+  arr.forEach(x=>{
+    const s=expiryState(x.expiry);
+
+    h+=`<tr>
+      <td><b>${esc(x.name)}</b><br><span class="small">${esc(x.state)} · ${esc(x.format)}</span></td>
+      <td>${esc(x.lotto||'-')}</td>
+      <td>${esc(x.storage)}</td>
+      <td class="${s.cls}">${fmtDate(x.expiry)}<br><span class="small">${s.text} · ${esc(x.expirySource||'')}</span></td>
+      <td><b>${x.qty}</b> ${esc(x.unit)}<br><span class="small">caricati: ${x.initialQty}</span></td>
+      <td>
+        <button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button>
+        <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button>
+        <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button>
+      </td>
+    </tr>`;
+  });
+
+  $('listaMagazzino').innerHTML=h+'</tbody></table></div>';
+}
 function matchSearch(x,q){return [x.name,x.lotto,x.storage,x.state,x.type,x.note,x.targetProductName,x.sourceName,x.sourceLotto].filter(Boolean).join(' ').toLowerCase().includes(q)}
 function renderScadenze(){const q=($('cercaScadenze')?.value||'').toLowerCase();const arr=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d>=0&&d<=7&&x.qty>0&&matchSearch(x,q)}).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));$('listaScadenze').innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Scadenza</th><th>Giacenza</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td class="warning">${fmtDate(x.expiry)}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessuna scadenza entro 7 giorni.</div>'}
 function renderScaduti(){const q=($('cercaScaduti')?.value||'').toLowerCase();const arr=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d<0&&x.qty>0&&matchSearch(x,q)}).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));$('listaScaduti').innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Scadenza</th><th>Giacenza</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td class="danger">${fmtDate(x.expiry)}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun prodotto scaduto con giacenza.</div>'}
