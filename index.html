@@ -122,7 +122,7 @@
 <div class="field"><label>Formato</label><select id="c_formato"><option>CONFEZIONE</option><option>VASSOIO</option><option>VASCHETTA 6 PORZIONI</option><option>VASCHETTA 2 PORZIONI</option><option>VASCHETTA 1 PORZIONE</option><option>CARTONE</option><option>SFUSO</option></select></div>
 <div class="field"><label>Quantità *</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0"></div><div class="field"><label>Unità</label><select id="c_unit"><option>PZ</option><option>KG</option><option>G</option><option>L</option><option>ML</option></select></div>
 </div>
-<div class="subbox"><h3>🥚 Ingredienti / allergeni</h3><div class="notice">L'anagrafica cresce con gli inserimenti. Puoi aggiungere ingredienti/allergeni anche senza creare un prodotto.</div><div id="ingredientiNuovo"></div><button class="secondary" onclick="aggiungiIngredienteRiga()">+ Aggiungi ingrediente / allergene</button></div>
+<div class="subbox"><h3>🥚 Ingredienti / allergeni</h3><div class="notice">L'anagrafica cresce con gli inserimenti. Puoi aggiungere ingredienti/allergeni anche senza creare un prodotto.</div><div id="ingredientiNuovo"></div><button class="secondary" onclick="aggiungiIngredienteRiga()">+ Aggiungi ingrediente / allergene</button></div><datalist id="ingredientList"></datalist>
 <div class="subbox"><h3>➖ Utilizza prodotti esistenti per questa preparazione</h3><div class="notice">Se, per esempio, la torta usa 30 pasticciotti su 100, alla conferma la giacenza diventa 70. Se utilizzi tutto, la giacenza va a zero e il movimento viene registrato come esaurito.</div><div id="utilizziNuovo"></div><button class="secondary" onclick="aggiungiUtilizzoRiga()">+ Utilizza prodotto esistente</button></div>
 <div class="actions"><button class="primary" onclick="caricaProdotto()">SALVA PRODOTTO</button></div></div></section>
 
@@ -548,7 +548,20 @@ function renderNomiProdotti(){
     .map(nome=>`<option value="${esc(nome)}"></option>`)
     .join('');
 }
+function renderIngredientList(){
+  const el=$('ingredientList');
+  if(!el)return;
 
+  const nomi=[...new Set(
+    ingredienti
+      .map(i=>String(i.name||'').trim())
+      .filter(Boolean)
+  )].sort((a,b)=>a.localeCompare(b,'it'));
+
+  el.innerHTML=nomi
+    .map(nome=>`<option value="${esc(nome)}"></option>`)
+    .join('');
+}
 function renderAll(){
   renderDashboard();
   renderMagazzino();
@@ -560,6 +573,7 @@ function renderAll(){
   renderIngredienti();
   renderDuplica();
   renderNomiProdotti();
+   renderIngredientList();
 }
 $('c_data').value=today();ricalcolaScadenzaUI();caricaDatabase();home();
 </script></body></html>
