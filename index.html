@@ -62,32 +62,32 @@
 <div class="dashboard">
 
 <div class="card" onclick="filtraConservazione('FRIGORIFERO +4°C')">
-<div class="number">❄️</div>
+<div class="number">❄️ <span id="numFrigorifero">0</span></div>
 <div class="label">FRIGORIFERO +4°C</div>
 </div>
 
 <div class="card" onclick="filtraConservazione('BANCO +4°C')">
-<div class="number">🍽️</div>
+<div class="number">🍽️ <span id="numBanco">0</span></div>
 <div class="label">BANCO +4°C</div>
 </div>
 
 <div class="card" onclick="filtraConservazione('CONGELATORE -16°C')">
-<div class="number">❄️</div>
+<div class="number">❄️ <span id="numCongelatore">0</span></div>
 <div class="label">CONGELATORE -16°C</div>
 </div>
 
 <div class="card" onclick="filtraConservazione('POZZETTO -16°C')">
-<div class="number">❄️</div>
+<div class="number">❄️ <span id="numPozzetto">0</span></div>
 <div class="label">POZZETTO -16°C</div>
 </div>
 
 <div class="card" onclick="filtraConservazione('DISPENSA')">
-<div class="number">📦</div>
+<div class="number">📦 <span id="numDispensa">0</span></div>
 <div class="label">DISPENSA</div>
 </div>
 
 <div class="card" onclick="filtraConservazione('SCAFFALI')">
-<div class="number">📦</div>
+<div class="number">📦 <span id="numScaffali">0</span></div>
 <div class="label">SCAFFALI</div>
 </div>
 
@@ -427,6 +427,32 @@ function renderQuantita(){const q=($('cercaQuantita')?.value||'').toLowerCase(),
 function renderMovimenti(){const q=($('cercaMovimenti')?.value||'').toLowerCase();const arr=movimenti.filter(m=>matchSearch(m,q)).sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'it')||String(b.date||'').localeCompare(String(a.date||'')));if(!arr.length){$('listaMovimenti').innerHTML='<div class="empty">Nessun movimento.</div>';return}$('listaMovimenti').innerHTML='<div class="tableWrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Prodotto</th><th>Lotto</th><th>Quantità</th><th>Residua</th><th>Note</th></tr></thead><tbody>'+arr.map(m=>`<tr><td>${fmtDate(m.date)}</td><td><span class="badge">${esc(m.type)}</span></td><td>${esc(m.name)}</td><td>${esc(m.lotto||'-')}</td><td>${m.qty} ${esc(m.unit||'')}</td><td>${m.remainingQty===undefined?'-':m.remainingQty+' '+esc(m.unit||'')}</td><td>${esc(m.note||'')}</td></tr>`).join('')+'</tbody></table></div>'}
 function renderTracciabilita(){const q=($('cercaTracciabilita')?.value||'').toLowerCase();const arr=tracciabilita.filter(t=>matchSearch(t,q)).sort((a,b)=>String(a.sourceName||'').localeCompare(String(b.sourceName||''),'it')||String(a.targetProductName||'').localeCompare(String(b.targetProductName||''),'it')||String(b.date||'').localeCompare(String(a.date||'')));if(!arr.length){$('listaTracciabilita').innerHTML='<div class="empty">Nessun utilizzo registrato.</div>';return}$('listaTracciabilita').innerHTML='<div class="tableWrap"><table><thead><tr><th>Data</th><th>Prodotto utilizzato</th><th>Lotto</th><th>Quantità</th><th>Utilizzato per</th></tr></thead><tbody>'+arr.map(t=>`<tr><td>${fmtDate(t.date)}</td><td>${esc(t.sourceName)}</td><td>${esc(t.sourceLotto||'-')}</td><td>${t.qty} ${esc(t.unit)}</td><td>${esc(t.targetProductName)}</td></tr>`).join('')+'</tbody></table></div>'}
 function renderDashboard(){
+  $('totaleGiacenze').textContent=stock.filter(x=>x.qty>0).length;
+
+  $('scadenzeImminenti').textContent=stock.filter(x=>{
+    const d=daysTo(x.expiry);
+    return d!==null&&d>=0&&d<=7&&x.qty>0
+  }).length;
+
+  $('scaduti').textContent=stock.filter(x=>{
+    const d=daysTo(x.expiry);
+    return d!==null&&d<0&&x.qty>0
+  }).length;
+
+  const conta=storage=>{
+    return stock.filter(x=>
+      String(x.storage||'')===storage &&
+      Number(x.qty||0)>0
+    ).length;
+  };
+
+  $('numFrigorifero').textContent=conta('FRIGORIFERO +4°C');
+  $('numBanco').textContent=conta('BANCO +4°C');
+  $('numCongelatore').textContent=conta('CONGELATORE -16°C');
+  $('numPozzetto').textContent=conta('POZZETTO -16°C');
+  $('numDispensa').textContent=conta('DISPENSA');
+  $('numScaffali').textContent=conta('SCAFFALI');
+}
   $('totaleGiacenze').textContent=stock.filter(x=>x.qty>0).length;
   $('scadenzeImminenti').textContent=stock.filter(x=>{
     const d=daysTo(x.expiry);
