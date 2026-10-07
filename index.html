@@ -28,14 +28,83 @@
 <body>
 <header><h1>Scadenze Don Tonino</h1><p>Magazzino • scadenze • movimenti • tracciabilità</p></header>
 <div class="container">
-<section id="home" class="section active"><div class="homeText"><h2>🏠 Home</h2><div>Pagina riassuntiva. Clicca sui quattro riquadri per aprire il relativo resoconto.</div></div></section>
+<section id="home" class="section active">
+<div class="homeText">
+<h2>🏠 Home</h2>
+</div>
+
 <div class="dashboard">
-<div class="card" onclick="mostra('magazzino')"><div class="number" id="totaleGiacenze">0</div><div class="label">Giacenze</div></div>
-<div class="card" onclick="mostra('scadenze')"><div class="number" id="scadenzeImminenti">0</div><div class="label">Scadenze ≤ 7 giorni</div></div>
-<div class="card" onclick="mostra('scaduti')"><div class="number" id="scaduti">
-<div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa prodotti scaduti')">🖨️ Stampa prodotti scaduti</button></div>0</div><div class="label">Scaduti</div></div>
-<div class="card" onclick="mostra('quantita')"><div class="number" id="quantitaTotale">0</div><div class="label">Quantità totale</div></div></div>
-<div class="menu"><button id="btnCarica" onclick="mostra('carica')">📦<br>Nuovo prodotto</button><button id="btnMagazzino" onclick="mostra('magazzino')">📋<br>Magazzino</button><button id="btnScadenze" onclick="mostra('scadenze')">⚠️<br>Scadenze</button><button id="btnMovimenti" onclick="mostra('movimenti')">🔄<br>Movimenti</button><button id="btnTraccia" onclick="mostra('tracciabilita')">🔎<br>Tracciabilità</button><button id="btnIngredienti" onclick="mostra('ingredienti')">🥚<br>Ingredienti</button></div>
+
+<div class="card" onclick="mostra('carica')">
+<div class="number">📦</div>
+<div class="label">NUOVO PRODOTTO</div>
+</div>
+
+<div class="card" onclick="mostra('magazzino')">
+<div class="number" id="totaleGiacenze">0</div>
+<div class="label">GIACENZE</div>
+</div>
+
+<div class="card" onclick="mostra('scadenze')">
+<div class="number" id="scadenzeImminenti">0</div>
+<div class="label">SCADENZE ≤ 7 GIORNI</div>
+</div>
+
+<div class="card" onclick="mostra('scaduti')">
+<div class="number" id="scaduti">0</div>
+<div class="label">SCADUTI</div>
+</div>
+
+</div>
+
+<h3 class="homeSectionTitle">CONSERVAZIONE</h3>
+
+<div class="dashboard">
+
+<div class="card" onclick="filtraConservazione('FRIGORIFERO +4°C')">
+<div class="number">❄️</div>
+<div class="label">FRIGORIFERO +4°C</div>
+</div>
+
+<div class="card" onclick="filtraConservazione('BANCO +4°C')">
+<div class="number">🍽️</div>
+<div class="label">BANCO +4°C</div>
+</div>
+
+<div class="card" onclick="filtraConservazione('CONGELATORE -16°C')">
+<div class="number">❄️</div>
+<div class="label">CONGELATORE -16°C</div>
+</div>
+
+<div class="card" onclick="filtraConservazione('POZZETTO -16°C')">
+<div class="number">❄️</div>
+<div class="label">POZZETTO -16°C</div>
+</div>
+
+<div class="card" onclick="filtraConservazione('DISPENSA')">
+<div class="number">📦</div>
+<div class="label">DISPENSA</div>
+</div>
+
+<div class="card" onclick="filtraConservazione('SCAFFALI')">
+<div class="number">📦</div>
+<div class="label">SCAFFALI</div>
+</div>
+
+</div>
+
+<div class="menu">
+
+<button id="btnMovimenti" onclick="mostra('movimenti')">
+🔄<br>Movimenti
+</button>
+
+<button id="btnIngredienti" onclick="mostra('ingredienti')">
+🥚<br>Ingredienti
+</button>
+
+</div>
+</section>
 
 <section id="carica" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📦 Nuovo prodotto / carico</h2><div class="notice">Il <b>lotto è facoltativo</b>. Se è presente la scadenza del produttore, quella ha priorità. Altrimenti l'app calcola la scadenza interna in base alle regole impostate.</div>
 <div class="subbox"><h3>📋 Duplica prodotto esistente</h3><div class="notice">Puoi richiamare un prodotto già presente o già esistito nel magazzino, compresi quelli esauriti. Verranno copiati i dati e soprattutto gli ingredienti/allergeni; lotto, quantità e date resteranno da inserire.</div><div class="actions"><select id="c_duplica" style="flex:1;min-width:240px"><option value="">Seleziona un prodotto...</option></select><button class="secondary" type="button" onclick="duplicaProdottoSelezionato()">CARICA DATI</button></div></div>
