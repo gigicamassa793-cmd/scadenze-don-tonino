@@ -773,11 +773,12 @@ function renderMagazzino(){
   const filtro=window.filtroConservazioneAttivo||'';
 
   let arr=stock.filter(x=>{
-    const testo=[x.name,x.lotto,x.storage,x.state].join(' ').toLowerCase();
-    const cercaOk=testo.includes(q);
-    const posizioneOk=!filtro || String(x.storage||'')===filtro;
-    return cercaOk && posizioneOk;
-  });
+  const testo=[x.name,x.lotto,x.storage,x.state].join(' ').toLowerCase();
+  const cercaOk=testo.includes(q);
+  const posizioneOk=!filtro || String(x.storage||'')===filtro;
+  const giacenzaOk=Number(x.qty||0)>0;
+  return cercaOk && posizioneOk && giacenzaOk;
+});
 
   arr.sort((a,b)=>{
     const scadenzaA=a.expiry||'9999-12-31';
