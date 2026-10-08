@@ -114,10 +114,8 @@ th,td{font-size:13px}
 </div>
 </section>
 
-<section id="carica" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📦 Nuovo prodotto / carico</h2><div class="notice">
-  📷 <b>FOTOGRAFA L'ETICHETTA SE DISPONIBILE</b><br>
-  <input id="c_etichetta" type="file" accept="image/*">
-</div>
+<section id="carica" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📦 Nuovo prodotto / carico</h2>
+
 <div class="subbox"><h3>📋 Duplica prodotto esistente</h3><div class="notice">Puoi richiamare un prodotto già presente o già esistito nel magazzino, compresi quelli esauriti. Verranno copiati i dati e soprattutto gli ingredienti/allergeni; lotto, quantità e date resteranno da inserire.</div><div class="actions"><select id="c_duplica"><option value="">Seleziona un prodotto...</option></select><button class="secondary" type="button" onclick="duplicaProdottoSelezionato()">CARICA DATI</button></div></div>
 <div class="form-grid">
 <div class="field"><label>Nome prodotto *</label><input id="c_nome" list="listaNomiProdotti" placeholder="Es. Torta crema">
@@ -258,52 +256,6 @@ async function caricaProdotto(){
   const ing=getIngredients();
   ensureIngredients(ing);
 
-  /* FOTO ETICHETTA */
-  let fotoEtichetta='';
-
-  const file=$('c_etichetta')?.files?.[0];
-
-  if(file){
-    try{
-      fotoEtichetta=await new Promise(resolve=>{
-        const reader=new FileReader();
-
-        reader.onload=function(){
-          const img=new Image();
-
-          img.onload=function(){
-            const canvas=document.createElement('canvas');
-            const max=1200;
-
-            let w=img.width;
-            let h=img.height;
-
-            if(w>max){
-              h=Math.round(h*max/w);
-              w=max;
-            }
-
-            canvas.width=w;
-            canvas.height=h;
-
-            const ctx=canvas.getContext('2d');
-            ctx.drawImage(img,0,0,w,h);
-
-            resolve(canvas.toDataURL('image/jpeg',0.65));
-          };
-
-          img.onerror=function(){resolve('');};
-          img.src=reader.result;
-        };
-
-        reader.onerror=function(){resolve('');};
-        reader.readAsDataURL(file);
-      });
-    }catch(e){
-      fotoEtichetta='';
-    }
-  }
-
   const d={
     state:$('c_stato').value,
     storage:$('c_storage').value,
@@ -336,8 +288,7 @@ async function caricaProdotto(){
     unit:$('c_unit').value,
     ingredients:ing,
 
-    /* FOTO ETICHETTA */
-    fotoEtichetta:fotoEtichetta,
+   
 
     createdAt:new Date().toISOString()
   };
