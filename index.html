@@ -471,7 +471,125 @@ function aggiungiIngredienteModifica(){
 function salvaIngredienteAnagrafica(){const name=$('i_nome').value.trim();if(!name)return alert('Inserisci il nome.');if(ingredienti.some(i=>i.name.toLowerCase()===name.toLowerCase()))return alert('Ingrediente già presente.');ingredienti.push({id:uid(),name,type:$('i_tipo').value});saveAll();$('i_nome').value='';renderIngredienti();alert('Ingrediente aggiunto.')}
 function renderIngredienti(){const el=$('listaIngredienti'),q=($('cercaIngredienti')?.value||'').toLowerCase();if(!ingredienti.length){el.innerHTML='<div class="empty">Nessun ingrediente registrato.</div>';return}const arr=[...ingredienti].filter(i=>(i.name+' '+(i.type||'')).toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Ingrediente</th><th>Tipo</th><th>Azioni</th></tr></thead><tbody>'+arr.map(i=>`<tr><td>${esc(i.name)}</td><td><span class="badge">${esc(i.type||'INGREDIENTE')}</span></td><td><button class="dangerBtn" onclick="eliminaIngrediente('${i.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun risultato.</div>'}
 function eliminaIngrediente(id){ingredienti=ingredienti.filter(i=>String(i.id)!==String(id));saveAll();renderIngredienti()}
-function salvaModifica(){
+function modificaProdotto(id){
+  const x=stock.find(p=>String(p.id)===String(id));
+  if(!x)return;
+
+  editingId=id;
+
+  $('editForm').innerHTML=`
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Nome</label>
+        <input id="e_nome" value="${esc(x.name||'')}">
+      </div>
+
+      <div class="field">
+        <label>Lotto</label>
+        <input id="e_lotto" value="${esc(x.lotto||'')}">
+      </div>
+
+      <div class="field">
+        <label>Stato</label>
+        <select id="e_stato">
+          ${['FRESCO','COTTO','SCONGELATO','ABBATTUTO +3°C','ABBATTUTO -18°C']
+            .map(v=>`<option ${x.state===v?'selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Conservazione</label>
+        <select id="e_storage">
+          ${['FRIGORIFERO +4°C','BANCO +4°C','CONGELATORE -16°C','POZZETTO -16°C','DISPENSA','SCAFFALI']
+            .map(v=>`<option ${x.storage===v?'selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Data carico</label>
+        <input id="e_date" type="date" value="${x.date||''}">
+      </div>
+
+      <div class="field">
+        <label>Scadenza produttore</label>
+        <input id="e_maker" type="date" value="${x.makerExpiry||''}">
+      </div>
+
+      <div class="field">
+        <label>Preparazione</label>
+        <input id="e_prep" type="date" value="${x.preparation||''}">
+      </div>
+
+      <div class="field">
+        <label>Abbattimento</label>
+        <input id="e_blast" type="date" value="${x.blast||''}">
+      </div>
+
+      <div class="field">
+        <label>Scongelamento / ingresso frigo</label>
+        <input id="e_thaw" type="date" value="${x.thaw||''}">
+      </div>
+
+      <div class="field">
+        <label>Scadenza</label>
+        <input id="e_expiry" type="date" value="${x.expiry||''}">
+      </div>
+
+      <div class="field">
+        <label>Formato</label>
+        <input id="e_format" value="${esc(x.format||'')}">
+      </div>
+
+      <div class="field">
+        <label>Quantità</label>
+        <input id="e_qty" type="number" min="0" step="0.01" value="${x.qty||0}">
+      </div>
+
+      <div class="field">
+        <label>Unità</label>
+        <input id="e_unit" value="${esc(x.unit||'')}">
+      </div>
+
+    </div>
+
+    <div class="subbox">
+      <h3>Ingredienti / allergeni</h3>
+
+      <div id="editIngredients">
+        ${(x.ingredients||[]).map(i=>`
+          <div class="row3 editIngRow">
+
+            <div class="field">
+              <label>Nome</label>
+              <input class="e_ing_name" value="${esc(i.name||'')}">
+            </div>
+
+            <div class="field">
+              <label>Tipo</label>
+              <select class="e_ing_type">
+                <option ${i.type==='ALLERGENE'?'selected':''}>ALLERGENE</option>
+                <option ${i.type!=='ALLERGENE'?'selected':''}>INGREDIENTE</option>
+              </select>
+            </div>
+
+            <button type="button" class="dangerBtn"
+              onclick="this.parentElement.remove()">Rimuovi</button>
+
+          </div>
+        `).join('')}
+      </div>
+
+      <button type="button" class="secondary"
+        onclick="aggiungiIngredienteModifica()">
+        + Aggiungi ingrediente
+      </button>
+    </div>
+  `;
+
+  $('editModal').classList.add('active');
+}
+  function salvaModifica(){
   const x=stock.find(p=>p.id===editingId);
   if(!x)return;
 
