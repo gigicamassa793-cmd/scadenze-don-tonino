@@ -406,7 +406,7 @@ home();
 
 alert('3 - HOME COMPLETATA');
 }
-function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza'].forEach(id=>$(id).value='');$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('c_etichetta').value='';$('ingredientiNuovo').innerHTML='';$('utilizziNuovo').innerHTML='';}
+function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza'].forEach(id=>$(id).value='');$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('ingredientiNuovo').innerHTML='';$('utilizziNuovo').innerHTML='';}
 function aggiungiIngredienteModifica(){
   const box=document.getElementById('editIngredients');
   const row=document.createElement('div');
