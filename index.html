@@ -208,33 +208,19 @@ function ricalcolaScadenzaUI(){}
 function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
 function aggiungiIngredienteRiga(data={}){
   const box=$('ingredientiNuovo');
-
-  // Crea il pannello una sola volta
   let pannello=document.getElementById('pannelloIngredientiNuovo');
 
   if(!pannello){
     pannello=document.createElement('div');
     pannello.id='pannelloIngredientiNuovo';
+
     pannello.innerHTML=`
       <div class="field">
-        <label>Cerca ingredienti</label>
-        <input id="cercaIngNuovo" placeholder="Scrivi per cercare...">
+        <label>Cerca ingredienti codificati</label>
+        <input id="cercaIngNuovo"
+          placeholder="Scrivi per cercare...">
       </div>
       <div id="elencoIngNuovo"></div>
-      <div class="row3" style="margin-top:10px">
-        <div class="field">
-          <label>Nuovo ingrediente / allergene</label>
-          <input id="nuovoNomeIng" placeholder="Scrivi il nome">
-        </div>
-        <div class="field">
-          <label>Tipo</label>
-          <select id="nuovoTipoIng">
-            <option>INGREDIENTE</option>
-            <option>ALLERGENE</option>
-          </select>
-        </div>
-        <button type="button" class="secondary" onclick="aggiungiNuovoIngAllaLista()">Aggiungi</button>
-      </div>
     `;
 
     box.innerHTML='';
@@ -284,35 +270,7 @@ function renderElencoIngNuovo(){
   }).join('');
 }
 
-function aggiungiNuovoIngAllaLista(){
-  const campo=document.getElementById('nuovoNomeIng');
-  const tipo=document.getElementById('nuovoTipoIng');
-  const nome=(campo?.value||'').trim();
 
-  if(!nome){
-    alert('Inserisci il nome dell’ingrediente.');
-    return;
-  }
-
-  const esistente=ingredienti.some(i=>
-    String(i.name||'').trim().toLowerCase()===nome.toLowerCase()
-  );
-
-  if(!esistente){
-    ingredienti.push({id:uid(),name:nome,type:tipo.value});
-  }
-
-  renderIngredientList();
-  renderElencoIngNuovo();
-
-  const checkbox=[...document.querySelectorAll('.checkIngNuovo')]
-    .find(c=>c.value.toLowerCase()===nome.toLowerCase());
-
-  if(checkbox) checkbox.checked=true;
-
-  campo.value='';
-  saveAll();
-}
 function getIngredients(){
   return [...document.querySelectorAll('#elencoIngNuovo .checkIngNuovo:checked')]
     .map(c=>{
@@ -509,36 +467,7 @@ function aggiungiIngredienteModifica(){
   renderElencoIngModifica();
 }
 
-function aggiungiNuovoIngModificaAllaLista(){
-  const campo=document.getElementById('nuovoNomeIngModifica');
-  const tipo=document.getElementById('nuovoTipoIngModifica');
-  const nome=(campo?.value||'').trim();
 
-  if(!nome){
-    alert('Inserisci il nome dell’ingrediente.');
-    return;
-  }
-
-  let esistente=ingredienti.find(i=>
-    String(i.name||'').trim().toLowerCase()===nome.toLowerCase()
-  );
-
-  if(!esistente){
-    esistente={id:uid(),name:nome,type:tipo.value};
-    ingredienti.push(esistente);
-  }
-
-  renderIngredientList();
-  renderElencoIngModifica();
-
-  const checkbox=[...document.querySelectorAll('.checkIngModifica')]
-    .find(c=>c.value.toLowerCase()===nome.toLowerCase());
-
-  if(checkbox)checkbox.checked=true;
-
-  campo.value='';
-  saveAll();
-}
 function salvaIngredienteAnagrafica(){const name=$('i_nome').value.trim();if(!name)return alert('Inserisci il nome.');if(ingredienti.some(i=>i.name.toLowerCase()===name.toLowerCase()))return alert('Ingrediente già presente.');ingredienti.push({id:uid(),name,type:$('i_tipo').value});saveAll();$('i_nome').value='';renderIngredienti();alert('Ingrediente aggiunto.')}
 function renderIngredienti(){const el=$('listaIngredienti'),q=($('cercaIngredienti')?.value||'').toLowerCase();if(!ingredienti.length){el.innerHTML='<div class="empty">Nessun ingrediente registrato.</div>';return}const arr=[...ingredienti].filter(i=>(i.name+' '+(i.type||'')).toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Ingrediente</th><th>Tipo</th><th>Azioni</th></tr></thead><tbody>'+arr.map(i=>`<tr><td>${esc(i.name)}</td><td><span class="badge">${esc(i.type||'INGREDIENTE')}</span></td><td><button class="dangerBtn" onclick="eliminaIngrediente('${i.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun risultato.</div>'}
 function eliminaIngrediente(id){ingredienti=ingredienti.filter(i=>String(i.id)!==String(id));saveAll();renderIngredienti()}
@@ -634,25 +563,7 @@ function modificaProdotto(id){
 
   <div id="elencoIngModifica"></div>
 
-  <div class="row3" style="margin-top:10px">
-    <div class="field">
-      <label>Nuovo ingrediente / allergene</label>
-      <input id="nuovoNomeIngModifica" placeholder="Scrivi il nome">
-    </div>
 
-    <div class="field">
-      <label>Tipo</label>
-      <select id="nuovoTipoIngModifica">
-        <option>INGREDIENTE</option>
-        <option>ALLERGENE</option>
-      </select>
-    </div>
-
-    <button type="button" class="secondary"
-      onclick="aggiungiNuovoIngModificaAllaLista()">
-      Aggiungi
-    </button>
-  </div>
 </div>  `;
 
  $('editModal').classList.add('active');
