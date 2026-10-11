@@ -34,7 +34,7 @@ th,td{font-size:13px}
   @page{margin:12mm}
 }
 .print-title{display:none}
-.ingredient-picker{display:block}.ingredient-picker select{padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:#fff;min-height:46px}.ingredient-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.ingredient-chip{display:inline-flex;align-items:center;gap:8px;background:#f1e5d8;border-radius:18px;padding:7px 10px;font-size:14px}.ingredient-chip button{border:0;border-radius:50%;width:22px;height:22px;background:#8b1e1e;color:#fff;font-weight:bold;cursor:pointer}.ingredient-summary{font-size:12px;color:#555;margin-top:5px;line-height:1.4}textarea[readonly]{background:#f8f5f0!important;min-height:58px!important}
+.supplier-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.supplier-grid .full{grid-column:1/-1}@media(max-width:560px){.supplier-grid{grid-template-columns:1fr}.supplier-grid .full{grid-column:auto}}.ingredient-picker{display:block}.ingredient-picker select{padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:#fff;min-height:46px}.ingredient-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.ingredient-chip{display:inline-flex;align-items:center;gap:8px;background:#f1e5d8;border-radius:18px;padding:7px 10px;font-size:14px}.ingredient-chip button{border:0;border-radius:50%;width:22px;height:22px;background:#8b1e1e;color:#fff;font-weight:bold;cursor:pointer}.ingredient-summary{font-size:12px;color:#555;margin-top:5px;line-height:1.4}textarea[readonly]{background:#f8f5f0!important;min-height:58px!important}
 </style>
 
 </head>
@@ -114,6 +114,12 @@ th,td{font-size:13px}
 <button id="btnClassici" onclick="mostra('prodottiClassici')">
 📚<br>Prodotti classici
 </button>
+<button id="btnFornitori" onclick="mostra('fornitori')">
+🏢<br>Fornitori
+</button>
+<button id="btnDocumentiFornitori" onclick="mostra('documentiFornitori')">
+🧾<br>Documenti fornitori
+</button>
 
 </div>
 </section>
@@ -124,6 +130,11 @@ th,td{font-size:13px}
 <div class="form-grid">
 <div class="field"><label>Nome prodotto *</label><input id="c_nome" list="listaNomiProdotti" placeholder="Es. Torta crema">
 <datalist id="listaNomiProdotti"></datalist></div><div class="field"><label>Lotto</label><input id="c_lotto" placeholder="Facoltativo"></div>
+<div class="field"><label>Fornitore (facoltativo)</label><select id="c_fornitore" onchange="aggiornaDocumentiProdotto('c')"><option value="">Produzione propria / nessun fornitore</option></select></div>
+<div class="field"><label>Documento fornitore (facoltativo)</label><select id="c_documento" onchange="applicaDocumentoProdotto('c')"><option value="">Nessun documento</option></select></div>
+<div class="field"><label>Data consegna</label><input id="c_dataConsegna" type="date"></div>
+<div class="field"><label>Tipo documento</label><select id="c_tipoDocumento"><option value="">Nessuno</option><option>Fattura</option><option>DDT</option></select></div>
+<div class="field"><label>Numero documento</label><input id="c_numeroDocumento" placeholder="Numero fattura o DDT"></div>
 <div class="field"><label>Stato</label><select id="c_stato" onchange="ricalcolaScadenzaUI()"><option>FRESCO</option><option>COTTO</option><option>SCONGELATO</option><option>ABBATTUTO +3°C</option><option>ABBATTUTO -18°C</option></select></div>
 <div class="field"><label>Conservazione</label><select id="c_storage" onchange="ricalcolaScadenzaUI()"><option>FRIGORIFERO +4°C</option><option>BANCO +4°C</option><option>CONGELATORE -16°C</option><option>POZZETTO -16°C</option><option>DISPENSA</option><option>SCAFFALI</option></select></div>
 <div class="field"><label>Data carico / ingresso</label><input id="c_data" type="date" onchange="ricalcolaScadenzaUI()"></div><div class="field"><label>Scadenza produttore</label><input id="c_scadenzaProduttore" type="date" onchange="ricalcolaScadenzaUI()"></div>
@@ -139,6 +150,10 @@ th,td{font-size:13px}
 </div></div><div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="c_ingredientiSintesi" readonly placeholder="Gli ingredienti selezionati appariranno qui, separati da virgole."></textarea></div></div><datalist id="ingredientList"></datalist>
 <div class="subbox"><h3>➖ Utilizza prodotti esistenti per questa preparazione</h3><div class="notice">Se, per esempio, la torta usa 30 pasticciotti su 100, alla conferma la giacenza diventa 70. Se utilizzi tutto, la giacenza va a zero e il movimento viene registrato come esaurito.</div><div id="utilizziNuovo"></div><button class="secondary" onclick="aggiungiUtilizzoRiga()">+ Utilizza prodotto esistente</button></div>
 <div class="actions"><button class="primary" onclick="caricaProdotto()">SALVA PRODOTTO</button></div></div></section>
+
+
+<section id="fornitori" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🏢 Elenco fornitori</h2><div class="notice">Anagrafica aggiornabile. I prodotti di produzione propria possono rimanere senza fornitore.</div><div class="supplier-grid"><div class="field"><label>Nome *</label><input id="f_nome" placeholder="Ragione sociale / nome"></div><div class="field"><label>Indirizzo</label><input id="f_indirizzo" placeholder="Via, numero, città"></div><div class="field"><label>Partita IVA</label><input id="f_piva" placeholder="Partita IVA"></div><div class="field"><label>Telefono</label><input id="f_telefono" type="tel" placeholder="Telefono"></div><div class="field full"><label>Mail</label><input id="f_mail" type="email" placeholder="email@fornitore.it"></div></div><div class="actions"><button class="primary" onclick="salvaFornitore()">SALVA FORNITORE</button><button class="secondary" onclick="pulisciFornitoreForm()">NUOVO / ANNULLA</button></div><div class="searchWrap" style="margin-top:18px"><span class="searchIcon">🔍</span><input id="cercaFornitori" class="search" placeholder="Cerca fornitore..." oninput="renderFornitori()"></div><div id="listaFornitori"></div></div></section>
+<section id="documentiFornitori" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🧾 Documenti fornitori</h2><div class="notice">La registrazione è facoltativa. Inserisci fatture e DDT ricevuti; i documenti sono ordinati per fornitore alfabeticamente e per data documento dal più recente.</div><div class="supplier-grid"><div class="field"><label>Tipo documento *</label><select id="df_tipo"><option>Fattura</option><option>DDT</option></select></div><div class="field"><label>Fornitore *</label><select id="df_fornitore"></select></div><div class="field"><label>Data consegna</label><input id="df_consegna" type="date"></div><div class="field"><label>Data documento</label><input id="df_data" type="date"></div><div class="field"><label>Numero documento *</label><input id="df_numero" placeholder="Numero documento"></div><div class="field"><label>Importo totale (€)</label><input id="df_importo" type="number" min="0" step="0.01" placeholder="0,00"></div></div><div class="actions"><button class="primary" onclick="salvaDocumentoFornitore()">SALVA DOCUMENTO</button><button class="secondary" onclick="pulisciDocumentoForm()">NUOVO / ANNULLA</button></div><div class="searchWrap" style="margin-top:18px"><span class="searchIcon">🔍</span><input id="cercaDocumentiFornitori" class="search" placeholder="Cerca fornitore, numero o tipo documento..." oninput="renderDocumentiFornitori()"></div><div id="listaDocumentiFornitori"></div></div></section>
 
 <section id="magazzino" class="section">
 <div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa giacenze')">🖨️ Stampa giacenze</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📋 Magazzino</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaMagazzino" oninput="renderMagazzino()" placeholder="Cerca prodotto, lotto, posizione o stato..."></div><div id="listaMagazzino"></div></div></section>
@@ -227,24 +242,26 @@ th,td{font-size:13px}
   </div>
 </div>
 <script>
-const KEY_STOCK='donToninoStock_v2',KEY_MOV='donToninoMovimenti_v2',KEY_TRACE='donToninoTracciabilita_v2',KEY_ING='donToninoIngredienti_v1',KEY_CLASSICI='donToninoClassici_v1';
-let stock=JSON.parse(localStorage.getItem(KEY_STOCK)||'[]'),movimenti=JSON.parse(localStorage.getItem(KEY_MOV)||'[]'),tracciabilita=JSON.parse(localStorage.getItem(KEY_TRACE)||'[]'),ingredienti=JSON.parse(localStorage.getItem(KEY_ING)||'[]'),prodottiClassici=JSON.parse(localStorage.getItem(KEY_CLASSICI)||'[]');let editingId=null, editingClassicoId=null;
+const KEY_STOCK='donToninoStock_v2',KEY_MOV='donToninoMovimenti_v2',KEY_TRACE='donToninoTracciabilita_v2',KEY_ING='donToninoIngredienti_v1',KEY_CLASSICI='donToninoClassici_v1',KEY_FORNITORI='donToninoFornitori_v1',KEY_DOC_FORNITORI='donToninoDocumentiFornitori_v1';
+let stock=JSON.parse(localStorage.getItem(KEY_STOCK)||'[]'),movimenti=JSON.parse(localStorage.getItem(KEY_MOV)||'[]'),tracciabilita=JSON.parse(localStorage.getItem(KEY_TRACE)||'[]'),ingredienti=JSON.parse(localStorage.getItem(KEY_ING)||'[]'),prodottiClassici=JSON.parse(localStorage.getItem(KEY_CLASSICI)||'[]'),fornitori=JSON.parse(localStorage.getItem(KEY_FORNITORI)||'[]'),documentiFornitori=JSON.parse(localStorage.getItem(KEY_DOC_FORNITORI)||'[]');let editingId=null, editingClassicoId=null, editingFornitoreId=null, editingDocumentoFornitoreId=null;
 const $=id=>document.getElementById(id);function today(){return new Date().toISOString().slice(0,10)}function uid(){return Date.now()+'_'+Math.random().toString(36).slice(2,8)}function saveAll(){
   localStorage.setItem(KEY_STOCK,JSON.stringify(stock));
   localStorage.setItem(KEY_MOV,JSON.stringify(movimenti));
   localStorage.setItem(KEY_TRACE,JSON.stringify(tracciabilita));
   localStorage.setItem(KEY_ING,JSON.stringify(ingredienti));
   localStorage.setItem(KEY_CLASSICI,JSON.stringify(prodottiClassici));
+  localStorage.setItem(KEY_FORNITORI,JSON.stringify(fornitori));
+  localStorage.setItem(KEY_DOC_FORNITORI,JSON.stringify(documentiFornitori));
   fetch('https://script.google.com/macros/s/AKfycbzXW257ueOM8fajq3Szcc0StlA651wJ9uf3b8DX7NXXK5adwkyyCdl8fWNCj2PdaUZC/exec',{
     method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify({products:stock,ingredients:ingredienti,classicalProducts:prodottiClassici,movements:movimenti,traceability:tracciabilita})
+    body:JSON.stringify({products:stock,ingredients:ingredienti,classicalProducts:prodottiClassici,movements:movimenti,traceability:tracciabilita,suppliers:fornitori,supplierDocuments:documentiFornitori})
   }).catch(e=>console.error('Errore salvataggio database:',e));
 }function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function fmtDate(v){if(!v)return '-';const p=v.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:v}function daysTo(v){if(!v)return null;const a=new Date();a.setHours(0,0,0,0);return Math.ceil((new Date(v+'T00:00:00')-a)/86400000)}function expiryState(v){const d=daysTo(v);if(d===null)return{text:'N/D',cls:''};if(d<0)return{text:'SCADUTO',cls:'danger'};if(d<=3)return{text:'URGENTE',cls:'danger'};if(d<=7)return{text:'IN SCADENZA',cls:'warning'};return{text:'OK',cls:'ok'}}
 // Regole interne presenti nel registro Don Tonino: vanno validate nel piano HACCP aziendale.
 const REGOLE=[['FRESCO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','BANCO +4°C',3,'preparazione'],['SCONGELATO','FRIGORIFERO +4°C',3,'scongelamento'],['ABBATTUTO +3°C','FRIGORIFERO +4°C',6,'abbattimento'],['ABBATTUTO -18°C','CONGELATORE -16°C',90,'abbattimento']];
 function addDays(s,n){if(!s)return'';const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}function calcolaScadenza(d){if(d.maker)return{date:d.maker,source:'PRODUTTORE'};const r=REGOLE.find(x=>x[0]===d.state&&x[1]===d.storage);if(!r)return{date:'',source:'NON CALCOLATA'};let base=d.carico;if(r[3]==='preparazione')base=d.preparazione||d.carico;if(r[3]==='scongelamento')base=d.scongelamento||d.carico;if(r[3]==='abbattimento')base=d.abbattimento||d.preparazione||d.carico;return{date:addDays(base,r[2]),source:'CALCOLATA +'+r[2]+' GG'}}
 function ricalcolaScadenzaUI(){}
-function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
+function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici',fornitori:'btnFornitori',documentiFornitori:'btnDocumentiFornitori'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
 const pickerSelected={pc:[],nuovo:[],edit:[]};
 function normalizeIngredientNames(arr){
   const result=[];const seen=new Set();
@@ -334,8 +351,12 @@ async function caricaProdotto(){
     initialQty:qty,
     unit:$('c_unit').value,
     ingredients:ing,
-
-   
+    supplierId:$('c_fornitore').value||'',
+    supplierName:(fornitori.find(f=>f.id===$('c_fornitore').value)||{}).name||'',
+    supplierDocumentId:$('c_documento').value||'',
+    deliveryDate:$('c_dataConsegna').value||'',
+    documentType:$('c_tipoDocumento').value||'',
+    documentNumber:$('c_numeroDocumento').value.trim(),
 
     createdAt:new Date().toISOString()
   };
@@ -501,6 +522,11 @@ function modificaProdotto(id){
         <label>Lotto</label>
         <input id="e_lotto" value="${esc(x.lotto||'')}">
       </div>
+      <div class="field"><label>Fornitore (facoltativo)</label><select id="e_fornitore" onchange="aggiornaDocumentiProdotto('e')">${optionFornitori(x.supplierId||'')}</select></div>
+      <div class="field"><label>Documento fornitore</label><select id="e_documento" onchange="applicaDocumentoProdotto('e')"></select></div>
+      <div class="field"><label>Data consegna</label><input id="e_dataConsegna" type="date" value="${x.deliveryDate||''}"></div>
+      <div class="field"><label>Tipo documento</label><select id="e_tipoDocumento"><option value="">Nessuno</option><option ${x.documentType==='Fattura'?'selected':''}>Fattura</option><option ${x.documentType==='DDT'?'selected':''}>DDT</option></select></div>
+      <div class="field"><label>Numero documento</label><input id="e_numeroDocumento" value="${esc(x.documentNumber||'')}"></div>
 
       <div class="field">
         <label>Stato</label>
@@ -581,6 +607,7 @@ function modificaProdotto(id){
   // Mantiene gli ingredienti già presenti e li mostra come selezioni compatte.
   ensureIngredients(x.ingredients||[]);
   inizializzaPicker('edit',x.ingredients||[]);
+  aggiornaDocumentiProdotto('e',x.supplierDocumentId||'');
 }
   
 function salvaModifica(){
@@ -591,6 +618,12 @@ function salvaModifica(){
 
   x.name=$('e_nome').value.trim();
   x.lotto=$('e_lotto').value.trim();
+  x.supplierId=$('e_fornitore').value||'';
+  x.supplierName=(fornitori.find(f=>f.id===x.supplierId)||{}).name||'';
+  x.supplierDocumentId=$('e_documento').value||'';
+  x.deliveryDate=$('e_dataConsegna').value||'';
+  x.documentType=$('e_tipoDocumento').value||'';
+  x.documentNumber=$('e_numeroDocumento').value.trim();
   x.state=$('e_stato').value;
   x.storage=$('e_storage').value;
   x.date=$('e_date').value;
@@ -999,6 +1032,8 @@ async function caricaDatabase(){
     stock=data.products||[];
 ingredienti=data.ingredients||[];
 if(Array.isArray(data.classicalProducts)) prodottiClassici=data.classicalProducts;
+if(Array.isArray(data.suppliers)) fornitori=data.suppliers;
+if(Array.isArray(data.supplierDocuments)) documentiFornitori=data.supplierDocuments;
 movimenti=data.movements||[];
 tracciabilita=data.traceability||[];
 
@@ -1007,6 +1042,8 @@ localStorage.setItem(KEY_MOV,JSON.stringify(movimenti));
 localStorage.setItem(KEY_TRACE,JSON.stringify(tracciabilita));
 localStorage.setItem(KEY_ING,JSON.stringify(ingredienti));
 localStorage.setItem(KEY_CLASSICI,JSON.stringify(prodottiClassici));
+localStorage.setItem(KEY_FORNITORI,JSON.stringify(fornitori));
+localStorage.setItem(KEY_DOC_FORNITORI,JSON.stringify(documentiFornitori));
 
     renderAll();
   }catch(e){
@@ -1055,6 +1092,33 @@ function renderAll(){
   renderPickerOptions('pc');renderPickerChips('pc');renderPickerOptions('nuovo');renderPickerChips('nuovo');
   renderNomiProdotti();
    renderIngredientList();
+   renderFornitori(); renderDocumentiFornitori(); renderSelectFornitori();
 }
+
+function optionFornitori(selected=''){
+ return '<option value="">Produzione propria / nessun fornitore</option>'+[...fornitori].sort((a,b)=>a.name.localeCompare(b.name,'it')).map(f=>`<option value="${esc(f.id)}" ${String(selected)===String(f.id)?'selected':''}>${esc(f.name)}</option>`).join('');
+}
+function renderSelectFornitori(){
+ ['c_fornitore','e_fornitore','df_fornitore'].forEach(id=>{const el=$(id);if(!el)return;const old=el.value;el.innerHTML= id==='df_fornitore' ? '<option value="">Seleziona fornitore...</option>'+[...fornitori].sort((a,b)=>a.name.localeCompare(b.name,'it')).map(f=>`<option value="${esc(f.id)}">${esc(f.name)}</option>`).join('') : optionFornitori(old);});
+ if($('c_fornitore'))aggiornaDocumentiProdotto('c',$('c_documento')?.value||'');
+}
+function salvaFornitore(){
+ const name=$('f_nome').value.trim();if(!name)return alert('Inserisci il nome del fornitore.');
+ const obj={id:editingFornitoreId||uid(),name,address:$('f_indirizzo').value.trim(),vat:$('f_piva').value.trim(),phone:$('f_telefono').value.trim(),email:$('f_mail').value.trim()};
+ const idx=fornitori.findIndex(f=>f.id===obj.id);if(idx>=0)fornitori[idx]=obj;else if(fornitori.some(f=>f.name.toLowerCase()===name.toLowerCase()))return alert('Esiste già un fornitore con questo nome.');else fornitori.push(obj);
+ editingFornitoreId=null;saveAll();pulisciFornitoreForm();renderFornitori();renderSelectFornitori();alert('Fornitore salvato.');
+}
+function modificaFornitore(id){const f=fornitori.find(x=>x.id===id);if(!f)return;editingFornitoreId=id;$('f_nome').value=f.name||'';$('f_indirizzo').value=f.address||'';$('f_piva').value=f.vat||'';$('f_telefono').value=f.phone||'';$('f_mail').value=f.email||'';mostra('fornitori');}
+function eliminaFornitore(id){if(documentiFornitori.some(d=>d.supplierId===id)||stock.some(p=>p.supplierId===id))return alert('Non posso eliminare questo fornitore perché è collegato a documenti o prodotti. Puoi modificarne i dati.');if(!confirm('Eliminare definitivamente il fornitore?'))return;fornitori=fornitori.filter(f=>f.id!==id);saveAll();renderFornitori();renderSelectFornitori();}
+function pulisciFornitoreForm(){editingFornitoreId=null;['f_nome','f_indirizzo','f_piva','f_telefono','f_mail'].forEach(id=>$(id).value='');}
+function renderFornitori(){const el=$('listaFornitori');if(!el)return;const q=($('cercaFornitori')?.value||'').toLowerCase();const arr=[...fornitori].filter(f=>[f.name,f.address,f.vat,f.phone,f.email].join(' ').toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));if(!arr.length){el.innerHTML='<div class="empty">Nessun fornitore registrato.</div>';return;}el.innerHTML='<div class="tableWrap"><table><thead><tr><th>Nome</th><th>Indirizzo</th><th>Partita IVA</th><th>Telefono</th><th>Mail</th><th>Azioni</th></tr></thead><tbody>'+arr.map(f=>`<tr><td>${esc(f.name)}</td><td>${esc(f.address||'—')}</td><td>${esc(f.vat||'—')}</td><td>${esc(f.phone||'—')}</td><td>${esc(f.email||'—')}</td><td><button class="editBtn" onclick="modificaFornitore('${esc(f.id)}')">MODIFICA</button> <button class="dangerBtn" onclick="eliminaFornitore('${esc(f.id)}')">ELIMINA</button></td></tr>`).join('')+'</tbody></table></div>';}
+function salvaDocumentoFornitore(){const supplierId=$('df_fornitore').value;const supplier=fornitori.find(f=>f.id===supplierId);const number=$('df_numero').value.trim();if(!supplier)return alert('Seleziona il fornitore.');if(!number)return alert('Inserisci il numero documento.');const obj={id:editingDocumentoFornitoreId||uid(),type:$('df_tipo').value,deliveryDate:$('df_consegna').value||'',documentDate:$('df_data').value||'',number,supplierId,supplierName:supplier.name,total:Number($('df_importo').value)||0};const idx=documentiFornitori.findIndex(d=>d.id===obj.id);if(idx>=0)documentiFornitori[idx]=obj;else documentiFornitori.push(obj);editingDocumentoFornitoreId=null;saveAll();pulisciDocumentoForm();renderDocumentiFornitori();renderSelectFornitori();alert('Documento fornitore salvato.');}
+function pulisciDocumentoForm(){editingDocumentoFornitoreId=null;$('df_tipo').value='Fattura';$('df_fornitore').value='';$('df_consegna').value='';$('df_data').value='';$('df_numero').value='';$('df_importo').value='';}
+function modificaDocumentoFornitore(id){const d=documentiFornitori.find(x=>x.id===id);if(!d)return;editingDocumentoFornitoreId=id;mostra('documentiFornitori');renderSelectFornitori();$('df_tipo').value=d.type||'Fattura';$('df_fornitore').value=d.supplierId||'';$('df_consegna').value=d.deliveryDate||'';$('df_data').value=d.documentDate||'';$('df_numero').value=d.number||'';$('df_importo').value=d.total||0;}
+function eliminaDocumentoFornitore(id){if(stock.some(p=>p.supplierDocumentId===id))return alert('Documento collegato a uno o più prodotti: modifica il collegamento prima di eliminarlo.');if(!confirm('Eliminare questo documento?'))return;documentiFornitori=documentiFornitori.filter(d=>d.id!==id);saveAll();renderDocumentiFornitori();renderSelectFornitori();}
+function renderDocumentiFornitori(){const el=$('listaDocumentiFornitori');if(!el)return;const q=($('cercaDocumentiFornitori')?.value||'').toLowerCase();const arr=[...documentiFornitori].filter(d=>[d.supplierName,d.number,d.type,d.documentDate,d.deliveryDate].join(' ').toLowerCase().includes(q)).sort((a,b)=>String(a.supplierName||'').localeCompare(String(b.supplierName||''),'it')||String(b.documentDate||'').localeCompare(String(a.documentDate||'')));if(!arr.length){el.innerHTML='<div class="empty">Nessun documento fornitore registrato.</div>';return;}el.innerHTML='<div class="tableWrap"><table><thead><tr><th>Fornitore</th><th>Tipo</th><th>Data documento</th><th>Data consegna</th><th>Numero</th><th>Importo</th><th>Azioni</th></tr></thead><tbody>'+arr.map(d=>`<tr><td>${esc(d.supplierName||'—')}</td><td>${esc(d.type||'')}</td><td>${fmtDate(d.documentDate)}</td><td>${fmtDate(d.deliveryDate)}</td><td>${esc(d.number||'')}</td><td>€ ${Number(d.total||0).toFixed(2).replace('.',',')}</td><td><button class="editBtn" onclick="modificaDocumentoFornitore('${esc(d.id)}')">MODIFICA</button> <button class="dangerBtn" onclick="eliminaDocumentoFornitore('${esc(d.id)}')">ELIMINA</button></td></tr>`).join('')+'</tbody></table></div>';}
+function aggiornaDocumentiProdotto(prefix,selectedId=''){const sid=$(prefix+'_fornitore')?.value||'';const el=$(prefix+'_documento');if(!el)return;const old=selectedId||el.value;const arr=[...documentiFornitori].filter(d=>d.supplierId===sid).sort((a,b)=>String(b.documentDate||'').localeCompare(String(a.documentDate||''))||String(b.deliveryDate||'').localeCompare(String(a.deliveryDate||'')));el.innerHTML='<option value="">Nessun documento</option>'+arr.map(d=>`<option value="${esc(d.id)}" ${d.id===old?'selected':''}>${esc(d.type)} n. ${esc(d.number)} — doc. ${fmtDate(d.documentDate)} — consegna ${fmtDate(d.deliveryDate)}</option>`).join('');if(old&&!arr.some(d=>d.id===old))el.value='';}
+function applicaDocumentoProdotto(prefix){const id=$(prefix+'_documento')?.value||'';const d=documentiFornitori.find(x=>x.id===id);if(!d)return;if($(prefix+'_fornitore'))$(prefix+'_fornitore').value=d.supplierId||'';aggiornaDocumentiProdotto(prefix,id);if($(prefix+'_dataConsegna'))$(prefix+'_dataConsegna').value=d.deliveryDate||'';if($(prefix+'_tipoDocumento'))$(prefix+'_tipoDocumento').value=d.type||'';if($(prefix+'_numeroDocumento'))$(prefix+'_numeroDocumento').value=d.number||'';}
+
 $('c_data').value=today();ricalcolaScadenzaUI();caricaDatabase();home();
 </script></body></html>
