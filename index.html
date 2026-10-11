@@ -34,6 +34,7 @@ th,td{font-size:13px}
   @page{margin:12mm}
 }
 .print-title{display:none}
+.ingredient-picker{display:block}.ingredient-picker select{padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:#fff;min-height:46px}.ingredient-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.ingredient-chip{display:inline-flex;align-items:center;gap:8px;background:#f1e5d8;border-radius:18px;padding:7px 10px;font-size:14px}.ingredient-chip button{border:0;border-radius:50%;width:22px;height:22px;background:#8b1e1e;color:#fff;font-weight:bold;cursor:pointer}.ingredient-summary{font-size:12px;color:#555;margin-top:5px;line-height:1.4}textarea[readonly]{background:#f8f5f0!important;min-height:58px!important}
 </style>
 
 </head>
@@ -119,7 +120,7 @@ th,td{font-size:13px}
 
 <section id="carica" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📦 Nuovo prodotto / carico</h2>
 
-<div class="subbox"><h3>📚 Seleziona dal catalogo Prodotti Classici</h3><div class="notice">Il nome e gli ingredienti del modello verranno copiati nel nuovo carico. Lotto, quantità e date si inseriscono qui sotto.</div><div class="actions"><select id="c_classico" onchange="applicaClassicoNuovo()"><option value="">Seleziona prodotto classico...</option></select><button class="secondary" type="button" onclick="applicaClassicoNuovo()">CARICA MODELLO</button></div></div><div class="subbox"><h3>📋 Duplica prodotto esistente</h3><div class="notice">Puoi richiamare un prodotto già presente o già esistito nel magazzino, compresi quelli esauriti. Verranno copiati i dati e soprattutto gli ingredienti/allergeni; lotto, quantità e date resteranno da inserire.</div><div class="actions"><select id="c_duplica"><option value="">Seleziona un prodotto...</option></select><button class="secondary" type="button" onclick="duplicaProdottoSelezionato()">CARICA DATI</button></div></div>
+<div class="subbox"><h3>📚 Seleziona dal catalogo Prodotti Classici</h3><div class="notice">Il nome e gli ingredienti del modello verranno copiati nel nuovo carico. Lotto, quantità e date si inseriscono qui sotto.</div><div class="actions"><select id="c_classico" onchange="applicaClassicoNuovo()"><option value="">Seleziona prodotto classico...</option></select><button class="secondary" type="button" onclick="applicaClassicoNuovo()">CARICA MODELLO</button></div></div>
 <div class="form-grid">
 <div class="field"><label>Nome prodotto *</label><input id="c_nome" list="listaNomiProdotti" placeholder="Es. Torta crema">
 <datalist id="listaNomiProdotti"></datalist></div><div class="field"><label>Lotto</label><input id="c_lotto" placeholder="Facoltativo"></div>
@@ -131,7 +132,11 @@ th,td{font-size:13px}
 <div class="field"><label>Formato</label><select id="c_formato"><option>CONFEZIONE</option><option>VASSOIO</option><option>VASCHETTA 6 PORZIONI</option><option>VASCHETTA 2 PORZIONI</option><option>VASCHETTA 1 PORZIONE</option><option>CARTONE</option><option>SFUSO</option></select></div>
 <div class="field"><label>Quantità *</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0"></div><div class="field"><label>Unità</label><select id="c_unit"><option>PZ</option><option>KG</option><option>G</option><option>L</option><option>ML</option></select></div>
 </div>
-<div class="subbox"><h3>🥚 Ingredienti / allergeni</h3><div class="notice">L'anagrafica cresce con gli inserimenti. Puoi aggiungere ingredienti/allergeni anche senza creare un prodotto.</div><div id="ingredientiNuovo"></div><button class="secondary" onclick="aggiungiIngredienteRiga()">+ Aggiungi ingrediente / allergene</button></div><datalist id="ingredientList"></datalist>
+<div class="subbox"><h3>🥚 Ingredienti / allergeni</h3><div class="notice">Cerca un ingrediente nel menu, selezionalo e premi AGGIUNGI. Gli ingredienti devono essere presenti nell'anagrafica.</div><div id="ingredientiNuovo"><div class="ingredient-picker">
+  <div class="field"><label for="nuovo_ingSearch">Cerca ingrediente</label><input id="nuovo_ingSearch" placeholder="Digita per filtrare l'elenco..." oninput="renderPickerOptions('nuovo')"></div>
+  <div class="actions" style="align-items:end;margin-top:8px"><div class="field" style="flex:1"><label for="nuovo_ingSelect">Seleziona ingrediente</label><select id="nuovo_ingSelect" size="1" style="width:100%"></select></div><button type="button" class="secondary" onclick="aggiungiSelezionatoPicker('nuovo')">AGGIUNGI</button></div>
+  <div id="nuovo_ingChips" class="ingredient-chips"></div>
+</div></div><div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="c_ingredientiSintesi" readonly placeholder="Gli ingredienti selezionati appariranno qui, separati da virgole."></textarea></div></div><datalist id="ingredientList"></datalist>
 <div class="subbox"><h3>➖ Utilizza prodotti esistenti per questa preparazione</h3><div class="notice">Se, per esempio, la torta usa 30 pasticciotti su 100, alla conferma la giacenza diventa 70. Se utilizzi tutto, la giacenza va a zero e il movimento viene registrato come esaurito.</div><div id="utilizziNuovo"></div><button class="secondary" onclick="aggiungiUtilizzoRiga()">+ Utilizza prodotto esistente</button></div>
 <div class="actions"><button class="primary" onclick="caricaProdotto()">SALVA PRODOTTO</button></div></div></section>
 
@@ -189,8 +194,11 @@ th,td{font-size:13px}
 <div class="subbox">
 <h3 id="titoloClassico">➕ Nuovo prodotto classico</h3>
 <div class="field"><label>Nome prodotto classico *</label><input id="pc_nome" placeholder="Es. Pasticciotto crema"></div>
-<div class="field" style="margin-top:12px"><label>Cerca ingredienti dell'anagrafica</label><input id="pc_cercaIng" placeholder="Scrivi per cercare..." oninput="renderIngredientiClassici()"></div>
-<div id="pc_elencoIng" style="margin-top:8px"></div>
+<div style="margin-top:12px"><div class="ingredient-picker">
+  <div class="field"><label for="pc_ingSearch">Cerca ingrediente</label><input id="pc_ingSearch" placeholder="Digita per filtrare l'elenco..." oninput="renderPickerOptions('pc')"></div>
+  <div class="actions" style="align-items:end;margin-top:8px"><div class="field" style="flex:1"><label for="pc_ingSelect">Seleziona ingrediente</label><select id="pc_ingSelect" size="1" style="width:100%"></select></div><button type="button" class="secondary" onclick="aggiungiSelezionatoPicker('pc')">AGGIUNGI</button></div>
+  <div id="pc_ingChips" class="ingredient-chips"></div>
+</div></div><div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="pc_ingredientiSintesi" readonly placeholder="Gli ingredienti selezionati appariranno qui, separati da virgole."></textarea></div>
 <div class="actions">
 <button class="primary" onclick="salvaProdottoClassico()">SALVA PRODOTTO CLASSICO</button>
 <button class="secondary" onclick="resetFormProdottoClassico()">ANNULLA / NUOVO</button>
@@ -237,86 +245,40 @@ const REGOLE=[['FRESCO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','FRIGORIF
 function addDays(s,n){if(!s)return'';const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}function calcolaScadenza(d){if(d.maker)return{date:d.maker,source:'PRODUTTORE'};const r=REGOLE.find(x=>x[0]===d.state&&x[1]===d.storage);if(!r)return{date:'',source:'NON CALCOLATA'};let base=d.carico;if(r[3]==='preparazione')base=d.preparazione||d.carico;if(r[3]==='scongelamento')base=d.scongelamento||d.carico;if(r[3]==='abbattimento')base=d.abbattimento||d.preparazione||d.carico;return{date:addDays(base,r[2]),source:'CALCOLATA +'+r[2]+' GG'}}
 function ricalcolaScadenzaUI(){}
 function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
-function aggiungiIngredienteRiga(data={}){
-  const box=$('ingredientiNuovo');
-  let pannello=document.getElementById('pannelloIngredientiNuovo');
-
-  if(!pannello){
-    pannello=document.createElement('div');
-    pannello.id='pannelloIngredientiNuovo';
-
-    pannello.innerHTML=`
-      <div class="field">
-        <label>Cerca ingredienti codificati</label>
-        <input id="cercaIngNuovo"
-          placeholder="Scrivi per cercare...">
-      </div>
-      <div id="elencoIngNuovo"></div>
-    `;
-
-    box.innerHTML='';
-    box.appendChild(pannello);
-
-    document.getElementById('cercaIngNuovo')
-      .addEventListener('input',renderElencoIngNuovo);
-  }
-
-  renderElencoIngNuovo();
+const pickerSelected={pc:[],nuovo:[],edit:[]};
+function normalizeIngredientNames(arr){
+  const result=[];const seen=new Set();
+  (arr||[]).forEach(x=>{const name=String(typeof x==='string'?x:(x.name||'')).trim();const key=name.toLowerCase();if(name&&!seen.has(key)){seen.add(key);const ref=ingredienti.find(i=>String(i.name||'').trim().toLowerCase()===key);result.push({name,type:(typeof x==='object'&&x.type)||ref?.type||'INGREDIENTE'});}});
+  return result;
 }
-
-function renderElencoIngNuovo(){
-  const el=document.getElementById('elencoIngNuovo');
-  if(!el)return;
-
-  const q=(document.getElementById('cercaIngNuovo')?.value||'')
-    .trim().toLowerCase();
-
-  const selezionati=new Set(
-    [...document.querySelectorAll('.checkIngNuovo:checked')]
-      .map(c=>c.value.trim().toLowerCase())
-  );
-
-  const arr=ingredienti
-    .filter(i=>String(i.name||'').toLowerCase().includes(q))
-    .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'it'));
-
-  if(!arr.length){
-    el.innerHTML='<div class="empty">Nessun ingrediente trovato.</div>';
-    return;
-  }
-
-  el.innerHTML=arr.map(i=>{
-    const nome=String(i.name||'').trim();
-    const chiave=nome.toLowerCase();
-
-    return `
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 0">
-        <input type="checkbox" class="checkIngNuovo"
-          value="${esc(nome)}"
-          ${selezionati.has(chiave)?'checked':''}>
-        <span>${esc(nome)}</span>
-        <small>(${esc(i.type||'INGREDIENTE')})</small>
-      </label>
-    `;
-  }).join('');
+function inizializzaPicker(prefix, initial=[]){pickerSelected[prefix]=normalizeIngredientNames(initial);renderPickerOptions(prefix);renderPickerChips(prefix);}
+function renderPickerOptions(prefix){
+  const sel=$(`${prefix}_ingSelect`),search=$(`${prefix}_ingSearch`);if(!sel||!search)return;
+  const q=search.value.trim().toLowerCase();const picked=new Set((pickerSelected[prefix]||[]).map(x=>x.name.toLowerCase()));
+  const arr=[...ingredienti].filter(i=>String(i.name||'').toLowerCase().includes(q)&&!picked.has(String(i.name||'').trim().toLowerCase())).sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'it'));
+  const previous=sel.value;
+  sel.innerHTML='<option value="">'+(arr.length?'Scegli ingrediente...':'Nessun ingrediente disponibile')+'</option>'+arr.map(i=>`<option value="${esc(i.name)}">${esc(i.name)} (${esc(i.type||'INGREDIENTE')})</option>`).join('');
+  if(arr.some(i=>i.name===previous))sel.value=previous;
 }
-
-
-function getIngredients(){
-  return [...document.querySelectorAll('#elencoIngNuovo .checkIngNuovo:checked')]
-    .map(c=>{
-      const nome=c.value.trim();
-      const ingrediente=ingredienti.find(i=>
-        String(i.name||'').trim().toLowerCase()===nome.toLowerCase()
-      );
-
-      return {
-        name:nome,
-        type:ingrediente?.type||'INGREDIENTE'
-      };
-    })
-    .filter(x=>x.name);
-}function ensureIngredients(a){a.forEach(x=>{if(!ingredienti.some(i=>i.name.toLowerCase()===x.name.toLowerCase()))ingredienti.push({id:uid(),name:x.name,type:x.type})})}
+function renderPickerChips(prefix){
+  const el=$(`${prefix}_ingChips`);if(!el)return;
+  const arr=pickerSelected[prefix]||[];
+  el.innerHTML=arr.length?arr.map((i,n)=>`<span class="ingredient-chip">${esc(i.name)} <small>(${esc(i.type)})</small><button type="button" title="Rimuovi ${esc(i.name)}" onclick="rimuoviPickerIngrediente('${prefix}',${n})">×</button></span>`).join(''):'<span class="small">Nessun ingrediente selezionato.</span>';
+  const summaryId={pc:'pc_ingredientiSintesi',nuovo:'c_ingredientiSintesi',edit:'e_ingredientiSintesi'}[prefix];
+  if($(summaryId))$(summaryId).value=arr.map(i=>i.name).join(', ');
+}
+function aggiungiSelezionatoPicker(prefix){
+  const sel=$(`${prefix}_ingSelect`);const name=sel?.value||'';if(!name)return alert('Cerca e seleziona un ingrediente dal menu.');
+  const i=ingredienti.find(x=>String(x.name||'').trim().toLowerCase()===name.trim().toLowerCase());
+  if(!i)return alert('Ingrediente non presente nell’anagrafica.');
+  if(!(pickerSelected[prefix]||[]).some(x=>x.name.toLowerCase()===name.toLowerCase()))pickerSelected[prefix].push({name:i.name,type:i.type||'INGREDIENTE'});
+  if($(`${prefix}_ingSearch`))$(`${prefix}_ingSearch`).value='';
+  renderPickerOptions(prefix);renderPickerChips(prefix);
+}
+function rimuoviPickerIngrediente(prefix,index){pickerSelected[prefix].splice(index,1);renderPickerOptions(prefix);renderPickerChips(prefix);}
+function getPickerIngredients(prefix){return normalizeIngredientNames(pickerSelected[prefix]||[]);}
+function aggiungiIngredienteRiga(data={}){const current=getPickerIngredients('nuovo');const incoming=data&&data.name?[data]:[];inizializzaPicker('nuovo',current.concat(incoming));}
+function getIngredients(){return getPickerIngredients('nuovo');}function ensureIngredients(a){a.forEach(x=>{if(!ingredienti.some(i=>i.name.toLowerCase()===x.name.toLowerCase()))ingredienti.push({id:uid(),name:x.name,type:x.type})})}
 function elencoProdottiDuplicabili(){const m={};stock.forEach(x=>{if(!x.name)return;const k=x.name.trim().toLowerCase();if(!m[k]||((x.ingredients||[]).length>(m[k].ingredients||[]).length))m[k]=x});return Object.values(m).sort((a,b)=>a.name.localeCompare(b.name,'it'))}
 function renderDuplica(){const el=$('c_duplica');if(!el)return;const arr=elencoProdottiDuplicabili();el.innerHTML='<option value="">Seleziona un prodotto...</option>'+arr.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}${x.lotto?' · Lotto '+esc(x.lotto):''}</option>`).join('')}
 function duplicaProdottoSelezionato(){const id=$('c_duplica').value;const x=stock.find(p=>String(p.id)===String(id));if(!x)return alert('Seleziona prima un prodotto.');$('c_nome').value=x.name||'';$('c_lotto').value='';$('c_stato').value=x.state||'FRESCO';$('c_storage').value=x.storage||'FRIGORIFERO +4°C';$('c_formato').value=x.format||'CONFEZIONE';$('c_unit').value=x.unit||'PZ';$('c_qty').value='';$('c_data').value=today();$('c_scadenzaProduttore').value='';$('c_preparazione').value='';$('c_abbattimento').value='';$('c_scongelamento').value='';$('ingredientiNuovo').innerHTML='';(x.ingredients||[]).forEach(i=>aggiungiIngredienteRiga(i));$('utilizziNuovo').innerHTML='';ricalcolaScadenzaUI();alert('Dati e ingredienti copiati. Inserisci quantità, lotto e date necessarie, poi salva il nuovo prodotto.')}
@@ -463,42 +425,24 @@ function getIngredientiDaSelezione(selettore){
     return {name:nome,type:i?.type||'INGREDIENTE'};
   }).filter(x=>x.name);
 }
-function renderIngredientiClassici(){
-  const el=$('pc_elencoIng'); if(!el)return;
-  const q=($('pc_cercaIng')?.value||'').trim().toLowerCase();
-  const selezionati=new Set([...document.querySelectorAll('.pc_checkIng:checked')].map(c=>c.value.toLowerCase()));
-  const arr=[...ingredienti].filter(i=>String(i.name||'').toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));
-  el.innerHTML=arr.length?arr.map(i=>`<label style="display:flex;align-items:center;gap:8px;padding:6px 0"><input type="checkbox" class="pc_checkIng" value="${esc(i.name)}" ${selezionati.has(String(i.name).toLowerCase())?'checked':''}><span>${esc(i.name)}</span><small>(${esc(i.type||'INGREDIENTE')})</small></label>`).join(''):'<div class="empty">Nessun ingrediente in anagrafica corrispondente.</div>';
-}
+function renderIngredientiClassici(){renderPickerOptions('pc');renderPickerChips('pc');}
 function resetFormProdottoClassico(){
-  editingClassicoId=null;
-  $('pc_nome').value=''; $('pc_cercaIng').value='';
-  $('titoloClassico').textContent='➕ Nuovo prodotto classico';
-  document.querySelectorAll('.pc_checkIng').forEach(c=>c.checked=false);
-  renderIngredientiClassici();
+  editingClassicoId=null;$('pc_nome').value='';$('pc_ingSearch').value='';
+  $('titoloClassico').textContent='➕ Nuovo prodotto classico';inizializzaPicker('pc',[]);
 }
 function salvaProdottoClassico(){
-  const name=$('pc_nome').value.trim();
-  if(!name)return alert('Inserisci il nome del prodotto classico.');
-  const ing=getIngredientiDaSelezione('.pc_checkIng');
+  const name=$('pc_nome').value.trim();if(!name)return alert('Inserisci il nome del prodotto classico.');
+  const ing=getPickerIngredients('pc');
   const duplicato=prodottiClassici.find(p=>p.name.trim().toLowerCase()===name.toLowerCase()&&String(p.id)!==String(editingClassicoId));
   if(duplicato)return alert('Esiste già un prodotto classico con questo nome.');
-  if(editingClassicoId){
-    const p=prodottiClassici.find(p=>String(p.id)===String(editingClassicoId));
-    if(p){p.name=name;p.ingredients=ing;p.updatedAt=new Date().toISOString();}
-  }else{
-    prodottiClassici.push({id:uid(),name,ingredients:ing,createdAt:new Date().toISOString()});
-  }
-  saveAll(); resetFormProdottoClassico(); renderAll(); alert('Prodotto classico salvato.');
+  if(editingClassicoId){const p=prodottiClassici.find(p=>String(p.id)===String(editingClassicoId));if(p){p.name=name;p.ingredients=ing;p.updatedAt=new Date().toISOString();}}
+  else prodottiClassici.push({id:uid(),name,ingredients:ing,createdAt:new Date().toISOString()});
+  saveAll();resetFormProdottoClassico();renderAll();alert('Prodotto classico salvato.');
 }
 function modificaProdottoClassico(id){
-  const p=prodottiClassici.find(x=>String(x.id)===String(id)); if(!p)return;
-  editingClassicoId=p.id; $('pc_nome').value=p.name||''; $('pc_cercaIng').value='';
-  $('titoloClassico').textContent='✏️ Modifica prodotto classico';
-  renderIngredientiClassici();
-  const sel=new Set((p.ingredients||[]).map(i=>String(i.name||'').toLowerCase()));
-  document.querySelectorAll('.pc_checkIng').forEach(c=>c.checked=sel.has(c.value.toLowerCase()));
-  $('pc_nome').scrollIntoView({behavior:'smooth',block:'center'});
+  const p=prodottiClassici.find(x=>String(x.id)===String(id));if(!p)return;
+  editingClassicoId=p.id;$('pc_nome').value=p.name||'';$('pc_ingSearch').value='';$('titoloClassico').textContent='✏️ Modifica prodotto classico';
+  inizializzaPicker('pc',p.ingredients||[]);$('pc_nome').scrollIntoView({behavior:'smooth',block:'center'});
 }
 function eliminaProdottoClassico(id){
   const p=prodottiClassici.find(x=>String(x.id)===String(id)); if(!p)return;
@@ -522,64 +466,16 @@ function renderCatalogoClassici(){
   renderIngredientiClassici();renderListaProdottiClassici();
 }
 function applicaClassicoNuovo(){
-  const p=prodottiClassici.find(x=>String(x.id)==String($('c_classico')?.value));
-  if(!p)return alert('Seleziona prima un prodotto classico.');
-  $('c_nome').value=p.name||'';
-  $('ingredientiNuovo').innerHTML='';
-  aggiungiIngredienteRiga();
-  const sel=new Set((p.ingredients||[]).map(i=>String(i.name||'').toLowerCase()));
-  document.querySelectorAll('#elencoIngNuovo .checkIngNuovo').forEach(c=>c.checked=sel.has(c.value.toLowerCase()));
-  alert('Nome e ingredienti del prodotto classico copiati. Puoi completare lotto, date e quantità.');
+  const p=prodottiClassici.find(x=>String(x.id)===String($('c_classico')?.value));if(!p)return alert('Seleziona prima un prodotto classico.');
+  $('c_nome').value=p.name||'';inizializzaPicker('nuovo',p.ingredients||[]);alert('Nome e ingredienti del prodotto classico copiati. Puoi completare lotto, date e quantità.');
 }
 function applicaClassicoModifica(){
-  const p=prodottiClassici.find(x=>String(x.id)==String($('e_classico')?.value));
-  if(!p)return;
-  $('e_nome').value=p.name||'';
-  const sel=new Set((p.ingredients||[]).map(i=>String(i.name||'').toLowerCase()));
-  document.querySelectorAll('#elencoIngModifica .checkIngModifica').forEach(c=>c.checked=sel.has(c.value.toLowerCase()));
+  const p=prodottiClassici.find(x=>String(x.id)===String($('e_classico')?.value));if(!p)return;
+  $('e_nome').value=p.name||'';inizializzaPicker('edit',p.ingredients||[]);
 }
-function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza'].forEach(id=>$(id).value='');$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('ingredientiNuovo').innerHTML='';$('utilizziNuovo').innerHTML='';}
-function renderElencoIngModifica(){
-  const el=document.getElementById('elencoIngModifica');
-  if(!el)return;
-
-  const q=(document.getElementById('cercaIngModifica')?.value||'')
-    .trim().toLowerCase();
-
-  const selezionati=new Set(
-    [...document.querySelectorAll('.checkIngModifica:checked')]
-      .map(c=>c.value.trim().toLowerCase())
-  );
-
-  const arr=ingredienti
-    .filter(i=>String(i.name||'').toLowerCase().includes(q))
-    .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'it'));
-
-  if(!arr.length){
-    el.innerHTML='<div class="empty">Nessun ingrediente trovato.</div>';
-    return;
-  }
-
-  el.innerHTML=arr.map(i=>{
-    const nome=String(i.name||'').trim();
-    const chiave=nome.toLowerCase();
-
-    return `
-      <label style="display:flex;align-items:center;gap:8px;padding:6px 0">
-        <input type="checkbox" class="checkIngModifica"
-          value="${esc(nome)}"
-          ${selezionati.has(chiave)?'checked':''}>
-        <span>${esc(nome)}</span>
-        <small>(${esc(i.type||'INGREDIENTE')})</small>
-      </label>
-    `;
-  }).join('');
-}
-
-function aggiungiIngredienteModifica(){
-  renderElencoIngModifica();
-}
-
+function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza'].forEach(id=>$(id).value='');$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('c_classico').value='';inizializzaPicker('nuovo',[]);$('utilizziNuovo').innerHTML='';}
+function renderElencoIngModifica(){renderPickerOptions('edit');renderPickerChips('edit');}
+function aggiungiIngredienteModifica(){renderElencoIngModifica();}
 
 function salvaIngredienteAnagrafica(){const name=$('i_nome').value.trim();if(!name)return alert('Inserisci il nome.');if(ingredienti.some(i=>i.name.toLowerCase()===name.toLowerCase()))return alert('Ingrediente già presente.');ingredienti.push({id:uid(),name,type:$('i_tipo').value});saveAll();$('i_nome').value='';renderIngredienti();alert('Ingrediente aggiunto.')}
 function renderIngredienti(){const el=$('listaIngredienti'),q=($('cercaIngredienti')?.value||'').toLowerCase();if(!ingredienti.length){el.innerHTML='<div class="empty">Nessun ingrediente registrato.</div>';return}const arr=[...ingredienti].filter(i=>(i.name+' '+(i.type||'')).toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Ingrediente</th><th>Tipo</th><th>Azioni</th></tr></thead><tbody>'+arr.map(i=>`<tr><td>${esc(i.name)}</td><td><span class="badge">${esc(i.type||'INGREDIENTE')}</span></td><td><button class="dangerBtn" onclick="eliminaIngrediente('${i.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun risultato.</div>'}
@@ -670,39 +566,21 @@ function modificaProdotto(id){
     </div>
 
     <div class="subbox">
-  <h3>🥚 Ingredienti / allergeni</h3>
-
-  <div class="field">
-    <label>Cerca ingredienti</label>
-    <input id="cercaIngModifica" placeholder="Scrivi per cercare...">
-  </div>
-
-  <div id="elencoIngModifica"></div>
-
-
-</div>  `;
+      <h3>🥚 Ingredienti / allergeni</h3>
+      <div class="notice">Cerca nel menu, seleziona un ingrediente e premi AGGIUNGI.</div>
+      <div class="ingredient-picker">
+  <div class="field"><label for="edit_ingSearch">Cerca ingrediente</label><input id="edit_ingSearch" placeholder="Digita per filtrare l'elenco..." oninput="renderPickerOptions('edit')"></div>
+  <div class="actions" style="align-items:end;margin-top:8px"><div class="field" style="flex:1"><label for="edit_ingSelect">Seleziona ingrediente</label><select id="edit_ingSelect" size="1" style="width:100%"></select></div><button type="button" class="secondary" onclick="aggiungiSelezionatoPicker('edit')">AGGIUNGI</button></div>
+  <div id="edit_ingChips" class="ingredient-chips"></div>
+</div>
+      <div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="e_ingredientiSintesi" readonly></textarea></div>
+    </div>  `;
 
  $('editModal').classList.add('active');
 
-  // Ingredienti già presenti nel prodotto
-  const selezionati=new Set(
-    (x.ingredients||[]).map(i=>
-      String(i.name||'').trim().toLowerCase()
-    )
-  );
-
-  // Inserisce in anagrafica eventuali ingredienti storici mancanti
+  // Mantiene gli ingredienti già presenti e li mostra come selezioni compatte.
   ensureIngredients(x.ingredients||[]);
-
-  renderElencoIngModifica();
-
-  document.querySelectorAll('#elencoIngModifica .checkIngModifica')
-    .forEach(c=>{
-      c.checked=selezionati.has(c.value.trim().toLowerCase());
-    });
-
-  document.getElementById('cercaIngModifica')
-    .addEventListener('input',renderElencoIngModifica);
+  inizializzaPicker('edit',x.ingredients||[]);
 }
   
 function salvaModifica(){
@@ -738,24 +616,8 @@ function salvaModifica(){
   x.qty=Number($('e_qty').value)||0;
   x.unit=$('e_unit').value;
 
-  const ingredientiModificati=[
-  ...document.querySelectorAll('#elencoIngModifica .checkIngModifica:checked')
-].map(c=>{
-  const nome=c.value.trim();
-  const precedente=(x.ingredients||[]).find(i=>
-    String(i.name||'').trim().toLowerCase()===nome.toLowerCase()
-  );
-  const anagrafica=ingredienti.find(i=>
-    String(i.name||'').trim().toLowerCase()===nome.toLowerCase()
-  );
-
-  return {
-    name:nome,
-    type:precedente?.type||anagrafica?.type||'INGREDIENTE'
-  };
-});
-
-x.ingredients=ingredientiModificati;
+  const ingredientiModificati=getPickerIngredients('edit');
+  x.ingredients=ingredientiModificati;
 ensureIngredients(x.ingredients);
 
 
@@ -943,7 +805,7 @@ function renderMagazzino(){
     const s=expiryState(x.expiry);
 
     h+=`<tr>
-      <td><b>${esc(x.name)}</b><br><span class="small">${esc(x.state)} · ${esc(x.format)}</span></td>
+      <td><b>${esc(x.name)}</b><br><span class="small">${esc(x.state)} · ${esc(x.format)}</span><div class="ingredient-summary"><b>Ingredienti:</b> ${esc(ingredientiSintesi(x))}</div></td>
       <td>${esc(x.lotto||'-')}</td>
       <td>${esc(x.storage)}</td>
       <td class="${s.cls}">${fmtDate(x.expiry)}<br><span class="small">${s.text} · ${esc(x.expirySource||'')}</span></td>
@@ -959,6 +821,7 @@ function renderMagazzino(){
 
   $('listaMagazzino').innerHTML=h+'</tbody></table></div>';
 }
+function ingredientiSintesi(x){return (x&&Array.isArray(x.ingredients)?x.ingredients:[]).map(i=>String(i.name||'').trim()).filter(Boolean).join(', ')||'Nessun ingrediente indicato';}
 function matchSearch(x,q){return [x.name,x.lotto,x.storage,x.state,x.type,x.note,x.targetProductName,x.sourceName,x.sourceLotto].filter(Boolean).join(' ').toLowerCase().includes(q)}
 function renderScadenze(){const q=($('cercaScadenze')?.value||'').toLowerCase();const arr=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d>=0&&d<=7&&x.qty>0&&matchSearch(x,q)}).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));$('listaScadenze').innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Scadenza</th><th>Giacenza</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td class="warning">${fmtDate(x.expiry)}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessuna scadenza entro 7 giorni.</div>'}
 function renderScaduti(){const q=($('cercaScaduti')?.value||'').toLowerCase();const arr=stock.filter(x=>{const d=daysTo(x.expiry);return d!==null&&d<0&&x.qty>0&&matchSearch(x,q)}).sort((a,b)=>a.name.localeCompare(b.name,'it')||String(a.lotto||'').localeCompare(String(b.lotto||''),'it'));$('listaScaduti').innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Lotto</th><th>Scadenza</th><th>Giacenza</th><th></th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.lotto||'-')}</td><td class="danger">${fmtDate(x.expiry)}</td><td>${x.qty} ${esc(x.unit)}</td><td><button class="editBtn" onclick="modificaProdotto('${x.id}')">Modifica</button> <button type="button" onclick="stampaSchedaProdotto('${x.id}')">🖨️ Stampa scheda</button> <button class="dangerBtn" onclick="eliminaProdotto('${x.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun prodotto scaduto con giacenza.</div>'}
@@ -1189,6 +1052,7 @@ function renderAll(){
   renderIngredienti();
   renderCatalogoClassici();
   renderDuplica();
+  renderPickerOptions('pc');renderPickerChips('pc');renderPickerOptions('nuovo');renderPickerChips('nuovo');
   renderNomiProdotti();
    renderIngredientList();
 }
