@@ -110,13 +110,16 @@ th,td{font-size:13px}
 <button id="btnIngredienti" onclick="mostra('ingredienti')">
 🥚<br>Ingredienti
 </button>
+<button id="btnClassici" onclick="mostra('prodottiClassici')">
+📚<br>Prodotti classici
+</button>
 
 </div>
 </section>
 
 <section id="carica" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📦 Nuovo prodotto / carico</h2>
 
-<div class="subbox"><h3>📋 Duplica prodotto esistente</h3><div class="notice">Puoi richiamare un prodotto già presente o già esistito nel magazzino, compresi quelli esauriti. Verranno copiati i dati e soprattutto gli ingredienti/allergeni; lotto, quantità e date resteranno da inserire.</div><div class="actions"><select id="c_duplica"><option value="">Seleziona un prodotto...</option></select><button class="secondary" type="button" onclick="duplicaProdottoSelezionato()">CARICA DATI</button></div></div>
+<div class="subbox"><h3>📚 Seleziona dal catalogo Prodotti Classici</h3><div class="notice">Il nome e gli ingredienti del modello verranno copiati nel nuovo carico. Lotto, quantità e date si inseriscono qui sotto.</div><div class="actions"><select id="c_classico" onchange="applicaClassicoNuovo()"><option value="">Seleziona prodotto classico...</option></select><button class="secondary" type="button" onclick="applicaClassicoNuovo()">CARICA MODELLO</button></div></div><div class="subbox"><h3>📋 Duplica prodotto esistente</h3><div class="notice">Puoi richiamare un prodotto già presente o già esistito nel magazzino, compresi quelli esauriti. Verranno copiati i dati e soprattutto gli ingredienti/allergeni; lotto, quantità e date resteranno da inserire.</div><div class="actions"><select id="c_duplica"><option value="">Seleziona un prodotto...</option></select><button class="secondary" type="button" onclick="duplicaProdottoSelezionato()">CARICA DATI</button></div></div>
 <div class="form-grid">
 <div class="field"><label>Nome prodotto *</label><input id="c_nome" list="listaNomiProdotti" placeholder="Es. Torta crema">
 <datalist id="listaNomiProdotti"></datalist></div><div class="field"><label>Lotto</label><input id="c_lotto" placeholder="Facoltativo"></div>
@@ -178,6 +181,24 @@ th,td{font-size:13px}
 </div><div id="listaMovimenti"></div></div></section>
 <section id="tracciabilita" class="section">
 <div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa tracciabilità')">🖨️ Stampa tracciabilità</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🔎 Tracciabilità</h2><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="cercaTracciabilita" oninput="renderTracciabilita()" placeholder="Cerca prodotto, lotto o preparazione..."></div><div id="listaTracciabilita"></div></div></section>
+<section id="prodottiClassici" class="section">
+<div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div>
+<div class="box">
+<h2>📚 Catalogo Prodotti Classici</h2>
+<div class="notice">Crea modelli riutilizzabili con nome e ingredienti. Le modifiche al magazzino non cambiano il modello salvato qui.</div>
+<div class="subbox">
+<h3 id="titoloClassico">➕ Nuovo prodotto classico</h3>
+<div class="field"><label>Nome prodotto classico *</label><input id="pc_nome" placeholder="Es. Pasticciotto crema"></div>
+<div class="field" style="margin-top:12px"><label>Cerca ingredienti dell'anagrafica</label><input id="pc_cercaIng" placeholder="Scrivi per cercare..." oninput="renderIngredientiClassici()"></div>
+<div id="pc_elencoIng" style="margin-top:8px"></div>
+<div class="actions">
+<button class="primary" onclick="salvaProdottoClassico()">SALVA PRODOTTO CLASSICO</button>
+<button class="secondary" onclick="resetFormProdottoClassico()">ANNULLA / NUOVO</button>
+</div>
+</div>
+<div class="subbox"><h3>Prodotti classici registrati</h3><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="pc_cerca" oninput="renderListaProdottiClassici()" placeholder="Cerca prodotto classico..."></div><div id="pc_lista"></div></div>
+</div>
+</section>
 <section id="ingredienti" class="section">
 <div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa ingredienti')">🖨️ Stampa ingredienti</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🥚 Ingredienti / allergeni</h2><div class="notice">Questa anagrafica può essere alimentata anche indipendentemente dall'inserimento dei prodotti.</div><div class="form-grid"><div class="field"><label>Nome ingrediente / allergene</label><input id="i_nome" placeholder="Es. Latte"></div><div class="field"><label>Tipo</label><select id="i_tipo"><option>ALLERGENE</option><option>INGREDIENTE</option></select></div></div><div class="actions"><button class="primary" onclick="salvaIngredienteAnagrafica()">AGGIUNGI</button></div><div class="searchWrap" style="margin-top:18px"><span class="searchIcon">🔍</span><input class="search" id="cercaIngredienti" oninput="renderIngredienti()" placeholder="Cerca ingrediente o allergene..."></div><div id="listaIngredienti"></div></div></section>
 </div>
@@ -198,14 +219,24 @@ th,td{font-size:13px}
   </div>
 </div>
 <script>
-const KEY_STOCK='donToninoStock_v2',KEY_MOV='donToninoMovimenti_v2',KEY_TRACE='donToninoTracciabilita_v2',KEY_ING='donToninoIngredienti_v1';
-let stock=JSON.parse(localStorage.getItem(KEY_STOCK)||'[]'),movimenti=JSON.parse(localStorage.getItem(KEY_MOV)||'[]'),tracciabilita=JSON.parse(localStorage.getItem(KEY_TRACE)||'[]'),ingredienti=JSON.parse(localStorage.getItem(KEY_ING)||'[]');let editingId=null;
-const $=id=>document.getElementById(id);function today(){return new Date().toISOString().slice(0,10)}function uid(){return Date.now()+'_'+Math.random().toString(36).slice(2,8)}function saveAll(){localStorage.setItem(KEY_STOCK,JSON.stringify(stock));localStorage.setItem(KEY_MOV,JSON.stringify(movimenti));localStorage.setItem(KEY_TRACE,JSON.stringify(tracciabilita));localStorage.setItem(KEY_ING,JSON.stringify(ingredienti));fetch('https://script.google.com/macros/s/AKfycbzXW257ueOM8fajq3Szcc0StlA651wJ9uf3b8DX7NXXK5adwkyyCdl8fWNCj2PdaUZC/exec',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({products:stock,ingredients:ingredienti,history:[],movements:movimenti,traceability:tracciabilita})}).catch(e=>console.error('Errore salvataggio database:',e))}function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function fmtDate(v){if(!v)return '-';const p=v.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:v}function daysTo(v){if(!v)return null;const a=new Date();a.setHours(0,0,0,0);return Math.ceil((new Date(v+'T00:00:00')-a)/86400000)}function expiryState(v){const d=daysTo(v);if(d===null)return{text:'N/D',cls:''};if(d<0)return{text:'SCADUTO',cls:'danger'};if(d<=3)return{text:'URGENTE',cls:'danger'};if(d<=7)return{text:'IN SCADENZA',cls:'warning'};return{text:'OK',cls:'ok'}}
+const KEY_STOCK='donToninoStock_v2',KEY_MOV='donToninoMovimenti_v2',KEY_TRACE='donToninoTracciabilita_v2',KEY_ING='donToninoIngredienti_v1',KEY_CLASSICI='donToninoClassici_v1';
+let stock=JSON.parse(localStorage.getItem(KEY_STOCK)||'[]'),movimenti=JSON.parse(localStorage.getItem(KEY_MOV)||'[]'),tracciabilita=JSON.parse(localStorage.getItem(KEY_TRACE)||'[]'),ingredienti=JSON.parse(localStorage.getItem(KEY_ING)||'[]'),prodottiClassici=JSON.parse(localStorage.getItem(KEY_CLASSICI)||'[]');let editingId=null, editingClassicoId=null;
+const $=id=>document.getElementById(id);function today(){return new Date().toISOString().slice(0,10)}function uid(){return Date.now()+'_'+Math.random().toString(36).slice(2,8)}function saveAll(){
+  localStorage.setItem(KEY_STOCK,JSON.stringify(stock));
+  localStorage.setItem(KEY_MOV,JSON.stringify(movimenti));
+  localStorage.setItem(KEY_TRACE,JSON.stringify(tracciabilita));
+  localStorage.setItem(KEY_ING,JSON.stringify(ingredienti));
+  localStorage.setItem(KEY_CLASSICI,JSON.stringify(prodottiClassici));
+  fetch('https://script.google.com/macros/s/AKfycbzXW257ueOM8fajq3Szcc0StlA651wJ9uf3b8DX7NXXK5adwkyyCdl8fWNCj2PdaUZC/exec',{
+    method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({products:stock,ingredients:ingredienti,classicalProducts:prodottiClassici,movements:movimenti,traceability:tracciabilita})
+  }).catch(e=>console.error('Errore salvataggio database:',e));
+}function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function fmtDate(v){if(!v)return '-';const p=v.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:v}function daysTo(v){if(!v)return null;const a=new Date();a.setHours(0,0,0,0);return Math.ceil((new Date(v+'T00:00:00')-a)/86400000)}function expiryState(v){const d=daysTo(v);if(d===null)return{text:'N/D',cls:''};if(d<0)return{text:'SCADUTO',cls:'danger'};if(d<=3)return{text:'URGENTE',cls:'danger'};if(d<=7)return{text:'IN SCADENZA',cls:'warning'};return{text:'OK',cls:'ok'}}
 // Regole interne presenti nel registro Don Tonino: vanno validate nel piano HACCP aziendale.
 const REGOLE=[['FRESCO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','BANCO +4°C',3,'preparazione'],['SCONGELATO','FRIGORIFERO +4°C',3,'scongelamento'],['ABBATTUTO +3°C','FRIGORIFERO +4°C',6,'abbattimento'],['ABBATTUTO -18°C','CONGELATORE -16°C',90,'abbattimento']];
 function addDays(s,n){if(!s)return'';const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}function calcolaScadenza(d){if(d.maker)return{date:d.maker,source:'PRODUTTORE'};const r=REGOLE.find(x=>x[0]===d.state&&x[1]===d.storage);if(!r)return{date:'',source:'NON CALCOLATA'};let base=d.carico;if(r[3]==='preparazione')base=d.preparazione||d.carico;if(r[3]==='scongelamento')base=d.scongelamento||d.carico;if(r[3]==='abbattimento')base=d.abbattimento||d.preparazione||d.carico;return{date:addDays(base,r[2]),source:'CALCOLATA +'+r[2]+' GG'}}
 function ricalcolaScadenzaUI(){}
-function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
+function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
 function aggiungiIngredienteRiga(data={}){
   const box=$('ingredientiNuovo');
   let pannello=document.getElementById('pannelloIngredientiNuovo');
@@ -425,6 +456,88 @@ home();
 
 alert('3 - HOME COMPLETATA');
 }
+function getIngredientiDaSelezione(selettore){
+  return [...document.querySelectorAll(selettore+':checked')].map(c=>{
+    const nome=c.value.trim();
+    const i=ingredienti.find(x=>String(x.name||'').trim().toLowerCase()===nome.toLowerCase());
+    return {name:nome,type:i?.type||'INGREDIENTE'};
+  }).filter(x=>x.name);
+}
+function renderIngredientiClassici(){
+  const el=$('pc_elencoIng'); if(!el)return;
+  const q=($('pc_cercaIng')?.value||'').trim().toLowerCase();
+  const selezionati=new Set([...document.querySelectorAll('.pc_checkIng:checked')].map(c=>c.value.toLowerCase()));
+  const arr=[...ingredienti].filter(i=>String(i.name||'').toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));
+  el.innerHTML=arr.length?arr.map(i=>`<label style="display:flex;align-items:center;gap:8px;padding:6px 0"><input type="checkbox" class="pc_checkIng" value="${esc(i.name)}" ${selezionati.has(String(i.name).toLowerCase())?'checked':''}><span>${esc(i.name)}</span><small>(${esc(i.type||'INGREDIENTE')})</small></label>`).join(''):'<div class="empty">Nessun ingrediente in anagrafica corrispondente.</div>';
+}
+function resetFormProdottoClassico(){
+  editingClassicoId=null;
+  $('pc_nome').value=''; $('pc_cercaIng').value='';
+  $('titoloClassico').textContent='➕ Nuovo prodotto classico';
+  document.querySelectorAll('.pc_checkIng').forEach(c=>c.checked=false);
+  renderIngredientiClassici();
+}
+function salvaProdottoClassico(){
+  const name=$('pc_nome').value.trim();
+  if(!name)return alert('Inserisci il nome del prodotto classico.');
+  const ing=getIngredientiDaSelezione('.pc_checkIng');
+  const duplicato=prodottiClassici.find(p=>p.name.trim().toLowerCase()===name.toLowerCase()&&String(p.id)!==String(editingClassicoId));
+  if(duplicato)return alert('Esiste già un prodotto classico con questo nome.');
+  if(editingClassicoId){
+    const p=prodottiClassici.find(p=>String(p.id)===String(editingClassicoId));
+    if(p){p.name=name;p.ingredients=ing;p.updatedAt=new Date().toISOString();}
+  }else{
+    prodottiClassici.push({id:uid(),name,ingredients:ing,createdAt:new Date().toISOString()});
+  }
+  saveAll(); resetFormProdottoClassico(); renderAll(); alert('Prodotto classico salvato.');
+}
+function modificaProdottoClassico(id){
+  const p=prodottiClassici.find(x=>String(x.id)===String(id)); if(!p)return;
+  editingClassicoId=p.id; $('pc_nome').value=p.name||''; $('pc_cercaIng').value='';
+  $('titoloClassico').textContent='✏️ Modifica prodotto classico';
+  renderIngredientiClassici();
+  const sel=new Set((p.ingredients||[]).map(i=>String(i.name||'').toLowerCase()));
+  document.querySelectorAll('.pc_checkIng').forEach(c=>c.checked=sel.has(c.value.toLowerCase()));
+  $('pc_nome').scrollIntoView({behavior:'smooth',block:'center'});
+}
+function eliminaProdottoClassico(id){
+  const p=prodottiClassici.find(x=>String(x.id)===String(id)); if(!p)return;
+  if(!confirm('Eliminare dal catalogo il prodotto classico "'+p.name+'"? I prodotti già presenti in magazzino non verranno modificati.'))return;
+  prodottiClassici=prodottiClassici.filter(x=>String(x.id)!==String(id));
+  saveAll();renderAll();
+}
+function renderListaProdottiClassici(){
+  const el=$('pc_lista');if(!el)return;
+  const q=($('pc_cerca')?.value||'').trim().toLowerCase();
+  const arr=[...prodottiClassici].filter(p=>String(p.name||'').toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));
+  el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Ingredienti</th><th>Azioni</th></tr></thead><tbody>'+arr.map(p=>`<tr><td><b>${esc(p.name)}</b></td><td>${(p.ingredients||[]).map(i=>esc(i.name)).join(', ')||'—'}</td><td><button class="editBtn" onclick="modificaProdottoClassico('${p.id}')">Modifica</button> <button class="dangerBtn" onclick="eliminaProdottoClassico('${p.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun prodotto classico registrato.</div>';
+}
+function renderCatalogoClassici(){
+  const sel=$('c_classico');
+  if(sel){
+    const val=sel.value;
+    sel.innerHTML='<option value="">Seleziona prodotto classico...</option>'+[...prodottiClassici].sort((a,b)=>a.name.localeCompare(b.name,'it')).map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
+    if(prodottiClassici.some(p=>String(p.id)===String(val)))sel.value=val;
+  }
+  renderIngredientiClassici();renderListaProdottiClassici();
+}
+function applicaClassicoNuovo(){
+  const p=prodottiClassici.find(x=>String(x.id)==String($('c_classico')?.value));
+  if(!p)return alert('Seleziona prima un prodotto classico.');
+  $('c_nome').value=p.name||'';
+  $('ingredientiNuovo').innerHTML='';
+  aggiungiIngredienteRiga();
+  const sel=new Set((p.ingredients||[]).map(i=>String(i.name||'').toLowerCase()));
+  document.querySelectorAll('#elencoIngNuovo .checkIngNuovo').forEach(c=>c.checked=sel.has(c.value.toLowerCase()));
+  alert('Nome e ingredienti del prodotto classico copiati. Puoi completare lotto, date e quantità.');
+}
+function applicaClassicoModifica(){
+  const p=prodottiClassici.find(x=>String(x.id)==String($('e_classico')?.value));
+  if(!p)return;
+  $('e_nome').value=p.name||'';
+  const sel=new Set((p.ingredients||[]).map(i=>String(i.name||'').toLowerCase()));
+  document.querySelectorAll('#elencoIngModifica .checkIngModifica').forEach(c=>c.checked=sel.has(c.value.toLowerCase()));
+}
 function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza'].forEach(id=>$(id).value='');$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('ingredientiNuovo').innerHTML='';$('utilizziNuovo').innerHTML='';}
 function renderElencoIngModifica(){
   const el=document.getElementById('elencoIngModifica');
@@ -478,6 +591,9 @@ function modificaProdotto(id){
   editingId=id;
 
   $('editForm').innerHTML=`
+    <div class="subbox"><h3>📚 Carica nome e ingredienti da un prodotto classico</h3>
+      <div class="field"><label>Prodotto classico</label><select id="e_classico" onchange="applicaClassicoModifica()"><option value="">Seleziona prodotto classico...</option>${[...prodottiClassici].sort((a,b)=>a.name.localeCompare(b.name,'it')).map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select></div>
+    </div>
     <div class="form-grid">
 
       <div class="field">
@@ -1019,6 +1135,7 @@ async function caricaDatabase(){
 
     stock=data.products||[];
 ingredienti=data.ingredients||[];
+if(Array.isArray(data.classicalProducts)) prodottiClassici=data.classicalProducts;
 movimenti=data.movements||[];
 tracciabilita=data.traceability||[];
 
@@ -1026,6 +1143,7 @@ localStorage.setItem(KEY_STOCK,JSON.stringify(stock));
 localStorage.setItem(KEY_MOV,JSON.stringify(movimenti));
 localStorage.setItem(KEY_TRACE,JSON.stringify(tracciabilita));
 localStorage.setItem(KEY_ING,JSON.stringify(ingredienti));
+localStorage.setItem(KEY_CLASSICI,JSON.stringify(prodottiClassici));
 
     renderAll();
   }catch(e){
@@ -1069,6 +1187,7 @@ function renderAll(){
   renderMovimenti();
   renderTracciabilita();
   renderIngredienti();
+  renderCatalogoClassici();
   renderDuplica();
   renderNomiProdotti();
    renderIngredientList();
