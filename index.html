@@ -285,7 +285,7 @@ function renderPickerOptions(prefix){
   panel.innerHTML=arr.length?arr.map(i=>{
     const name=String(i.name||'').trim();
     const checked=selected.has(name.toLowerCase())?'checked':'';
-    return `<label class="ingredient-option"><input type="checkbox" ${checked} onchange="setPickerIngredient('${prefix}',${JSON.stringify(name).replace(/</g,'\\u003c')},this.checked)"><span>${esc(name)}</span><small>${esc(i.type||'INGREDIENTE')}</small></label>`;
+    return `<label class="ingredient-option"><input type="checkbox" data-picker-prefix="${prefix}" data-ingredient-name="${esc(name)}" ${checked} onchange="setPickerIngredientFromInput(this)"><span>${esc(name)}</span><small>${esc(i.type||'INGREDIENTE')}</small></label>`;
   }).join(''):'<div class="small" style="padding:10px">Nessun ingrediente trovato. Aggiungilo prima nell’anagrafica Ingredienti.</div>';
   if(toggle){
     const count=(pickerSelected[prefix]||[]).length;
@@ -297,6 +297,12 @@ function togglePickerDropdown(prefix){
   const panel=$(`${prefix}_ingOptions`),toggle=$(`${prefix}_ingToggle`);if(!panel)return;
   panel.classList.toggle('hidden');
   if(toggle)toggle.setAttribute('aria-expanded',panel.classList.contains('hidden')?'false':'true');
+}
+function setPickerIngredientFromInput(input){
+  if(!input)return;
+  const prefix=input.dataset.pickerPrefix;
+  const name=input.dataset.ingredientName;
+  setPickerIngredient(prefix,name,input.checked);
 }
 function setPickerIngredient(prefix,name,checked){
   const key=String(name||'').trim().toLowerCase();
@@ -319,9 +325,11 @@ function confermaPicker(prefix){
   const panel=$(`${prefix}_ingOptions`),toggle=$(`${prefix}_ingToggle`);
   if(panel)panel.classList.add('hidden');
   if(toggle)toggle.setAttribute('aria-expanded','false');
-  const arr=pickerSelected[prefix]||[];
+  const arr=getPickerIngredients(prefix);
+  pickerSelected[prefix]=arr;
   const summaryId={pc:'pc_ingredientiSintesi',nuovo:'c_ingredientiSintesi',edit:'e_ingredientiSintesi'}[prefix];
   if($(summaryId))$(summaryId).value=arr.map(i=>i.name).join(', ');
+  renderPickerChips(prefix);
   alert(arr.length?`Confermati ${arr.length} ingredienti.`:'Non hai selezionato ingredienti.');
 }
 
