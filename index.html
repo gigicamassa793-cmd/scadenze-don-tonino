@@ -146,8 +146,8 @@ th,td{font-size:13px}
 </div>
 <div class="subbox"><h3>🥚 Ingredienti / allergeni</h3><div class="notice">Apri una sola volta l'elenco e spunta tutti gli ingredienti della preparazione. Puoi cercarli e selezionarne quanti ne servono; il riepilogo si aggiorna automaticamente.</div><div id="ingredientiNuovo"><div class="ingredient-picker">
   <div class="field"><label for="nuovo_ingSearch">Filtra ingredienti</label><input id="nuovo_ingSearch" placeholder="Digita per trovare un ingrediente..." oninput="renderPickerOptions('nuovo')"></div>
-  <div class="ingredient-dropdown"><button type="button" id="nuovo_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="true" onclick="togglePickerDropdown('nuovo')">☑️ Seleziona ingredienti</button><div id="nuovo_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
-  <div id="nuovo_ingChips" class="ingredient-chips"></div>
+  <div class="ingredient-dropdown"><button type="button" id="nuovo_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="false" onclick="togglePickerDropdown('nuovo')">☑️ Seleziona ingredienti</button><div id="nuovo_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
+  <div id="nuovo_ingChips" class="ingredient-chips"></div><div class="actions" style="margin-top:10px"><button type="button" class="primary" onclick="confermaPicker('nuovo')">CONFERMA INGREDIENTI</button></div>
 </div></div><div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="c_ingredientiSintesi" readonly placeholder="Gli ingredienti selezionati appariranno qui, separati da virgole."></textarea></div></div><datalist id="ingredientList"></datalist>
 <div class="subbox"><h3>➖ Utilizza prodotti esistenti per questa preparazione</h3><div class="notice">Se, per esempio, la torta usa 30 pasticciotti su 100, alla conferma la giacenza diventa 70. Se utilizzi tutto, la giacenza va a zero e il movimento viene registrato come esaurito.</div><div id="utilizziNuovo"></div><button class="secondary" onclick="aggiungiUtilizzoRiga()">+ Utilizza prodotto esistente</button></div>
 <div class="actions"><button class="primary" onclick="caricaProdotto()">SALVA PRODOTTO</button></div></div></section>
@@ -212,8 +212,8 @@ th,td{font-size:13px}
 <div class="field"><label>Nome prodotto classico *</label><input id="pc_nome" placeholder="Es. Pasticciotto crema"></div>
 <div style="margin-top:12px"><div class="ingredient-picker">
   <div class="field"><label for="pc_ingSearch">Filtra ingredienti</label><input id="pc_ingSearch" placeholder="Digita per trovare un ingrediente..." oninput="renderPickerOptions('pc')"></div>
-  <div class="ingredient-dropdown"><button type="button" id="pc_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="true" onclick="togglePickerDropdown('pc')">☑️ Seleziona ingredienti</button><div id="pc_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
-  <div id="pc_ingChips" class="ingredient-chips"></div>
+  <div class="ingredient-dropdown"><button type="button" id="pc_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="false" onclick="togglePickerDropdown('pc')">☑️ Seleziona ingredienti</button><div id="pc_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
+  <div id="pc_ingChips" class="ingredient-chips"></div><div class="actions" style="margin-top:10px"><button type="button" class="primary" onclick="confermaPicker('pc')">CONFERMA INGREDIENTI</button></div>
 </div></div><div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="pc_ingredientiSintesi" readonly placeholder="Gli ingredienti selezionati appariranno qui, separati da virgole."></textarea></div>
 <div class="actions">
 <button class="primary" onclick="salvaProdottoClassico()">SALVA PRODOTTO CLASSICO</button>
@@ -300,17 +300,31 @@ function togglePickerDropdown(prefix){
 }
 function setPickerIngredient(prefix,name,checked){
   const key=String(name||'').trim().toLowerCase();
-  const current=pickerSelected[prefix]||[];
+  let current=pickerSelected[prefix]||[];
   if(checked){
     const item=ingredienti.find(i=>String(i.name||'').trim().toLowerCase()===key);
     if(item&&!current.some(x=>x.name.trim().toLowerCase()===key))current.push({name:item.name,type:item.type||'INGREDIENTE'});
+    pickerSelected[prefix]=current;
   }else{
     pickerSelected[prefix]=current.filter(x=>x.name.trim().toLowerCase()!==key);
   }
-  if(checked)pickerSelected[prefix]=current;
-  renderPickerOptions(prefix);
+  // La casella rimane selezionata/deselezionata senza ricreare il menu durante il click.
   renderPickerChips(prefix);
+  const toggle=$(`${prefix}_ingToggle`);
+  if(toggle){const count=(pickerSelected[prefix]||[]).length;toggle.textContent=count?`☑️ Ingredienti selezionati: ${count}`:'☑️ Seleziona ingredienti';}
 }
+function confermaPicker(prefix){
+  // Conferma esplicita: sincronizza riepilogo, chiude il menu e lascia gli ingredienti salvati nello stato del modulo.
+  renderPickerChips(prefix);
+  const panel=$(`${prefix}_ingOptions`),toggle=$(`${prefix}_ingToggle`);
+  if(panel)panel.classList.add('hidden');
+  if(toggle)toggle.setAttribute('aria-expanded','false');
+  const arr=pickerSelected[prefix]||[];
+  const summaryId={pc:'pc_ingredientiSintesi',nuovo:'c_ingredientiSintesi',edit:'e_ingredientiSintesi'}[prefix];
+  if($(summaryId))$(summaryId).value=arr.map(i=>i.name).join(', ');
+  alert(arr.length?`Confermati ${arr.length} ingredienti.`:'Non hai selezionato ingredienti.');
+}
+
 function renderPickerChips(prefix){
   const el=$(`${prefix}_ingChips`);if(!el)return;
   const arr=pickerSelected[prefix]||[];
@@ -625,8 +639,8 @@ function modificaProdotto(id){
       <div class="notice">Apri l'elenco e spunta tutti gli ingredienti da associare al prodotto. Il riepilogo si aggiorna automaticamente.</div>
       <div class="ingredient-picker">
   <div class="field"><label for="edit_ingSearch">Filtra ingredienti</label><input id="edit_ingSearch" placeholder="Digita per trovare un ingrediente..." oninput="renderPickerOptions('edit')"></div>
-  <div class="ingredient-dropdown"><button type="button" id="edit_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="true" onclick="togglePickerDropdown('edit')">☑️ Seleziona ingredienti</button><div id="edit_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
-  <div id="edit_ingChips" class="ingredient-chips"></div>
+  <div class="ingredient-dropdown"><button type="button" id="edit_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="false" onclick="togglePickerDropdown('edit')">☑️ Seleziona ingredienti</button><div id="edit_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
+  <div id="edit_ingChips" class="ingredient-chips"></div><div class="actions" style="margin-top:10px"><button type="button" class="primary" onclick="confermaPicker('edit')">CONFERMA INGREDIENTI</button></div>
 </div>
       <div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="e_ingredientiSintesi" readonly></textarea></div>
     </div>  `;
