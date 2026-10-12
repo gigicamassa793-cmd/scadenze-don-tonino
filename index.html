@@ -1,3 +1,4 @@
+````
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -34,7 +35,7 @@ th,td{font-size:13px}
   @page{margin:12mm}
 }
 .print-title{display:none}
-.supplier-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.supplier-grid .full{grid-column:1/-1}@media(max-width:560px){.supplier-grid{grid-template-columns:1fr}.supplier-grid .full{grid-column:auto}}.ingredient-picker{display:block}.ingredient-picker select{padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:#fff;min-height:46px}.ingredient-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.ingredient-chip{display:inline-flex;align-items:center;gap:8px;background:#f1e5d8;border-radius:18px;padding:7px 10px;font-size:14px}.ingredient-chip button{border:0;border-radius:50%;width:22px;height:22px;background:#8b1e1e;color:#fff;font-weight:bold;cursor:pointer}.ingredient-summary{font-size:12px;color:#555;margin-top:5px;line-height:1.4}textarea[readonly]{background:#f8f5f0!important;min-height:58px!important}
+.supplier-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.supplier-grid .full{grid-column:1/-1}@media(max-width:560px){.supplier-grid{grid-template-columns:1fr}.supplier-grid .full{grid-column:auto}}.ingredient-picker{display:block}.ingredient-dropdown{position:relative;width:100%}.ingredient-dropdown-toggle{width:100%;padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:#fff;text-align:left;color:#333;min-height:46px;cursor:pointer}.ingredient-dropdown-panel{display:block;border:1px solid #d7cec3;border-radius:10px;background:#fff;margin-top:7px;padding:10px;max-height:260px;overflow-y:auto;box-shadow:0 4px 12px #00000012}.ingredient-dropdown-panel.hidden{display:none!important}.ingredient-option{display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid #f0ebe5;cursor:pointer;font-size:15px}.ingredient-option:last-child{border-bottom:0}.ingredient-option input{width:20px;height:20px;flex:0 0 auto;accent-color:#8b1e1e}.ingredient-option small{color:#777;margin-left:auto}.ingredient-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.ingredient-chip{display:inline-flex;align-items:center;gap:8px;background:#f1e5d8;border-radius:18px;padding:7px 10px;font-size:14px}.ingredient-chip button{border:0;border-radius:50%;width:22px;height:22px;background:#8b1e1e;color:#fff;font-weight:bold;cursor:pointer}.ingredient-summary{font-size:12px;color:#555;margin-top:5px;line-height:1.4}textarea[readonly]{background:#f8f5f0!important;min-height:58px!important}
 </style>
 
 </head>
@@ -143,9 +144,9 @@ th,td{font-size:13px}
 <div class="field"><label>Formato</label><select id="c_formato"><option>CONFEZIONE</option><option>VASSOIO</option><option>VASCHETTA 6 PORZIONI</option><option>VASCHETTA 2 PORZIONI</option><option>VASCHETTA 1 PORZIONE</option><option>CARTONE</option><option>SFUSO</option></select></div>
 <div class="field"><label>Quantità *</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0"></div><div class="field"><label>Unità</label><select id="c_unit"><option>PZ</option><option>KG</option><option>G</option><option>L</option><option>ML</option></select></div>
 </div>
-<div class="subbox"><h3>🥚 Ingredienti / allergeni</h3><div class="notice">Cerca un ingrediente nel menu, selezionalo e premi AGGIUNGI. Gli ingredienti devono essere presenti nell'anagrafica.</div><div id="ingredientiNuovo"><div class="ingredient-picker">
-  <div class="field"><label for="nuovo_ingSearch">Cerca ingrediente</label><input id="nuovo_ingSearch" placeholder="Digita per filtrare l'elenco..." oninput="renderPickerOptions('nuovo')"></div>
-  <div class="actions" style="align-items:end;margin-top:8px"><div class="field" style="flex:1"><label for="nuovo_ingSelect">Seleziona ingrediente</label><select id="nuovo_ingSelect" size="1" style="width:100%"></select></div><button type="button" class="secondary" onclick="aggiungiSelezionatoPicker('nuovo')">AGGIUNGI</button></div>
+<div class="subbox"><h3>🥚 Ingredienti / allergeni</h3><div class="notice">Apri una sola volta l'elenco e spunta tutti gli ingredienti della preparazione. Puoi cercarli e selezionarne quanti ne servono; il riepilogo si aggiorna automaticamente.</div><div id="ingredientiNuovo"><div class="ingredient-picker">
+  <div class="field"><label for="nuovo_ingSearch">Filtra ingredienti</label><input id="nuovo_ingSearch" placeholder="Digita per trovare un ingrediente..." oninput="renderPickerOptions('nuovo')"></div>
+  <div class="ingredient-dropdown"><button type="button" id="nuovo_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="true" onclick="togglePickerDropdown('nuovo')">☑️ Seleziona ingredienti</button><div id="nuovo_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
   <div id="nuovo_ingChips" class="ingredient-chips"></div>
 </div></div><div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="c_ingredientiSintesi" readonly placeholder="Gli ingredienti selezionati appariranno qui, separati da virgole."></textarea></div></div><datalist id="ingredientList"></datalist>
 <div class="subbox"><h3>➖ Utilizza prodotti esistenti per questa preparazione</h3><div class="notice">Se, per esempio, la torta usa 30 pasticciotti su 100, alla conferma la giacenza diventa 70. Se utilizzi tutto, la giacenza va a zero e il movimento viene registrato come esaurito.</div><div id="utilizziNuovo"></div><button class="secondary" onclick="aggiungiUtilizzoRiga()">+ Utilizza prodotto esistente</button></div>
@@ -210,8 +211,8 @@ th,td{font-size:13px}
 <h3 id="titoloClassico">➕ Nuovo prodotto classico</h3>
 <div class="field"><label>Nome prodotto classico *</label><input id="pc_nome" placeholder="Es. Pasticciotto crema"></div>
 <div style="margin-top:12px"><div class="ingredient-picker">
-  <div class="field"><label for="pc_ingSearch">Cerca ingrediente</label><input id="pc_ingSearch" placeholder="Digita per filtrare l'elenco..." oninput="renderPickerOptions('pc')"></div>
-  <div class="actions" style="align-items:end;margin-top:8px"><div class="field" style="flex:1"><label for="pc_ingSelect">Seleziona ingrediente</label><select id="pc_ingSelect" size="1" style="width:100%"></select></div><button type="button" class="secondary" onclick="aggiungiSelezionatoPicker('pc')">AGGIUNGI</button></div>
+  <div class="field"><label for="pc_ingSearch">Filtra ingredienti</label><input id="pc_ingSearch" placeholder="Digita per trovare un ingrediente..." oninput="renderPickerOptions('pc')"></div>
+  <div class="ingredient-dropdown"><button type="button" id="pc_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="true" onclick="togglePickerDropdown('pc')">☑️ Seleziona ingredienti</button><div id="pc_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
   <div id="pc_ingChips" class="ingredient-chips"></div>
 </div></div><div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="pc_ingredientiSintesi" readonly placeholder="Gli ingredienti selezionati appariranno qui, separati da virgole."></textarea></div>
 <div class="actions">
@@ -261,21 +262,54 @@ const $=id=>document.getElementById(id);function today(){return new Date().toISO
 const REGOLE=[['FRESCO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','BANCO +4°C',3,'preparazione'],['SCONGELATO','FRIGORIFERO +4°C',3,'scongelamento'],['ABBATTUTO +3°C','FRIGORIFERO +4°C',6,'abbattimento'],['ABBATTUTO -18°C','CONGELATORE -16°C',90,'abbattimento']];
 function addDays(s,n){if(!s)return'';const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}function calcolaScadenza(d){if(d.maker)return{date:d.maker,source:'PRODUTTORE'};const r=REGOLE.find(x=>x[0]===d.state&&x[1]===d.storage);if(!r)return{date:'',source:'NON CALCOLATA'};let base=d.carico;if(r[3]==='preparazione')base=d.preparazione||d.carico;if(r[3]==='scongelamento')base=d.scongelamento||d.carico;if(r[3]==='abbattimento')base=d.abbattimento||d.preparazione||d.carico;return{date:addDays(base,r[2]),source:'CALCOLATA +'+r[2]+' GG'}}
 function ricalcolaScadenzaUI(){}
-function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici',fornitori:'btnFornitori',documentiFornitori:'btnDocumentiFornitori'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
+function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici',fornitori:'btnFornitori',documentiFornitori:'btnDocumentiFornitori'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');if(id==='ingredienti'){if($('i_nome'))$('i_nome').value='';if($('i_tipo'))$('i_tipo').value='ALLERGENE';}renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
 const pickerSelected={pc:[],nuovo:[],edit:[]};
 function normalizeIngredientNames(arr){
   const result=[];const seen=new Set();
   (arr||[]).forEach(x=>{const name=String(typeof x==='string'?x:(x.name||'')).trim();const key=name.toLowerCase();if(name&&!seen.has(key)){seen.add(key);const ref=ingredienti.find(i=>String(i.name||'').trim().toLowerCase()===key);result.push({name,type:(typeof x==='object'&&x.type)||ref?.type||'INGREDIENTE'});}});
   return result;
 }
-function inizializzaPicker(prefix, initial=[]){pickerSelected[prefix]=normalizeIngredientNames(initial);renderPickerOptions(prefix);renderPickerChips(prefix);}
+function inizializzaPicker(prefix, initial=[]){
+  pickerSelected[prefix]=normalizeIngredientNames(initial);
+  renderPickerOptions(prefix);
+  renderPickerChips(prefix);
+}
 function renderPickerOptions(prefix){
-  const sel=$(`${prefix}_ingSelect`),search=$(`${prefix}_ingSearch`);if(!sel||!search)return;
-  const q=search.value.trim().toLowerCase();const picked=new Set((pickerSelected[prefix]||[]).map(x=>x.name.toLowerCase()));
-  const arr=[...ingredienti].filter(i=>String(i.name||'').toLowerCase().includes(q)&&!picked.has(String(i.name||'').trim().toLowerCase())).sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'it'));
-  const previous=sel.value;
-  sel.innerHTML='<option value="">'+(arr.length?'Scegli ingrediente...':'Nessun ingrediente disponibile')+'</option>'+arr.map(i=>`<option value="${esc(i.name)}">${esc(i.name)} (${esc(i.type||'INGREDIENTE')})</option>`).join('');
-  if(arr.some(i=>i.name===previous))sel.value=previous;
+  const panel=$(`${prefix}_ingOptions`),search=$(`${prefix}_ingSearch`),toggle=$(`${prefix}_ingToggle`);
+  if(!panel||!search)return;
+  const q=search.value.trim().toLowerCase();
+  const selected=new Set((pickerSelected[prefix]||[]).map(x=>x.name.trim().toLowerCase()));
+  const arr=[...ingredienti]
+    .filter(i=>String(i.name||'').toLowerCase().includes(q))
+    .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'it'));
+  panel.innerHTML=arr.length?arr.map(i=>{
+    const name=String(i.name||'').trim();
+    const checked=selected.has(name.toLowerCase())?'checked':'';
+    return `<label class="ingredient-option"><input type="checkbox" ${checked} onchange="setPickerIngredient('${prefix}',${JSON.stringify(name).replace(/</g,'\\u003c')},this.checked)"><span>${esc(name)}</span><small>${esc(i.type||'INGREDIENTE')}</small></label>`;
+  }).join(''):'<div class="small" style="padding:10px">Nessun ingrediente trovato. Aggiungilo prima nell’anagrafica Ingredienti.</div>';
+  if(toggle){
+    const count=(pickerSelected[prefix]||[]).length;
+    toggle.textContent=count?`☑️ Ingredienti selezionati: ${count}`:'☑️ Seleziona ingredienti';
+    toggle.setAttribute('aria-expanded',panel.classList.contains('hidden')?'false':'true');
+  }
+}
+function togglePickerDropdown(prefix){
+  const panel=$(`${prefix}_ingOptions`),toggle=$(`${prefix}_ingToggle`);if(!panel)return;
+  panel.classList.toggle('hidden');
+  if(toggle)toggle.setAttribute('aria-expanded',panel.classList.contains('hidden')?'false':'true');
+}
+function setPickerIngredient(prefix,name,checked){
+  const key=String(name||'').trim().toLowerCase();
+  const current=pickerSelected[prefix]||[];
+  if(checked){
+    const item=ingredienti.find(i=>String(i.name||'').trim().toLowerCase()===key);
+    if(item&&!current.some(x=>x.name.trim().toLowerCase()===key))current.push({name:item.name,type:item.type||'INGREDIENTE'});
+  }else{
+    pickerSelected[prefix]=current.filter(x=>x.name.trim().toLowerCase()!==key);
+  }
+  if(checked)pickerSelected[prefix]=current;
+  renderPickerOptions(prefix);
+  renderPickerChips(prefix);
 }
 function renderPickerChips(prefix){
   const el=$(`${prefix}_ingChips`);if(!el)return;
@@ -283,22 +317,17 @@ function renderPickerChips(prefix){
   el.innerHTML=arr.length?arr.map((i,n)=>`<span class="ingredient-chip">${esc(i.name)} <small>(${esc(i.type)})</small><button type="button" title="Rimuovi ${esc(i.name)}" onclick="rimuoviPickerIngrediente('${prefix}',${n})">×</button></span>`).join(''):'<span class="small">Nessun ingrediente selezionato.</span>';
   const summaryId={pc:'pc_ingredientiSintesi',nuovo:'c_ingredientiSintesi',edit:'e_ingredientiSintesi'}[prefix];
   if($(summaryId))$(summaryId).value=arr.map(i=>i.name).join(', ');
+  const toggle=$(`${prefix}_ingToggle`),panel=$(`${prefix}_ingOptions`);
+  if(toggle&&panel)toggle.setAttribute('aria-expanded',panel.classList.contains('hidden')?'false':'true');
 }
-function aggiungiSelezionatoPicker(prefix){
-  const sel=$(`${prefix}_ingSelect`);const name=sel?.value||'';if(!name)return alert('Cerca e seleziona un ingrediente dal menu.');
-  const i=ingredienti.find(x=>String(x.name||'').trim().toLowerCase()===name.trim().toLowerCase());
-  if(!i)return alert('Ingrediente non presente nell’anagrafica.');
-  if(!(pickerSelected[prefix]||[]).some(x=>x.name.toLowerCase()===name.toLowerCase()))pickerSelected[prefix].push({name:i.name,type:i.type||'INGREDIENTE'});
-  if($(`${prefix}_ingSearch`))$(`${prefix}_ingSearch`).value='';
-  renderPickerOptions(prefix);renderPickerChips(prefix);
-}
+function aggiungiSelezionatoPicker(prefix){/* Compatibilità con eventuali vecchi richiami: la selezione ora avviene con le caselle. */}
 function rimuoviPickerIngrediente(prefix,index){pickerSelected[prefix].splice(index,1);renderPickerOptions(prefix);renderPickerChips(prefix);}
 function getPickerIngredients(prefix){return normalizeIngredientNames(pickerSelected[prefix]||[]);}
 function aggiungiIngredienteRiga(data={}){const current=getPickerIngredients('nuovo');const incoming=data&&data.name?[data]:[];inizializzaPicker('nuovo',current.concat(incoming));}
 function getIngredients(){return getPickerIngredients('nuovo');}function ensureIngredients(a){a.forEach(x=>{if(!ingredienti.some(i=>i.name.toLowerCase()===x.name.toLowerCase()))ingredienti.push({id:uid(),name:x.name,type:x.type})})}
 function elencoProdottiDuplicabili(){const m={};stock.forEach(x=>{if(!x.name)return;const k=x.name.trim().toLowerCase();if(!m[k]||((x.ingredients||[]).length>(m[k].ingredients||[]).length))m[k]=x});return Object.values(m).sort((a,b)=>a.name.localeCompare(b.name,'it'))}
 function renderDuplica(){const el=$('c_duplica');if(!el)return;const arr=elencoProdottiDuplicabili();el.innerHTML='<option value="">Seleziona un prodotto...</option>'+arr.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}${x.lotto?' · Lotto '+esc(x.lotto):''}</option>`).join('')}
-function duplicaProdottoSelezionato(){const id=$('c_duplica').value;const x=stock.find(p=>String(p.id)===String(id));if(!x)return alert('Seleziona prima un prodotto.');$('c_nome').value=x.name||'';$('c_lotto').value='';$('c_stato').value=x.state||'FRESCO';$('c_storage').value=x.storage||'FRIGORIFERO +4°C';$('c_formato').value=x.format||'CONFEZIONE';$('c_unit').value=x.unit||'PZ';$('c_qty').value='';$('c_data').value=today();$('c_scadenzaProduttore').value='';$('c_preparazione').value='';$('c_abbattimento').value='';$('c_scongelamento').value='';$('ingredientiNuovo').innerHTML='';(x.ingredients||[]).forEach(i=>aggiungiIngredienteRiga(i));$('utilizziNuovo').innerHTML='';ricalcolaScadenzaUI();alert('Dati e ingredienti copiati. Inserisci quantità, lotto e date necessarie, poi salva il nuovo prodotto.')}
+function duplicaProdottoSelezionato(){const id=$('c_duplica').value;const x=stock.find(p=>String(p.id)===String(id));if(!x)return alert('Seleziona prima un prodotto.');$('c_nome').value=x.name||'';$('c_lotto').value='';$('c_stato').value=x.state||'FRESCO';$('c_storage').value=x.storage||'FRIGORIFERO +4°C';$('c_formato').value=x.format||'CONFEZIONE';$('c_unit').value=x.unit||'PZ';$('c_qty').value='';$('c_data').value=today();$('c_scadenzaProduttore').value='';$('c_preparazione').value='';$('c_abbattimento').value='';$('c_scongelamento').value='';inizializzaPicker('nuovo',x.ingredients||[]);$('utilizziNuovo').innerHTML='';ricalcolaScadenzaUI();alert('Dati e ingredienti copiati. Inserisci quantità, lotto e date necessarie, poi salva il nuovo prodotto.')}
 function aggiungiUtilizzoRiga(data={}){const row=document.createElement('div');row.className='row3';const opts=stock.filter(x=>Number(x.qty)>0).sort((a,b)=>a.name.localeCompare(b.name)).map(x=>`<option value="${x.id}" ${data.stockId===x.id?'selected':''}>${esc(x.name)}${x.lotto?' — Lotto '+esc(x.lotto):''} — ${x.qty} ${esc(x.unit)}</option>`).join('');row.innerHTML=`<div class="field"><label>Prodotto / lotto</label><select class="useStock" onchange="aggiornaUtilizzo(this)"><option value="">Seleziona...</option>${opts}</select><span class="small useAvail"></span></div><div class="field"><label>Quantità da utilizzare</label><input class="useQty" type="number" min="0.01" step="0.01" value="${data.qty||''}"></div><button class="dangerBtn" type="button" onclick="this.parentElement.remove()">Rimuovi</button>`;$('utilizziNuovo').appendChild(row);aggiornaUtilizzo(row.querySelector('.useStock'))}function aggiornaUtilizzo(sel){const row=sel.closest('.row3'),x=stock.find(p=>p.id===sel.value);row.querySelector('.useAvail').textContent=x?`Disponibile: ${x.qty} ${x.unit}`:'';if(x)row.querySelector('.useQty').max=x.qty}function getUtilizzi(){return [...document.querySelectorAll('#utilizziNuovo .row3')].map(r=>({stockId:r.querySelector('.useStock').value,qty:Number(r.querySelector('.useQty').value)})).filter(x=>x.stockId&&x.qty>0)}
 async function caricaProdotto(){
   const name=$('c_nome').value.trim();
@@ -494,7 +523,7 @@ function applicaClassicoModifica(){
   const p=prodottiClassici.find(x=>String(x.id)===String($('e_classico')?.value));if(!p)return;
   $('e_nome').value=p.name||'';inizializzaPicker('edit',p.ingredients||[]);
 }
-function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza'].forEach(id=>$(id).value='');$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('c_classico').value='';inizializzaPicker('nuovo',[]);$('utilizziNuovo').innerHTML='';}
+function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza'].forEach(id=>{if($(id))$(id).value='';});$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('c_classico').value='';if($('nuovo_ingSearch'))$('nuovo_ingSearch').value='';inizializzaPicker('nuovo',[]);$('utilizziNuovo').innerHTML='';}
 function renderElencoIngModifica(){renderPickerOptions('edit');renderPickerChips('edit');}
 function aggiungiIngredienteModifica(){renderElencoIngModifica();}
 
@@ -593,10 +622,10 @@ function modificaProdotto(id){
 
     <div class="subbox">
       <h3>🥚 Ingredienti / allergeni</h3>
-      <div class="notice">Cerca nel menu, seleziona un ingrediente e premi AGGIUNGI.</div>
+      <div class="notice">Apri l'elenco e spunta tutti gli ingredienti da associare al prodotto. Il riepilogo si aggiorna automaticamente.</div>
       <div class="ingredient-picker">
-  <div class="field"><label for="edit_ingSearch">Cerca ingrediente</label><input id="edit_ingSearch" placeholder="Digita per filtrare l'elenco..." oninput="renderPickerOptions('edit')"></div>
-  <div class="actions" style="align-items:end;margin-top:8px"><div class="field" style="flex:1"><label for="edit_ingSelect">Seleziona ingrediente</label><select id="edit_ingSelect" size="1" style="width:100%"></select></div><button type="button" class="secondary" onclick="aggiungiSelezionatoPicker('edit')">AGGIUNGI</button></div>
+  <div class="field"><label for="edit_ingSearch">Filtra ingredienti</label><input id="edit_ingSearch" placeholder="Digita per trovare un ingrediente..." oninput="renderPickerOptions('edit')"></div>
+  <div class="ingredient-dropdown"><button type="button" id="edit_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="true" onclick="togglePickerDropdown('edit')">☑️ Seleziona ingredienti</button><div id="edit_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
   <div id="edit_ingChips" class="ingredient-chips"></div>
 </div>
       <div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="e_ingredientiSintesi" readonly></textarea></div>
@@ -1095,3 +1124,4 @@ function applicaDocumentoProdotto(prefix){const id=$(prefix+'_documento')?.value
 $('c_data').value=today();ricalcolaScadenzaUI();caricaDatabase();home();
 </script></body></html>
 ```
+````
