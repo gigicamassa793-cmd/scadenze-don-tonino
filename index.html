@@ -362,10 +362,16 @@ async function caricaProdotto(){
 
   const us=getUtilizzi();
 
+  // Controlla il totale per ogni lotto/prodotto, anche se selezionato in più righe.
+  const totaliUso={};
   for(const u of us){
-    const s=stock.find(x=>x.id===u.stockId);
-    if(!s||u.qty>Number(s.qty)){
-      return alert('Quantità insufficiente per uno dei prodotti utilizzati.');
+    const key=String(u.stockId);
+    totaliUso[key]=(totaliUso[key]||0)+u.qty;
+  }
+  for(const [stockId,totale] of Object.entries(totaliUso)){
+    const s=stock.find(x=>String(x.id)===stockId);
+    if(!s||totale>Number(s.qty)){
+      return alert('Quantità insufficiente per uno dei prodotti utilizzati. Controlla la quantità totale selezionata.');
     }
   }
 
@@ -429,9 +435,10 @@ async function caricaProdotto(){
   });
 
   us.forEach(u=>{
-    const s=stock.find(x=>x.id===u.stockId);
+    const s=stock.find(x=>String(x.id)===String(u.stockId));
+    if(!s) return;
 
-    s.qty=Number((s.qty-u.qty).toFixed(6));
+    s.qty=Math.max(0,Number((Number(s.qty)-u.qty).toFixed(6)));
 
     movimenti.unshift({
       id:uid(),
@@ -546,7 +553,22 @@ function applicaClassicoModifica(){
   const p=prodottiClassici.find(x=>String(x.id)===String($('e_classico')?.value));if(!p)return;
   $('e_nome').value=p.name||'';inizializzaPicker('edit',p.ingredients||[]);
 }
-function resetNuovo(){['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza'].forEach(id=>{if($(id))$(id).value='';});$('c_data').value=today();$('c_stato').value='FRESCO';$('c_storage').value='FRIGORIFERO +4°C';$('c_classico').value='';if($('nuovo_ingSearch'))$('nuovo_ingSearch').value='';inizializzaPicker('nuovo',[]);$('utilizziNuovo').innerHTML='';}
+function resetNuovo(){
+  ['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza','c_dataConsegna','c_numeroDocumento'].forEach(id=>{if($(id))$(id).value='';});
+  $('c_data').value=today();
+  $('c_stato').value='FRESCO';
+  $('c_storage').value='FRIGORIFERO +4°C';
+  $('c_classico').value='';
+  $('c_formato').value='CONFEZIONE';
+  $('c_unit').value='PZ';
+  $('c_tipoDocumento').value='';
+  $('c_fornitore').value='';
+  aggiornaDocumentiProdotto('c');
+  if($('nuovo_ingSearch'))$('nuovo_ingSearch').value='';
+  inizializzaPicker('nuovo',[]);
+  $('utilizziNuovo').innerHTML='';
+  ricalcolaScadenzaUI();
+}
 function renderElencoIngModifica(){renderPickerOptions('edit');renderPickerChips('edit');}
 function aggiungiIngredienteModifica(){renderElencoIngModifica();}
 
@@ -694,8 +716,10 @@ function salvaModifica(){
     scongelamento:x.thaw
   });
 
-  x.expiry=sc.date||$('e_expiry').value;
-  x.expirySource=sc.source;
+  // La data mostrata nel campo Scadenza è quella confermata dall'utente.
+  // Non ricalcolarla al salvataggio: altrimenti sovrascrive la modifica manuale.
+  x.expiry=$('e_expiry').value||'';
+  x.expirySource=x.expiry?'INSERITA/MODIFICATA MANUALMENTE':'';
 
   x.format=$('e_format').value;
   x.qty=Number($('e_qty').value)||0;
