@@ -151,20 +151,19 @@ th,td{font-size:13px}
 <div class="field"><label>Data ingresso</label><input id="c_dataConsegna" type="date"></div>
 <div class="field"><label>Tipo documento</label><select id="c_tipoDocumento"><option value="">Nessuno</option><option>Fattura</option><option>DDT</option></select></div>
 <div class="field"><label>Numero documento</label><input id="c_numeroDocumento" placeholder="Numero fattura o DDT"></div>
-<div class="field"><label>Stato</label><select id="c_stato" onchange="ricalcolaScadenzaUI()"><option>FRESCO</option><option>COTTO</option><option>SCONGELATO</option><option>ABBATTUTO +3°C</option><option>ABBATTUTO -18°C</option></select></div>
+<div class="field"><label>Stato</label><select id="c_stato" onchange="ricalcolaScadenzaUI()"><option>FRESCO</option><option>COTTO</option><option>SCONGELATO</option><option>ABBATTUTO +3°C</option><option>ABBATTUTO -18°C</option><option>CONFEZIONE SCIOLTA</option></select></div>
 <div class="field"><label>Conservazione</label><select id="c_storage" onchange="ricalcolaScadenzaUI()"><option>FRIGORIFERO +4°C</option><option>BANCO +4°C</option><option>CONGELATORE -16°C</option><option>POZZETTO -16°C</option><option>DISPENSA</option><option>SCAFFALI</option></select></div>
 <div class="field"><label>Scadenza produttore</label><input id="c_scadenzaProduttore" type="date" onchange="ricalcolaScadenzaUI()"></div>
 <div class="field"><label>Data preparazione</label><input id="c_preparazione" type="date" onchange="ricalcolaScadenzaUI()"></div><div class="field"><label>Data abbattimento</label><input id="c_abbattimento" type="date" onchange="ricalcolaScadenzaUI()"></div>
 <div class="field"><label>Data scongelamento / ingresso frigo</label><input id="c_scongelamento" type="date" onchange="ricalcolaScadenzaUI()"></div><div class="field"><label>Scadenza</label><input id="c_scadenza" type="date"></div>
-<div class="field"><label>Formato</label><select id="c_formato"><option>CONFEZIONE</option><option>VASSOIO</option><option>VASCHETTA 6 PORZIONI</option><option>VASCHETTA 2 PORZIONI</option><option>VASCHETTA 1 PORZIONE</option><option>CARTONE</option><option>SFUSO</option></select></div>
-<div class="field"><label>Quantità acquistata *</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0" oninput="sincronizzaQuantitaEconomica()"></div><div class="field"><label>Unità</label><select id="c_unit" onchange="sincronizzaUnitaEconomica()"><option value="PZ">Pz</option><option value="L">Lt</option><option value="KG">Kg</option></select></div>
+<div class="field"><label>Quantità acquistata *</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0" oninput="sincronizzaQuantitaEconomica()"></div>
+<input id="c_formato" type="hidden" value="CONFEZIONE"><input id="c_unit" type="hidden" value="PZ">
 </div>
 <div class="subbox" id="datiAcquistoBox"><h3>💶 Dati acquisto e vendita</h3><div class="notice">Inserisci il costo totale IVA esclusa della quantità acquistata. Il sistema calcola costo totale IVA inclusa e costi unitari I.E./I.I. per unità di misura. I dati compatibili possono essere proposti dal foglio CONTROLLO PREZZI.</div>
 <div class="form-grid">
 <div class="field"><label>Destinazione uso</label><input id="c_destinazioneUso" placeholder="Da prodotto classico"></div>
 <div class="field"><label>Destinazione uso 2</label><input id="c_destinazioneUso2" placeholder="Da prodotto classico"></div>
-<input id="c_pzPeso" type="hidden" value=""><div class="field"><label>Unità di misura prodotto</label><select id="c_unitaMisuraPrezzo" onchange="ricalcolaEconomiaAcquisto()"><option value="PZ">Pz</option><option value="L">Lt</option><option value="KG">Kg</option></select></div>
-<div class="field"><label>Quantità acquistata</label><input id="c_qtyEconomia" type="number" min="0.0001" step="0.0001" placeholder="Quantità totale acquistata" oninput="sincronizzaQuantitaDaEconomia()"></div>
+<input id="c_pzPeso" type="hidden" value=""><div class="field"><label>Unità di misura prodotto</label><select id="c_unitaMisuraPrezzo" onchange="sincronizzaUnitaEconomica()"><option value="PZ">Pz</option><option value="L">Lt</option><option value="KG">Kg</option></select></div><input id="c_qtyEconomia" type="hidden" value="">
 <div class="field"><label>Costo totale IVA esclusa (€)</label><input id="c_prezzoAcq" type="number" min="0" step="0.0001" placeholder="Costo totale senza IVA" oninput="ricalcolaEconomiaAcquisto()"></div>
 <div class="field"><label>IVA (%)</label><input id="c_ivaAcq" type="number" min="0" step="0.01" placeholder="Da prodotto classico o inserisci" oninput="ricalcolaEconomiaAcquisto()"></div>
 <div class="field"><label>Costo totale IVA inclusa (€)</label><input id="c_totaleIncl" type="number" readonly placeholder="Calcolato automaticamente"></div>
@@ -625,6 +624,7 @@ function resetNuovo(){
   $('c_classico').value='';
   $('c_formato').value='CONFEZIONE';
   $('c_unit').value='PZ';
+  if($('c_unitaMisuraPrezzo'))$('c_unitaMisuraPrezzo').value='PZ';
   $('c_tipoDocumento').value='';
   $('c_fornitore').value='';
   aggiornaDocumentiProdotto('c');
@@ -1310,17 +1310,16 @@ function sincronizzaQuantitaEconomica(){
  ricalcolaEconomiaAcquisto();
 }
 function sincronizzaQuantitaDaEconomia(){
- const q=$('c_qtyEconomia')?.value??'';
- if($('c_qty'))$('c_qty').value=q;
- ricalcolaEconomiaAcquisto();
+ sincronizzaQuantitaEconomica();
 }
 function sincronizzaUnitaEconomica(){
- const u=String($('c_unit')?.value||'KG').toUpperCase();
- if($('c_unitaMisuraPrezzo'))$('c_unitaMisuraPrezzo').value=u;
+ const u=String($('c_unitaMisuraPrezzo')?.value||'KG').toUpperCase();
+ if($('c_unit'))$('c_unit').value=u;
  ricalcolaEconomiaAcquisto();
 }
 function ricalcolaEconomiaAcquisto(){
- const totaleRaw=$('c_prezzoAcq')?.value??'',ivaRaw=$('c_ivaAcq')?.value??'',qRaw=$('c_qtyEconomia')?.value??$('c_qty')?.value??'',formatoRaw=$('c_formatoVendita')?.value??'';
+ const totaleRaw=$('c_prezzoAcq')?.value??'',ivaRaw=$('c_ivaAcq')?.value??'',qRaw=$('c_qty')?.value??'',formatoRaw=$('c_formatoVendita')?.value??'';
+ if($('c_qtyEconomia'))$('c_qtyEconomia').value=qRaw;
  const totale=Number(totaleRaw),iva=Number(ivaRaw)||0,q=Number(qRaw),formato=Number(formatoRaw);
  const unitaAcq=String($('c_unitaMisuraPrezzo')?.value||$('c_unit')?.value||'KG').toUpperCase(),unitaVendita=String($('c_formatoUnita')?.value||'');
  const totaleIncl=totaleRaw!==''&&Number.isFinite(totale)&&totale>=0?totale*(1+iva/100):null;
