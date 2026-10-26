@@ -157,18 +157,22 @@ th,td{font-size:13px}
 <div class="field"><label>Data preparazione</label><input id="c_preparazione" type="date" onchange="ricalcolaScadenzaUI()"></div><div class="field"><label>Data abbattimento</label><input id="c_abbattimento" type="date" onchange="ricalcolaScadenzaUI()"></div>
 <div class="field"><label>Data scongelamento / ingresso frigo</label><input id="c_scongelamento" type="date" onchange="ricalcolaScadenzaUI()"></div><div class="field"><label>Scadenza</label><input id="c_scadenza" type="date"></div>
 <div class="field"><label>Formato</label><select id="c_formato"><option>CONFEZIONE</option><option>VASSOIO</option><option>VASCHETTA 6 PORZIONI</option><option>VASCHETTA 2 PORZIONI</option><option>VASCHETTA 1 PORZIONE</option><option>CARTONE</option><option>SFUSO</option></select></div>
-<div class="field"><label>Quantità acquistata *</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0"></div><div class="field"><label>Unità</label><select id="c_unit" onchange="ricalcolaEconomiaAcquisto()"><option>PZ</option><option>KG</option><option>G</option><option>L</option><option>ML</option></select></div>
+<div class="field"><label>Quantità acquistata *</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0" oninput="sincronizzaQuantitaEconomica()"></div><div class="field"><label>Unità</label><select id="c_unit" onchange="sincronizzaUnitaEconomica()"><option value="PZ">Pz</option><option value="L">Lt</option><option value="KG">Kg</option></select></div>
 </div>
-<div class="subbox" id="datiAcquistoBox"><h3>💶 Dati acquisto e vendita</h3><div class="notice">I dati di acquisto possono essere precompilati dal foglio CONTROLLO PREZZI quando il prodotto classico o la destinazione d’uso corrispondono. Puoi completare o correggere i valori prima di salvare.</div>
+<div class="subbox" id="datiAcquistoBox"><h3>💶 Dati acquisto e vendita</h3><div class="notice">Inserisci il costo totale IVA esclusa della quantità acquistata. Il sistema calcola costo totale IVA inclusa e costi unitari I.E./I.I. per unità di misura. I dati compatibili possono essere proposti dal foglio CONTROLLO PREZZI.</div>
 <div class="form-grid">
 <div class="field"><label>Destinazione uso</label><input id="c_destinazioneUso" placeholder="Da prodotto classico"></div>
 <div class="field"><label>Destinazione uso 2</label><input id="c_destinazioneUso2" placeholder="Da prodotto classico"></div>
-<div class="field"><label>Prezzo riferito a quantità</label><input id="c_pzPeso" type="text" inputmode="decimal" placeholder="Es. prezzo per 1 kg, 1 L o 1 Pz"></div>
-<div class="field"><label>Prezzo acquisto IVA esclusa (€ per unità di acquisto)</label><input id="c_prezzoAcq" type="number" min="0" step="0.0001" placeholder="0,00" oninput="ricalcolaEconomiaAcquisto()"></div>
-<div class="field"><label>IVA (%)</label><input id="c_ivaAcq" type="number" min="0" step="0.01" placeholder="22" oninput="ricalcolaEconomiaAcquisto()"></div>
-<div class="field"><label>Formato vendita — quantità (da modello, modificabile)</label><input id="c_formatoVendita" type="number" min="0.0001" step="0.0001" placeholder="Es. 250" oninput="ricalcolaEconomiaAcquisto()"></div><div class="field"><label>Formato vendita — unità</label><select id="c_formatoUnita" onchange="ricalcolaEconomiaAcquisto()"><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="L">L</option><option value="Pz">Pz</option></select></div>
-<div class="field"><label>Costo formato vendita (€)</label><input id="c_costoFormatoVendita" type="number" min="0" step="0.0001" placeholder="0,00" oninput="ricalcolaEconomiaAcquisto()"></div>
-<div class="field"><label>Prezzo di vendita (€)</label><input id="c_prezzoVendita" type="number" min="0" step="0.01" placeholder="Inserisci prezzo" oninput="ricalcolaEconomiaAcquisto()"></div>
+<input id="c_pzPeso" type="hidden" value=""><div class="field"><label>Unità di misura prodotto</label><select id="c_unitaMisuraPrezzo" onchange="ricalcolaEconomiaAcquisto()"><option value="PZ">Pz</option><option value="L">Lt</option><option value="KG">Kg</option></select></div>
+<div class="field"><label>Quantità acquistata</label><input id="c_qtyEconomia" type="number" min="0.0001" step="0.0001" placeholder="Quantità totale acquistata" oninput="sincronizzaQuantitaDaEconomia()"></div>
+<div class="field"><label>Costo totale IVA esclusa (€)</label><input id="c_prezzoAcq" type="number" min="0" step="0.0001" placeholder="Costo totale senza IVA" oninput="ricalcolaEconomiaAcquisto()"></div>
+<div class="field"><label>IVA (%)</label><input id="c_ivaAcq" type="number" min="0" step="0.01" placeholder="Da prodotto classico o inserisci" oninput="ricalcolaEconomiaAcquisto()"></div>
+<div class="field"><label>Costo totale IVA inclusa (€)</label><input id="c_totaleIncl" type="number" readonly placeholder="Calcolato automaticamente"></div>
+<div class="field"><label>Costo unitario I.E. / unità di misura</label><input id="c_costoUnitExcl" readonly placeholder="Calcolato automaticamente"></div>
+<div class="field"><label>Costo unitario I.I. / unità di misura</label><input id="c_costoUnitIncl" readonly placeholder="Calcolato automaticamente"></div>
+<div class="field"><label>Formato di vendita — quantità</label><input id="c_formatoVendita" type="number" min="0.0001" step="0.0001" placeholder="Es. 1" oninput="ricalcolaEconomiaAcquisto()"></div><div class="field"><label>Formato di vendita — unità</label><select id="c_formatoUnita" onchange="ricalcolaEconomiaAcquisto()"><option value="Pz">Pz</option><option value="L">Lt</option><option value="kg">Kg</option><option value="g">g</option><option value="ml">ml</option></select></div>
+<div class="field"><label>Costo del formato di vendita (€)</label><input id="c_costoFormatoVendita" type="number" min="0" step="0.0001" readonly placeholder="Calcolato automaticamente"></div>
+<div class="field"><label>Prezzo di vendita (€)</label><input id="c_prezzoVendita" type="number" min="0" step="0.01" placeholder="Da prodotto classico, modificabile" oninput="ricalcolaEconomiaAcquisto()"></div>
 <div class="field"><label>Differenza (€)</label><input id="c_differenza" readonly placeholder="Calcolata automaticamente"></div>
 <div class="field"><label>Margine (%)</label><input id="c_margine" readonly placeholder="Calcolato automaticamente"></div>
 </div></div>
@@ -241,7 +245,7 @@ th,td{font-size:13px}
 <div class="form-grid" style="margin-top:12px">
 <div class="field"><label>Destinazione uso</label><select id="pc_uso"><option value="Materia prima">Materia prima</option><option value="Costi di produzione">Costi di produzione</option></select></div>
 <div class="field"><label>Destinazione uso 2</label><input id="pc_uso2" list="pc_usi2Lista" placeholder="Scegli o inserisci una destinazione"><datalist id="pc_usi2Lista"></datalist></div>
-<div class="field"><label>Unità prezzo acquisto</label><select id="pc_unitaAcquisto"><option value="kg">kg</option><option value="L">litro (L)</option><option value="Pz">pezzo (Pz)</option></select></div>
+<div class="field"><label>Unità di misura prodotto</label><select id="pc_unitaAcquisto"><option value="PZ">Pz</option><option value="L">Lt</option><option value="KG">Kg</option></select></div>
 <div class="field"><label>IVA predefinita (%)</label><input id="pc_iva" type="number" min="0" step="0.01" placeholder="Es. 10"></div>
 <div class="field"><label>Formato vendita — quantità</label><input id="pc_formatoQta" type="number" min="0.0001" step="0.0001" placeholder="Es. 250"></div>
 <div class="field"><label>Formato vendita — unità</label><select id="pc_formatoUnita"><option value="g">grammi (g)</option><option value="kg">kg</option><option value="ml">millilitri (ml)</option><option value="L">litro (L)</option><option value="Pz">pezzo (Pz)</option></select></div>
@@ -409,6 +413,8 @@ async function caricaProdotto(){
   const name=$('c_nome').value.trim();
   const lotto=$('c_lotto').value.trim();
   const qty=Number($('c_qty').value);
+  if($('c_qtyEconomia'))$('c_qtyEconomia').value=$('c_qty').value;
+  ricalcolaEconomiaAcquisto();
 
   if(!name)return alert('Inserisci il nome del prodotto.');
   if(!qty||qty<=0)return alert('Inserisci una quantità valida.');
@@ -469,15 +475,15 @@ async function caricaProdotto(){
     documentType:$('c_tipoDocumento').value||'',
     documentNumber:$('c_numeroDocumento').value.trim(),
     destinazioneUso:$('c_destinazioneUso').value.trim(),destinazioneUso2:$('c_destinazioneUso2').value.trim(),
-    datiAcquisto:{pezziPeso:$('c_pzPeso').value.trim(),prezzoAcquisto:Number($('c_prezzoAcq').value)||0,iva:Number($('c_ivaAcq').value)||0,formatoVendita:$('c_formatoVendita').value.trim(),costoFormatoVendita:Number($('c_costoFormatoVendita').value)||0,prezzoVendita:Number($('c_prezzoVendita').value)||0,differenza:Number($('c_differenza').value)||0,margine:Number($('c_margine').value)||0},
+    datiAcquisto:{pezziPeso:$('c_qtyEconomia').value||$('c_qty').value,prezzoAcquisto:Number($('c_prezzoAcq').value)||0,costoTotaleIvaIncl:Number($('c_totaleIncl').value)||0,costoUnitarioExcl:Number($('c_costoUnitExcl').value)||0,costoUnitarioIncl:Number($('c_costoUnitIncl').value)||0,iva:Number($('c_ivaAcq').value)||0,formatoVendita:$('c_formatoVendita').value.trim(),costoFormatoVendita:Number($('c_costoFormatoVendita').value)||0,prezzoVendita:Number($('c_prezzoVendita').value)||0,differenza:Number($('c_differenza').value)||0,margine:Number($('c_margine').value)||0},
 
     createdAt:new Date().toISOString()
   };
 
   stock.push(item);
   // Registro separato e immutabile dello storico acquisti: quantità effettiva, fornitore e valori applicati a questo acquisto.
-  const prezzoStorico=Number($('c_prezzoAcq').value);
-  storicoAcquisti.unshift({id:uid(),productName:name,date:item.date||today(),supplier:item.supplierName||'Fornitore non specificato',quantity:qty,unit:item.unit||'',priceExcl:Number.isFinite(prezzoStorico)?prezzoStorico:null,vat:Number($('c_ivaAcq').value)||0,saleFormat:($('c_formatoVendita').value||'')+' '+($('c_formatoUnita').value||''),saleFormatCost:Number($('c_costoFormatoVendita').value)||0,salePrice:Number($('c_prezzoVendita').value)||0,unitPriceBasis:$('c_pzPeso').value||'',destinazioneUso:item.destinazioneUso||'',destinazioneUso2:item.destinazioneUso2||'',createdAt:new Date().toISOString()});
+  const prezzoStorico=Number($('c_costoUnitExcl').value);
+  storicoAcquisti.unshift({id:uid(),productName:name,date:item.date||today(),supplier:item.supplierName||'Fornitore non specificato',quantity:qty,unit:item.unit||'',priceExcl:Number.isFinite(prezzoStorico)?prezzoStorico:null,totalExcl:Number($('c_prezzoAcq').value)||0,totalIncl:Number($('c_totaleIncl').value)||0,unitPriceIncl:Number($('c_costoUnitIncl').value)||0,vat:Number($('c_ivaAcq').value)||0,saleFormat:($('c_formatoVendita').value||'')+' '+($('c_formatoUnita').value||''),saleFormatCost:Number($('c_costoFormatoVendita').value)||0,salePrice:Number($('c_prezzoVendita').value)||0,unitPriceBasis:$('c_pzPeso').value||'',destinazioneUso:item.destinazioneUso||'',destinazioneUso2:item.destinazioneUso2||'',createdAt:new Date().toISOString()});
 
   movimenti.unshift({
     id:uid(),
@@ -565,7 +571,7 @@ function getIngredientiDaSelezione(selettore){
 }
 function renderIngredientiClassici(){renderPickerOptions('pc');renderPickerChips('pc');}
 function resetFormProdottoClassico(){
-  editingClassicoId=null;$('pc_nome').value='';$('pc_uso').value='Materia prima';$('pc_uso2').value='';$('pc_unitaAcquisto').value='kg';$('pc_iva').value='';$('pc_formatoQta').value='';$('pc_formatoUnita').value='g';$('pc_prezzoVendita').value='';$('pc_ingSearch').value='';
+  editingClassicoId=null;$('pc_nome').value='';$('pc_uso').value='Materia prima';$('pc_uso2').value='';$('pc_unitaAcquisto').value='KG';$('pc_iva').value='';$('pc_formatoQta').value='';$('pc_formatoUnita').value='g';$('pc_prezzoVendita').value='';$('pc_ingSearch').value='';
   $('titoloClassico').textContent='➕ Nuovo prodotto classico';inizializzaPicker('pc',[]);
 }
 function salvaProdottoClassico(){
@@ -579,7 +585,7 @@ function salvaProdottoClassico(){
 }
 function modificaProdottoClassico(id){
   const p=prodottiClassici.find(x=>String(x.id)===String(id));if(!p)return;
-  editingClassicoId=p.id;$('pc_nome').value=p.name||'';$('pc_uso').value=p.uso||'Materia prima';$('pc_uso2').value=p.uso2||'';$('pc_unitaAcquisto').value=p.unitaAcquisto||'kg';$('pc_iva').value=p.iva??'';$('pc_formatoQta').value=p.formatoQta??'';$('pc_formatoUnita').value=p.formatoUnita||'g';$('pc_prezzoVendita').value=p.prezzoVendita??'';$('pc_ingSearch').value='';$('titoloClassico').textContent='✏️ Modifica prodotto classico';
+  editingClassicoId=p.id;$('pc_nome').value=p.name||'';$('pc_uso').value=p.uso||'Materia prima';$('pc_uso2').value=p.uso2||'';$('pc_unitaAcquisto').value=String(p.unitaAcquisto||'KG').toUpperCase();$('pc_iva').value=p.iva??'';$('pc_formatoQta').value=p.formatoQta??'';$('pc_formatoUnita').value=p.formatoUnita||'g';$('pc_prezzoVendita').value=p.prezzoVendita??'';$('pc_ingSearch').value='';$('titoloClassico').textContent='✏️ Modifica prodotto classico';
   inizializzaPicker('pc',p.ingredients||[]);$('pc_nome').scrollIntoView({behavior:'smooth',block:'center'});
 }
 function eliminaProdottoClassico(id){
@@ -592,7 +598,7 @@ function renderListaProdottiClassici(){
   const el=$('pc_lista');if(!el)return;
   const q=($('pc_cerca')?.value||'').trim().toLowerCase();
   const arr=[...prodottiClassici].filter(p=>String(p.name||'').toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));
-  el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Destinazione uso</th><th>Destinazione uso 2</th><th>Unità acquisto</th><th>IVA</th><th>Formato vendita</th><th>Prezzo vendita</th><th>Ingredienti</th><th>Azioni</th></tr></thead><tbody>'+arr.map(p=>{const stats=riepilogoAcquistiProdotto(p.name);return `<tr><td><b>${esc(p.name)}</b><br><span class="small">${stats.count} acquisti · quantità anno ${stats.qtyYear===null?'unità miste':stats.qtyYear} ${esc(stats.yearUnit)} · prezzo minimo ${stats.min?euroPrezzo(stats.min.priceExcl)+' ('+esc(stats.min.supplier||'—')+')':'—'} · ultimo prezzo ${stats.last&&stats.last.priceExcl!=null?euroPrezzo(stats.last.priceExcl)+' ('+esc(stats.last.supplier||'—')+')':'—'} · costo formato minimo ${stats.minCost?euroPrezzo(stats.minCost.saleFormatCost)+' ('+esc(stats.minCost.supplier||'—')+')':'—'} · ultimo costo formato ${stats.lastCost?euroPrezzo(stats.lastCost.saleFormatCost)+' ('+esc(stats.lastCost.supplier||'—')+')':'—'}</span></td><td>${esc(p.uso||'—')}</td><td>${esc(p.uso2||'—')}</td><td>${esc(p.unitaAcquisto||'kg')}</td><td>${p.iva!==''&&p.iva!=null?esc(p.iva)+'%':'—'}</td><td>${esc(p.formatoQta||'—')} ${esc(p.formatoUnita||'')}</td><td>${p.prezzoVendita?euroPrezzo(p.prezzoVendita):'—'}</td><td>${(p.ingredients||[]).map(i=>esc(i.name)).join(', ')||'—'}</td><td><button class="editBtn" onclick="modificaProdottoClassico('${p.id}')">Modifica</button> <button class="dangerBtn" onclick="eliminaProdottoClassico('${p.id}')">Elimina</button></td></tr>`}).join('')+'</tbody></table></div>':'<div class="empty">Nessun prodotto classico registrato.</div>';
+  el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Destinazione uso</th><th>Destinazione uso 2</th><th>Unità acquisto</th><th>IVA</th><th>Formato vendita</th><th>Prezzo vendita</th><th>Ingredienti</th><th>Azioni</th></tr></thead><tbody>'+arr.map(p=>{const stats=riepilogoAcquistiProdotto(p.name);return `<tr><td><b>${esc(p.name)}</b><br><span class="small">${stats.count} acquisti · quantità anno ${stats.qtyYear===null?'unità miste':stats.qtyYear} ${esc(stats.yearUnit)} · costo minimo I.E. ${stats.min?euroPrezzo(stats.min.priceExcl)+' ('+esc(stats.min.supplier||'—')+')':'—'} / I.I. ${stats.min?euroPrezzo(Number(stats.min.priceExcl)*(1+Number(stats.min.vat||0)/100)):'—'} · ultimo costo I.E. ${stats.last&&stats.last.priceExcl!=null?euroPrezzo(stats.last.priceExcl)+' ('+esc(stats.last.supplier||'—')+')':'—'} / I.I. ${stats.last&&stats.last.priceExcl!=null?euroPrezzo(Number(stats.last.priceExcl)*(1+Number(stats.last.vat||0)/100)):'—'} · costo formato minimo ${stats.minCost?euroPrezzo(stats.minCost.saleFormatCost)+' ('+esc(stats.minCost.supplier||'—')+')':'—'} · ultimo costo formato ${stats.lastCost?euroPrezzo(stats.lastCost.saleFormatCost)+' ('+esc(stats.lastCost.supplier||'—')+')':'—'}</span></td><td>${esc(p.uso||'—')}</td><td>${esc(p.uso2||'—')}</td><td>${esc(p.unitaAcquisto||'kg')}</td><td>${p.iva!==''&&p.iva!=null?esc(p.iva)+'%':'—'}</td><td>${esc(p.formatoQta||'—')} ${esc(p.formatoUnita||'')}</td><td>${p.prezzoVendita?euroPrezzo(p.prezzoVendita):'—'}</td><td>${(p.ingredients||[]).map(i=>esc(i.name)).join(', ')||'—'}</td><td><button class="editBtn" onclick="modificaProdottoClassico('${p.id}')">Modifica</button> <button class="dangerBtn" onclick="eliminaProdottoClassico('${p.id}')">Elimina</button></td></tr>`}).join('')+'</tbody></table></div>':'<div class="empty">Nessun prodotto classico registrato.</div>';
 }
 function renderCatalogoClassici(){
   const sel=$('c_classico');
@@ -605,14 +611,14 @@ function renderCatalogoClassici(){
 }
 function applicaClassicoNuovo(){
   const p=prodottiClassici.find(x=>String(x.id)===String($('c_classico')?.value));if(!p)return alert('Seleziona prima un prodotto classico.');
-  $('c_nome').value=p.name||'';$('c_destinazioneUso').value=p.uso||'';$('c_destinazioneUso2').value=p.uso2||'';$('c_unit').value=String(p.unitaAcquisto||'kg').toUpperCase();$('c_ivaAcq').value=p.iva??$('c_ivaAcq').value;$('c_formatoVendita').value=p.formatoQta??$('c_formatoVendita').value;$('c_formatoUnita').value=p.formatoUnita||'g';$('c_prezzoVendita').value=p.prezzoVendita??$('c_prezzoVendita').value;inizializzaPicker('nuovo',p.ingredients||[]);precompilaDatiAcquisto(p);alert('Nome, destinazioni d’uso e ingredienti copiati. Puoi completare lotto, date, quantità e dati economici.');
+  $('c_nome').value=p.name||'';$('c_destinazioneUso').value=p.uso||'';$('c_destinazioneUso2').value=p.uso2||'';$('c_unit').value=String(p.unitaAcquisto||'KG').toUpperCase();if($('c_unitaMisuraPrezzo'))$('c_unitaMisuraPrezzo').value=String(p.unitaAcquisto||'KG').toUpperCase();$('c_ivaAcq').value=p.iva??$('c_ivaAcq').value;$('c_formatoVendita').value=p.formatoQta??$('c_formatoVendita').value;$('c_formatoUnita').value=p.formatoUnita||'g';$('c_prezzoVendita').value=p.prezzoVendita??$('c_prezzoVendita').value;if($('c_qtyEconomia'))$('c_qtyEconomia').value=$('c_qty').value||'';inizializzaPicker('nuovo',p.ingredients||[]);precompilaDatiAcquisto(p);ricalcolaEconomiaAcquisto();alert('Nome, destinazioni d’uso e ingredienti copiati. Puoi completare lotto, date, quantità e dati economici.');
 }
 function applicaClassicoModifica(){
   const p=prodottiClassici.find(x=>String(x.id)===String($('e_classico')?.value));if(!p)return;
   $('e_nome').value=p.name||'';inizializzaPicker('edit',p.ingredients||[]);
 }
 function resetNuovo(){
-  ['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza','c_dataConsegna','c_numeroDocumento','c_destinazioneUso','c_destinazioneUso2','c_pzPeso','c_prezzoAcq','c_ivaAcq','c_formatoVendita','c_costoFormatoVendita','c_prezzoVendita','c_differenza','c_margine'].forEach(id=>{if($(id))$(id).value='';});
+  ['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza','c_dataConsegna','c_numeroDocumento','c_destinazioneUso','c_destinazioneUso2','c_pzPeso','c_prezzoAcq','c_qtyEconomia','c_totaleIncl','c_costoUnitExcl','c_costoUnitIncl','c_ivaAcq','c_formatoVendita','c_costoFormatoVendita','c_prezzoVendita','c_differenza','c_margine'].forEach(id=>{if($(id))$(id).value='';});
   if($('c_dataConsegna')&&!$('c_dataConsegna').value)$('c_dataConsegna').value=today();
   $('c_stato').value='FRESCO';
   $('c_storage').value='FRIGORIFERO +4°C';
@@ -1203,7 +1209,7 @@ function riepilogoAcquistiProdotto(nome){
  return {count:arr.length,min,last,minCost,lastCost,qtyYear,yearUnit:units.length===1?units[0]:(units.length?'unità miste':'')};
 }
 function aggiornaDestinazioniUso2(){const dl=$('pc_usi2Lista');if(!dl)return;const values=[...new Set(prodottiClassici.map(p=>String(p.uso2||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'it'));dl.innerHTML=values.map(v=>`<option value="${esc(v)}"></option>`).join('');}
-function renderStoricoAcquisti(){const el=$('storicoLista');if(!el)return;const q=String($('storicoCerca')?.value||'').trim().toLocaleLowerCase('it');const arr=storicoAcquisti.filter(x=>(String(x.productName||'')+' '+String(x.supplier||'')).toLocaleLowerCase('it').includes(q)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));const anno=String(new Date().getFullYear());const totale=storicoAcquisti.filter(x=>String(x.date||'').startsWith(anno)).length;if($('storicoRiepilogo'))$('storicoRiepilogo').innerHTML=`<div class="notice">Acquisti registrati: <b>${storicoAcquisti.length}</b> · Acquisti nel ${anno}: <b>${totale}</b></div>`;el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Data</th><th>Prodotto</th><th>Fornitore</th><th>Quantità acquistata dal fornitore</th><th>Prezzo acquisto IVA esclusa (unità di acquisto)</th><th>IVA</th><th>Formato vendita</th><th>Costo formato</th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${fmtDate(x.date)}</td><td><b>${esc(x.productName||'—')}</b></td><td>${esc(x.supplier||'Fornitore non specificato')}</td><td><b>${esc(x.quantity)}</b> ${esc(x.unit||'')}</td><td>${x.priceExcl==null?'—':euroPrezzo(x.priceExcl)}${x.unitPriceBasis?' / '+esc(x.unitPriceBasis):' / '+esc(x.unit||'unità')}</td><td>${esc(x.vat??0)}%</td><td>${esc(x.saleFormat||'—')}</td><td>${euroPrezzo(x.saleFormatCost)}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun acquisto registrato'+(q?' corrispondente alla ricerca':'')+'. I nuovi acquisti salvati appariranno qui.</div>';}
+function renderStoricoAcquisti(){const el=$('storicoLista');if(!el)return;const q=String($('storicoCerca')?.value||'').trim().toLocaleLowerCase('it');const arr=storicoAcquisti.filter(x=>(String(x.productName||'')+' '+String(x.supplier||'')).toLocaleLowerCase('it').includes(q)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));const anno=String(new Date().getFullYear());const totale=storicoAcquisti.filter(x=>String(x.date||'').startsWith(anno)).length;if($('storicoRiepilogo'))$('storicoRiepilogo').innerHTML=`<div class="notice">Acquisti registrati: <b>${storicoAcquisti.length}</b> · Acquisti nel ${anno}: <b>${totale}</b></div>`;el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Data</th><th>Prodotto</th><th>Fornitore</th><th>Quantità acquistata dal fornitore</th><th>Costo unitario I.E. / unità di misura</th><th>IVA</th><th>Formato vendita</th><th>Costo formato</th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${fmtDate(x.date)}</td><td><b>${esc(x.productName||'—')}</b></td><td>${esc(x.supplier||'Fornitore non specificato')}</td><td><b>${esc(x.quantity)}</b> ${esc(x.unit||'')}</td><td>${x.priceExcl==null?'—':euroPrezzo(x.priceExcl)}${x.unitPriceBasis?' / '+esc(x.unitPriceBasis):' / '+esc(x.unit||'unità')}</td><td>${esc(x.vat??0)}%</td><td>${esc(x.saleFormat||'—')}</td><td>${euroPrezzo(x.saleFormatCost)}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun acquisto registrato'+(q?' corrispondente alla ricerca':'')+'. I nuovi acquisti salvati appariranno qui.</div>';}
 function renderAll(){
   renderDashboard();
   renderMagazzino();
@@ -1298,26 +1304,45 @@ function renderControlloPrezzi(){
  if(!arr.length){el.innerHTML='<div class="empty">Nessun prodotto trovato. Prova un altro termine di ricerca.</div>';return;}
  el.innerHTML=arr.map((x,i)=>`<article class="price-card"><div class="price-head"><div><span class="price-rank">${i+1}° prezzo</span><div class="price-name">${esc(x.prodotto||'Prodotto senza nome')}</div><div class="price-meta"><b>Fornitore:</b> ${esc(x.fornitore||'—')}<br><b>Destinazioni:</b> ${[x.uso,x.uso2,x.uso3].filter(Boolean).map(esc).join(' · ')||'—'}<br><b>Pezzi/peso acquisto:</b> ${esc(x.formatoAcquisto||'—')}<br><b>Formato vendita:</b> ${esc(x.formatoVendita||'—')}<br><b>Costo formato vendita:</b> ${euroPrezzo(x.costoFormatoVendita)}</div></div><div class="price-values"><div class="price-excl">${euroPrezzo(x.esclusa)} <span style="font-size:12px;font-weight:normal">IVA escl.</span></div><div class="price-incl">${euroPrezzo(x.inclusa)} IVA inclusa</div>${x.iva!==null?`<div class="small">IVA ${esc(x.iva)}%</div>`:''}</div></div></article>`).join('');
 }
+function sincronizzaQuantitaEconomica(){
+ const q=$('c_qty')?.value??'';
+ if($('c_qtyEconomia'))$('c_qtyEconomia').value=q;
+ ricalcolaEconomiaAcquisto();
+}
+function sincronizzaQuantitaDaEconomia(){
+ const q=$('c_qtyEconomia')?.value??'';
+ if($('c_qty'))$('c_qty').value=q;
+ ricalcolaEconomiaAcquisto();
+}
+function sincronizzaUnitaEconomica(){
+ const u=String($('c_unit')?.value||'KG').toUpperCase();
+ if($('c_unitaMisuraPrezzo'))$('c_unitaMisuraPrezzo').value=u;
+ ricalcolaEconomiaAcquisto();
+}
 function ricalcolaEconomiaAcquisto(){
- const prezzoRaw=$('c_prezzoAcq')?.value??'',ivaRaw=$('c_ivaAcq')?.value??'',formatoRaw=$('c_formatoVendita')?.value??'';
- const prezzo=Number(prezzoRaw),iva=Number(ivaRaw)||0,formato=Number(formatoRaw);
- const unitaAcq=String($('c_unit')?.value||'').toUpperCase(),unitaVendita=String($('c_formatoUnita')?.value||'');
+ const totaleRaw=$('c_prezzoAcq')?.value??'',ivaRaw=$('c_ivaAcq')?.value??'',qRaw=$('c_qtyEconomia')?.value??$('c_qty')?.value??'',formatoRaw=$('c_formatoVendita')?.value??'';
+ const totale=Number(totaleRaw),iva=Number(ivaRaw)||0,q=Number(qRaw),formato=Number(formatoRaw);
+ const unitaAcq=String($('c_unitaMisuraPrezzo')?.value||$('c_unit')?.value||'KG').toUpperCase(),unitaVendita=String($('c_formatoUnita')?.value||'');
+ const totaleIncl=totaleRaw!==''&&Number.isFinite(totale)&&totale>=0?totale*(1+iva/100):null;
+ const unitExcl=totale!==null&&qRaw!==''&&Number.isFinite(q)&&q>0?totale/q:null;
+ const unitIncl=totaleIncl!==null&&qRaw!==''&&Number.isFinite(q)&&q>0?totaleIncl/q:null;
+ if($('c_totaleIncl'))$('c_totaleIncl').value=totaleIncl===null?'':totaleIncl.toFixed(2);
+ if($('c_costoUnitExcl'))$('c_costoUnitExcl').value=unitExcl===null?'':unitExcl.toFixed(4);
+ if($('c_costoUnitIncl'))$('c_costoUnitIncl').value=unitIncl===null?'':unitIncl.toFixed(4);
  let fattore=null;
- // Fattore di conversione: quante unità di acquisto contiene il formato di vendita.
+ // Il formato di vendita viene convertito nell'unita' di acquisto, mantenendo le equivalenze kg/g e L/ml.
  if(unitaAcq==='KG'&&unitaVendita==='g')fattore=formato/1000;
  else if(unitaAcq==='KG'&&unitaVendita==='kg')fattore=formato;
- else if(unitaAcq==='G'&&unitaVendita==='g')fattore=formato;
- else if(unitaAcq==='G'&&unitaVendita==='kg')fattore=formato*1000;
+ else if(unitaAcq==='KG'&&unitaVendita==='KG')fattore=formato;
  else if(unitaAcq==='L'&&unitaVendita==='ml')fattore=formato/1000;
  else if(unitaAcq==='L'&&unitaVendita==='L')fattore=formato;
- else if(unitaAcq==='ML'&&unitaVendita==='ml')fattore=formato;
- else if(unitaAcq==='ML'&&unitaVendita==='L')fattore=formato*1000;
+ else if(unitaAcq==='L'&&unitaVendita==='l')fattore=formato;
  else if(unitaAcq==='PZ'&&unitaVendita==='Pz')fattore=formato;
- const costoValido=prezzoRaw!==''&&Number.isFinite(prezzo)&&prezzo>=0&&formatoRaw!==''&&Number.isFinite(formato)&&formato>0&&fattore!==null;
- const costo=costoValido?prezzo*fattore*(1+iva/100):null;
- if($('c_costoFormatoVendita'))$('c_costoFormatoVendita').value=costo===null?'':costo.toFixed(4);
+ else if(unitaAcq==='PZ'&&unitaVendita==='PZ')fattore=formato;
+ const costoFormato=unitIncl!==null&&formatoRaw!==''&&Number.isFinite(formato)&&formato>0&&fattore!==null?unitIncl*fattore:null;
+ if($('c_costoFormatoVendita'))$('c_costoFormatoVendita').value=costoFormato===null?'':costoFormato.toFixed(4);
  const venditaRaw=$('c_prezzoVendita')?.value??'',vendita=Number(venditaRaw),validVendita=venditaRaw!==''&&Number.isFinite(vendita);
- const diff=costo!==null&&validVendita?vendita-costo:null;
+ const diff=costoFormato!==null&&validVendita?vendita-costoFormato:null;
  if($('c_differenza'))$('c_differenza').value=diff===null?'':diff.toFixed(2);
  if($('c_margine'))$('c_margine').value=diff!==null&&vendita>0?(diff/vendita*100).toFixed(2)+'%':'';
 }
@@ -1340,7 +1365,7 @@ function precompilaDatiAcquisto(classico){
  let r=righeControlloPrezzi.find(x=>name&&norm(x.prodotto)===name);
  if(!r)r=righeControlloPrezzi.find(x=>(uso&&norm(x.uso)===uso)||(uso2&&norm(x.uso2)===uso2)||(uso&&norm(x.uso2)===uso)||(uso2&&norm(x.uso)===uso2));
  if(!r)return;
- $('c_pzPeso').value=r.formatoAcquisto||'';$('c_prezzoAcq').value=r.esclusa??'';$('c_ivaAcq').value=r.iva??'';const fv=interpretaFormatoVendita(r.formatoVendita);if(fv.quantita)$('c_formatoVendita').value=fv.quantita;if(fv.unita)$('c_formatoUnita').value=fv.unita;if(r.costoFormatoVendita!==null&&r.costoFormatoVendita!==undefined)$('c_costoFormatoVendita').value=r.costoFormatoVendita;ricalcolaEconomiaAcquisto();
+ $('c_pzPeso').value=r.formatoAcquisto||'';$('c_ivaAcq').value=r.iva??'';const fv=interpretaFormatoVendita(r.formatoVendita);if(fv.quantita)$('c_formatoVendita').value=fv.quantita;if(fv.unita)$('c_formatoUnita').value=fv.unita;if(r.costoFormatoVendita!==null&&r.costoFormatoVendita!==undefined)$('c_costoFormatoVendita').value=r.costoFormatoVendita;ricalcolaEconomiaAcquisto();
 }
 $('c_dataConsegna').value=today();$('pc_uso').value='Materia prima';$('c_formatoUnita').value='g';aggiornaDestinazioniUso2();ricalcolaScadenzaUI();caricaDatabase();home();
 </script></body></html>
