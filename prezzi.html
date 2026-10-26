@@ -5,87 +5,359 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#173d32">
 <title>Don Tonino - Controllo Prezzi</title>
+
 <style>
 :root{--green:#173d32;--green2:#245b48;--bg:#f7f6f1;--line:#d9e2dc;--muted:#68766e;--red:#b42318}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#202b25}
-header{background:var(--green);color:#fff;padding:20px 16px}header .wrap,main{max-width:1100px;margin:auto}
-.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;background:#fff;color:var(--green);font-weight:900;display:grid;place-items:center;font-size:22px}
-h1{font-size:21px;margin:0 0 4px}header p{margin:0;font-size:12px;letter-spacing:1px;color:#dce9e1}
-main{padding:18px 14px 32px}.panel,.item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:15px;box-shadow:0 5px 18px #132e1c08}
-.grid{display:grid;grid-template-columns:1fr 1.5fr;gap:14px}.field label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#202b25}
+header{background:var(--green);color:#fff;padding:20px 16px}
+header .wrap,main{max-width:1100px;margin:auto}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;border-radius:14px;background:#fff;color:var(--green);font-weight:900;display:grid;place-items:center;font-size:22px}
+h1{font-size:21px;margin:0 0 4px}
+header p{margin:0;font-size:12px;letter-spacing:1px;color:#dce9e1}
+main{padding:18px 14px 32px}
+.panel,.item{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:15px;box-shadow:0 5px 18px #132e1c08}
+.grid{display:grid;grid-template-columns:1fr 1.5fr;gap:14px}
+.field label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}
 select,input[type=search]{width:100%;min-height:48px;border:1px solid #cbd7ce;border-radius:12px;padding:12px 14px;font-size:16px;background:#fff;color:#1e2b24}
-.sortrow{display:flex;gap:12px 20px;align-items:center;flex-wrap:wrap;margin:16px 0}.sortrow label{display:flex;gap:7px;align-items:center}
-.actions{display:flex;gap:10px;flex-wrap:wrap}button{border:0;border-radius:12px;min-height:46px;padding:12px 20px;font-size:15px;font-weight:700;cursor:pointer}.primary{background:var(--green);color:#fff}.secondary{background:#e8eee9;color:var(--green)}button:disabled{opacity:.55}
-.status{padding:4px 2px 12px;color:var(--muted);font-size:14px}.error{background:#fff0ef;border:1px solid #ffc8c4;color:var(--red);border-radius:12px;padding:12px;margin-bottom:14px;overflow-wrap:anywhere}
-.results-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 2px 12px}.results-head h2{font-size:20px;margin:0}.count{color:var(--muted);font-size:14px}
-.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;margin-bottom:12px}.item.best{border-color:#80b69a;background:#fbfffc}.prod{font-weight:800;font-size:18px;overflow-wrap:anywhere}.supplier{color:var(--muted);margin-top:6px;font-size:14px;overflow-wrap:anywhere}
-.prices{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-end}.pricebox{text-align:right;min-width:115px}.price-label{font-size:12px;color:var(--muted);margin-bottom:5px}.price{font-size:18px;font-weight:800}.best-tag{display:inline-block;background:#dff3e5;color:#205b38;border-radius:6px;padding:4px 7px;font-size:11px;font-weight:700;margin-top:6px}
-.uses{grid-column:1/-1;border-top:1px solid #e8eee9;padding-top:11px;display:flex;gap:7px;flex-wrap:wrap}.chip{background:#f0f3f0;border-radius:8px;padding:6px 9px;font-size:12px;color:#435148;overflow-wrap:anywhere}.empty{text-align:center;padding:24px 12px;border:1px dashed #cbd7ce;border-radius:14px;color:var(--muted);background:#fff}
+.sortrow{display:flex;gap:12px 20px;align-items:center;flex-wrap:wrap;margin:16px 0}
+.sortrow label{display:flex;gap:7px;align-items:center}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+button{border:0;border-radius:12px;min-height:46px;padding:12px 20px;font-size:15px;font-weight:700;cursor:pointer}
+.primary{background:var(--green);color:#fff}
+.secondary{background:#e8eee9;color:var(--green)}
+button:disabled{opacity:.55}
+.status{padding:4px 2px 12px;color:var(--muted);font-size:14px}
+.error{background:#fff0ef;border:1px solid #ffc8c4;color:var(--red);border-radius:12px;padding:12px;margin-bottom:14px;overflow-wrap:anywhere}
+.results-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 2px 12px}
+.results-head h2{font-size:20px;margin:0}
+.count{color:var(--muted);font-size:14px}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;margin-bottom:12px}
+.item.best{border-color:#80b69a;background:#fbfffc}
+.prod{font-weight:800;font-size:18px;overflow-wrap:anywhere}
+.supplier{color:var(--muted);margin-top:6px;font-size:14px;overflow-wrap:anywhere}
+.prices{display:flex;gap:18px;flex-wrap:wrap;justify-content:flex-end}
+.pricebox{text-align:right;min-width:115px}
+.price-label{font-size:12px;color:var(--muted);margin-bottom:5px}
+.price{font-size:18px;font-weight:800}
+.best-tag{display:inline-block;background:#dff3e5;color:#205b38;border-radius:6px;padding:4px 7px;font-size:11px;font-weight:700;margin-top:6px}
+.uses{grid-column:1/-1;border-top:1px solid #e8eee9;padding-top:11px;display:flex;gap:7px;flex-wrap:wrap}
+.chip{background:#f0f3f0;border-radius:8px;padding:6px 9px;font-size:12px;color:#435148;overflow-wrap:anywhere}
+.empty{text-align:center;padding:24px 12px;border:1px dashed #cbd7ce;border-radius:14px;color:var(--muted);background:#fff}
 .foot{text-align:center;color:var(--muted);font-size:11px;margin-top:22px}
-@media(max-width:650px){header{padding:17px 14px}.brand h1{font-size:19px}main{padding:12px 10px 25px}.panel{padding:14px}.grid{grid-template-columns:1fr;gap:12px}.sortrow{align-items:flex-start;flex-direction:column;gap:10px}.actions button{flex:1}.item{grid-template-columns:1fr;gap:12px;padding:14px}.prices{justify-content:flex-start;gap:12px}.pricebox{text-align:left;min-width:0;flex:1}.price{font-size:17px}.uses{grid-column:1}.results-head h2{font-size:19px}}
+@media(max-width:650px){
+ header{padding:17px 14px}
+ .brand h1{font-size:19px}
+ main{padding:12px 10px 25px}
+ .panel{padding:14px}
+ .grid{grid-template-columns:1fr;gap:12px}
+ .sortrow{align-items:flex-start;flex-direction:column;gap:10px}
+ .actions button{flex:1}
+ .item{grid-template-columns:1fr;gap:12px;padding:14px}
+ .prices{justify-content:flex-start;gap:12px}
+ .pricebox{text-align:left;min-width:0;flex:1}
+ .price{font-size:17px}
+ .uses{grid-column:1}
+ .results-head h2{font-size:19px}
+}
 </style>
 </head>
+
 <body>
-<header><div class="wrap"><div class="brand"><div class="logo">DT</div><div><h1>DON TONINO</h1><p>CONTROLLO E CONFRONTO PREZZI</p></div></div></div></header>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">DT</div>
+      <div>
+        <h1>DON TONINO</h1>
+        <p>CONTROLLO E CONFRONTO PREZZI</p>
+      </div>
+    </div>
+  </div>
+</header>
+
 <main>
-<section class="panel">
- <div class="grid">
-  <div class="field"><label for="field">Cerca in questo campo</label><select id="field"><option>Prodotto</option><option>Fornitore</option><option>Destinazione uso</option><option>Destinazione uso 2</option><option>Destinazione uso 3</option></select></div>
-  <div class="field"><label for="query">Parola da cercare</label><input id="query" type="search" placeholder="Es. burrata, farina, fornitore..." autocomplete="off"></div>
- </div>
- <div class="sortrow"><strong>Ordina per:</strong><label><input type="radio" name="sort" value="netto" checked> Prezzo IVA esclusa</label><label><input type="radio" name="sort" value="lordo"> Prezzo IVA inclusa</label></div>
- <div class="actions"><button class="primary" id="searchBtn">Cerca prodotti</button><button class="secondary" id="resetBtn">Azzera ricerca</button></div>
-</section>
-<div id="status" class="status">Pronto per la ricerca. Inserisci un nome o una parte del nome.</div><div id="error" class="error" hidden></div>
-<div class="results-head"><h2>Risultati</h2><span id="count" class="count"></span></div>
-<section id="results"><div class="empty">I prodotti trovati appariranno qui, ordinati dal prezzo più basso al più alto.</div></section>
-<div class="foot">Don Tonino · Dati letti dal tuo Google Sheet</div>
+  <section class="panel">
+    <div class="grid">
+      <div class="field">
+        <label for="field">Cerca in questo campo</label>
+        <select id="field">
+          <option>Prodotto</option>
+          <option>Fornitore</option>
+          <option>Destinazione uso</option>
+          <option>Destinazione uso 2</option>
+          <option>Destinazione uso 3</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="query">Parola da cercare</label>
+        <input id="query" type="search"
+          placeholder="Es. burrata, farina, fornitore..."
+          autocomplete="off">
+      </div>
+    </div>
+
+    <div class="sortrow">
+      <strong>Ordina per:</strong>
+      <label><input type="radio" name="sort" value="netto" checked> Prezzo IVA esclusa</label>
+      <label><input type="radio" name="sort" value="lordo"> Prezzo IVA inclusa</label>
+    </div>
+
+    <div class="actions">
+      <button class="primary" id="searchBtn">Cerca prodotti</button>
+      <button class="secondary" id="resetBtn">Azzera ricerca</button>
+    </div>
+  </section>
+
+  <div id="status" class="status">Pronto per la ricerca. Inserisci un nome o una parte del nome.</div>
+  <div id="error" class="error" hidden></div>
+
+  <div class="results-head">
+    <h2>Risultati</h2>
+    <span id="count" class="count"></span>
+  </div>
+
+  <section id="results">
+    <div class="empty">I prodotti trovati appariranno qui, ordinati dal prezzo più basso al più alto.</div>
+  </section>
+
+  <div class="foot">Don Tonino · Dati letti dal tuo Google Sheet</div>
 </main>
+
 <script>
-/* INCOLLA QUI L'URL /exec della NUOVA app web Apps Script dedicata a Controllo Prezzi. */
+/*
+ * DON TONINO - CONTROLLO PREZZI
+ * Richieste JSONP per evitare il problema CORS di fetch().
+ */
 const API_URL = 'https://script.google.com/macros/s/AKfycbwyPyqHb6sPNlQLYT9dmsObPckHF1xsfICmgUdHtf2ujLzwfQEv49aDMUx74N3QIndh/exec';
+
 const $ = id => document.getElementById(id);
-let timer;
+let timer = null;
+let requestNumber = 0;
+let activeScript = null;
+
 $('searchBtn').addEventListener('click', searchNow);
 $('resetBtn').addEventListener('click', resetSearch);
 $('field').addEventListener('change', searchNow);
-document.querySelectorAll('input[name="sort"]').forEach(el=>el.addEventListener('change',searchNow));
-$('query').addEventListener('keydown',e=>{if(e.key==='Enter')searchNow()});
-$('query').addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(searchNow,450)});
 
-async function searchNow(){
- const query=$('query').value.trim(), field=$('field').value;
- const sortBy=document.querySelector('input[name="sort"]:checked').value;
- $('error').hidden=true;
- if(!API_URL.startsWith('https://script.google.com/macros/s/') || API_URL.includes('INCOLLA_QUI')){
-   showError('Manca l’URL della Web App Apps Script nel file prezzi.html.');
-   return;
- }
- $('status').textContent='Ricerca in corso…';$('count').textContent='';
- $('results').innerHTML='<div class="empty">Sto cercando nel foglio…</div>';$('searchBtn').disabled=true;
- try{
-   const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({api:'prezzi',action:'searchProducts',args:{query,field,sortBy}}),redirect:'follow'});
-   if(!response.ok)throw new Error('Errore HTTP '+response.status);
-   const payload=await response.json();
-   if(!payload||payload.ok!==true)throw new Error(payload&&payload.error?payload.error:'Risposta non valida dal server.');
-   renderResults(payload.data);
- }catch(err){
-   showError('Non riesco a leggere i dati. Controlla che la Web App Apps Script sia distribuita con accesso “Chiunque” e che l’URL /exec sia corretto. Dettaglio: '+(err.message||err));
- }finally{$('searchBtn').disabled=false}
+document.querySelectorAll('input[name="sort"]').forEach(el => {
+  el.addEventListener('change', searchNow);
+});
+
+$('query').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    clearTimeout(timer);
+    searchNow();
+  }
+});
+
+$('query').addEventListener('input', () => {
+  clearTimeout(timer);
+  timer = setTimeout(searchNow, 450);
+});
+
+/*
+ * Esegue una richiesta JSONP tramite uno script temporaneo.
+ * Questa modalità non utilizza fetch() e non richiede CORS.
+ */
+function apiRequest(params) {
+  return new Promise((resolve, reject) => {
+    const callbackName = 'donToninoCallback_' +
+      Date.now() + '_' + (++requestNumber);
+
+    const script = document.createElement('script');
+    let completed = false;
+
+    const cleanup = () => {
+      if (completed) return;
+      completed = true;
+
+      clearTimeout(timeout);
+      script.remove();
+
+      try {
+        delete window[callbackName];
+      } catch (_) {
+        window[callbackName] = undefined;
+      }
+
+      if (activeScript === script) {
+        activeScript = null;
+      }
+    };
+
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error(
+        'Tempo scaduto. Controlla la connessione e la distribuzione Apps Script.'
+      ));
+    }, 20000);
+
+    window[callbackName] = payload => {
+      cleanup();
+      resolve(payload);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error(
+        'Impossibile caricare la risposta Google. Verifica la distribuzione della Web App.'
+      ));
+    };
+
+    const queryParams = new URLSearchParams({
+      ...params,
+      callback: callbackName
+    });
+
+    script.src = API_URL + '?' + queryParams.toString();
+    activeScript = script;
+    document.body.appendChild(script);
+  });
 }
-function renderResults(data){
- if(!data||!Array.isArray(data.rows)){showError('Risposta non valida dal server.');return}
- $('status').textContent=data.total?'Ricerca completata.':'Nessun risultato trovato. Prova un’altra parola o un altro campo.';
- $('count').textContent=data.total+(data.total===1?' risultato':' risultati');
- if(!data.rows.length){$('results').innerHTML='<div class="empty">Nessun prodotto trovato.</div>';return}
- $('results').innerHTML=data.rows.map(item=>{
-  const best=item.isCheapest;
-  const uses=[['Uso',item.uso1],['Uso 2',item.uso2],['Uso 3',item.uso3]].filter(x=>x[1]).map(x=>'<span class="chip"><b>'+esc(x[0])+':</b> '+esc(x[1])+'</span>').join('');
-  return '<article class="item '+(best?'best':'')+'"><div><div class="prod">'+esc(item.prodotto||'Prodotto senza nome')+'</div><div class="supplier">Fornitore: '+esc(item.fornitore||'Non indicato')+'</div>'+(best?'<span class="best-tag">PREZZO PIÙ BASSO</span>':'')+'</div><div class="prices"><div class="pricebox"><div class="price-label">Prezzo IVA esclusa</div><div class="price">'+esc(item.nettoDisplay||'Non disponibile')+'</div></div><div class="pricebox"><div class="price-label">Prezzo IVA inclusa</div><div class="price">'+esc(item.lordoDisplay||'Non disponibile')+'</div></div></div>'+(uses?'<div class="uses">'+uses+'</div>':'')+'</article>';
- }).join('');
+
+async function searchNow() {
+  clearTimeout(timer);
+
+  const query = $('query').value.trim();
+  const field = $('field').value;
+  const sortBy = document.querySelector('input[name="sort"]:checked').value;
+
+  $('error').hidden = true;
+
+  if (!API_URL.startsWith('https://script.google.com/macros/s/') ||
+      API_URL.includes('INCOLLA_QUI')) {
+    showError('Manca l’URL della Web App Apps Script nel file prezzi.html.');
+    return;
+  }
+
+  $('status').textContent = 'Ricerca in corso…';
+  $('count').textContent = '';
+  $('results').innerHTML = '<div class="empty">Sto cercando nel foglio…</div>';
+  $('searchBtn').disabled = true;
+
+  try {
+    const payload = await apiRequest({
+      api: 'prezzi',
+      action: 'searchProducts',
+      query: query,
+      field: field,
+      sortBy: sortBy
+    });
+
+    if (!payload || payload.ok !== true) {
+      throw new Error(
+        payload && payload.error
+          ? payload.error
+          : 'Risposta non valida dal server.'
+      );
+    }
+
+    renderResults(payload.data);
+
+  } catch (err) {
+    showError(
+      'Non riesco a leggere i dati. Verifica che la Web App Apps Script sia aggiornata e accessibile a chiunque. Dettaglio: ' +
+      (err.message || err)
+    );
+  } finally {
+    $('searchBtn').disabled = false;
+  }
 }
-function showError(message){$('error').textContent=message;$('error').hidden=false;$('status').textContent='Ricerca non completata.';$('results').innerHTML='<div class="empty">Correggi il collegamento e riprova.</div>';$('searchBtn').disabled=false}
-function resetSearch(){$('query').value='';$('field').value='Prodotto';document.querySelector('input[name="sort"][value="netto"]').checked=true;$('error').hidden=true;$('status').textContent='Ricerca azzerata.';$('count').textContent='';$('results').innerHTML='<div class="empty">Inserisci un termine per cercare i prodotti.</div>'}
-function esc(value){return String(value==null?'':value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function renderResults(data) {
+  if (!data || !Array.isArray(data.rows)) {
+    showError('Risposta non valida dal server.');
+    return;
+  }
+
+  $('status').textContent = data.total
+    ? 'Ricerca completata.'
+    : 'Nessun risultato trovato. Prova un’altra parola o un altro campo.';
+
+  $('count').textContent =
+    data.total + (data.total === 1 ? ' risultato' : ' risultati');
+
+  if (!data.rows.length) {
+    $('results').innerHTML = '<div class="empty">Nessun prodotto trovato.</div>';
+    return;
+  }
+
+  $('results').innerHTML = data.rows.map(item => {
+    const best = item.isCheapest;
+
+    const uses = [
+      ['Uso', item.uso1],
+      ['Uso 2', item.uso2],
+      ['Uso 3', item.uso3]
+    ]
+    .filter(x => x[1])
+    .map(x =>
+      '<span class="chip"><b>' + esc(x[0]) +
+      ':</b> ' + esc(x[1]) + '</span>'
+    )
+    .join('');
+
+    return '<article class="item ' + (best ? 'best' : '') + '">' +
+      '<div>' +
+        '<div class="prod">' + esc(item.prodotto || 'Prodotto senza nome') + '</div>' +
+        '<div class="supplier">Fornitore: ' + esc(item.fornitore || 'Non indicato') + '</div>' +
+        (best ? '<span class="best-tag">PREZZO PIÙ BASSO</span>' : '') +
+      '</div>' +
+
+      '<div class="prices">' +
+        '<div class="pricebox">' +
+          '<div class="price-label">Prezzo IVA esclusa</div>' +
+          '<div class="price">' + esc(item.nettoDisplay || 'Non disponibile') + '</div>' +
+        '</div>' +
+        '<div class="pricebox">' +
+          '<div class="price-label">Prezzo IVA inclusa</div>' +
+          '<div class="price">' + esc(item.lordoDisplay || 'Non disponibile') + '</div>' +
+        '</div>' +
+      '</div>' +
+
+      (uses ? '<div class="uses">' + uses + '</div>' : '') +
+    '</article>';
+  }).join('');
+}
+
+function showError(message) {
+  $('error').textContent = message;
+  $('error').hidden = false;
+  $('status').textContent = 'Ricerca non completata.';
+  $('results').innerHTML = '<div class="empty">Correggi il collegamento e riprova.</div>';
+  $('searchBtn').disabled = false;
+}
+
+function resetSearch() {
+  clearTimeout(timer);
+
+  if (activeScript) {
+    activeScript.remove();
+    activeScript = null;
+  }
+
+  $('query').value = '';
+  $('field').value = 'Prodotto';
+  document.querySelector('input[name="sort"][value="netto"]').checked = true;
+
+  $('error').hidden = true;
+  $('status').textContent = 'Ricerca azzerata.';
+  $('count').textContent = '';
+  $('results').innerHTML = '<div class="empty">Inserisci un termine per cercare i prodotti.</div>';
+}
+
+function esc(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c]));
+}
 </script>
-</body></html>
+</body>
+</html>
