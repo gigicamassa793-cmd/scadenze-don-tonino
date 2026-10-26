@@ -1215,10 +1215,10 @@ async function caricaPrezziGoogle(force=false){
    if(payload.status==='error')throw new Error((payload.errors||[]).map(e=>e.detailed_message||e.message).join(' ' )||'Google Sheets non ha restituito i dati.');
    const table=payload.table;if(!table||!table.rows)throw new Error('Il foglio non contiene righe leggibili.');
    const cells=table.rows.map(r=>(r.c||[]).map(c=>c?(c.v!==null&&c.v!==undefined?c.v:(c.f??'')) :''));
-   // Le colonne del file CONTROLLO PREZZI sono A:I, nell'ordine mostrato dall'utente.
+   // Le colonne del file CONTROLLO PREZZI sono A:K, incluse le colonne aggiornate Formato vendita e Costo formato vendita.
    righeControlloPrezzi=cells.slice(1).map(r=>({
      prodotto:String(r[0]??'').trim(),fornitore:String(r[1]??'').trim(),uso:String(r[2]??'').trim(),uso2:String(r[3]??'').trim(),uso3:String(r[4]??'').trim(),
-     formato:String(r[5]??'').trim(),esclusa:numeroPrezzo(r[6]),iva:numeroPrezzo(r[7]),inclusa:numeroPrezzo(r[8])
+     formatoAcquisto:String(r[5]??'').trim(),esclusa:numeroPrezzo(r[6]),iva:numeroPrezzo(r[7]),inclusa:numeroPrezzo(r[8]),formatoVendita:String(r[9]??'').trim(),costoFormatoVendita:numeroPrezzo(r[10])
    })).filter(x=>x.prodotto||x.fornitore||x.uso||x.uso2||x.uso3);
    if(status)status.textContent='Aggiornato: '+righeControlloPrezzi.length+' prodotti letti dal foglio.';
    renderControlloPrezzi();
@@ -1246,7 +1246,7 @@ function renderControlloPrezzi(){
  if($('prezziConteggio'))$('prezziConteggio').textContent=arr.length+' risultati'+(q?' per “'+q+'”':'');
  if(!righeControlloPrezzi.length){el.innerHTML='<div class="empty">Nessun dato caricato. Premi AGGIORNA PREZZI.</div>';return;}
  if(!arr.length){el.innerHTML='<div class="empty">Nessun prodotto trovato. Prova un altro termine di ricerca.</div>';return;}
- el.innerHTML=arr.map((x,i)=>`<article class="price-card"><div class="price-head"><div><span class="price-rank">${i+1}° prezzo</span><div class="price-name">${esc(x.prodotto||'Prodotto senza nome')}</div><div class="price-meta"><b>Fornitore:</b> ${esc(x.fornitore||'—')}<br><b>Destinazioni:</b> ${[x.uso,x.uso2,x.uso3].filter(Boolean).map(esc).join(' · ')||'—'}<br><b>Pezzi/peso acquisto:</b> ${esc(x.formato||'—')}</div></div><div class="price-values"><div class="price-excl">${euroPrezzo(x.esclusa)} <span style="font-size:12px;font-weight:normal">IVA escl.</span></div><div class="price-incl">${euroPrezzo(x.inclusa)} IVA inclusa</div>${x.iva!==null?`<div class="small">IVA ${esc(x.iva)}%</div>`:''}</div></div></article>`).join('');
+ el.innerHTML=arr.map((x,i)=>`<article class="price-card"><div class="price-head"><div><span class="price-rank">${i+1}° prezzo</span><div class="price-name">${esc(x.prodotto||'Prodotto senza nome')}</div><div class="price-meta"><b>Fornitore:</b> ${esc(x.fornitore||'—')}<br><b>Destinazioni:</b> ${[x.uso,x.uso2,x.uso3].filter(Boolean).map(esc).join(' · ')||'—'}<br><b>Pezzi/peso acquisto:</b> ${esc(x.formatoAcquisto||'—')}<br><b>Formato vendita:</b> ${esc(x.formatoVendita||'—')}<br><b>Costo formato vendita:</b> ${euroPrezzo(x.costoFormatoVendita)}</div></div><div class="price-values"><div class="price-excl">${euroPrezzo(x.esclusa)} <span style="font-size:12px;font-weight:normal">IVA escl.</span></div><div class="price-incl">${euroPrezzo(x.inclusa)} IVA inclusa</div>${x.iva!==null?`<div class="small">IVA ${esc(x.iva)}%</div>`:''}</div></div></article>`).join('');
 }
 $('c_data').value=today();ricalcolaScadenzaUI();caricaDatabase();home();
 </script></body></html>
