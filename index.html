@@ -1,5 +1,3 @@
-`````
-````
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -22,6 +20,17 @@ th,td{font-size:13px}
 .actions select{width:100%;flex-basis:100%}
 .actions button{width:100%}
 }
+<style id="controlloPrezziStyles">
+#controlloPrezzi .price-card{border:1px solid #e8dfd5;border-radius:12px;padding:14px;margin:10px 0;background:#fff}
+#controlloPrezzi .price-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+#controlloPrezzi .price-name{font-weight:bold;font-size:17px;color:#8b1e1e;overflow-wrap:anywhere}
+#controlloPrezzi .price-values{text-align:right;white-space:nowrap}
+#controlloPrezzi .price-excl{font-size:19px;font-weight:bold;color:#2e7d32}
+#controlloPrezzi .price-incl{font-size:14px;margin-top:4px}
+#controlloPrezzi .price-meta{font-size:13px;color:#666;margin-top:8px;line-height:1.5;overflow-wrap:anywhere}
+#controlloPrezzi .price-rank{display:inline-block;background:#e7f3e8;color:#246b2b;padding:3px 8px;border-radius:14px;font-size:12px;font-weight:bold;margin-bottom:5px}
+@media(max-width:560px){#controlloPrezzi .price-head{flex-direction:column}#controlloPrezzi .price-values{text-align:left;white-space:normal}#controlloPrezzi .price-excl{font-size:20px}}
+</style>
 <style id="printStyles">
 @media print{
   body{background:#fff!important;color:#000!important}
@@ -122,6 +131,9 @@ th,td{font-size:13px}
 <button id="btnDocumentiFornitori" onclick="mostra('documentiFornitori')">
 🧾<br>Documenti fornitori
 </button>
+        <button id="btnControlloPrezzi" onclick="mostra('controlloPrezzi')">
+            💶<br>Controllo prezzi
+        </button>
 
 </div>
 </section>
@@ -226,6 +238,21 @@ th,td{font-size:13px}
 </section>
 <section id="ingredienti" class="section">
 <div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa ingredienti')">🖨️ Stampa ingredienti</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🥚 Ingredienti / allergeni</h2><div class="notice">Questa anagrafica può essere alimentata anche indipendentemente dall'inserimento dei prodotti.</div><div class="form-grid"><div class="field"><label>Nome ingrediente / allergene</label><input id="i_nome" placeholder="Es. Latte"></div><div class="field"><label>Tipo</label><select id="i_tipo"><option>ALLERGENE</option><option>INGREDIENTE</option></select></div></div><div class="actions"><button class="primary" onclick="salvaIngredienteAnagrafica()">AGGIUNGI</button></div><div class="searchWrap" style="margin-top:18px"><span class="searchIcon">🔍</span><input class="search" id="cercaIngredienti" oninput="renderIngredienti()" placeholder="Cerca ingrediente o allergene..."></div><div id="listaIngredienti"></div></div></section>
+<section id="controlloPrezzi" class="section">
+  <div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div>
+  <div class="box">
+    <h2>💶 Controllo prezzi di acquisto</h2>
+    <div class="notice">Ricerca nel foglio Google CONTROLLO PREZZI. I risultati sono ordinati dal prezzo IVA esclusa più basso al più alto.</div>
+    <div class="field"><label for="prezziQuery">Cerca prodotto, fornitore o destinazione d'uso</label><input id="prezziQuery" placeholder="Es. polpo, Varvaglione, vino rosso..." oninput="renderControlloPrezzi()"></div>
+    <div class="actions" style="margin-bottom:14px"><button class="primary" type="button" onclick="caricaPrezziGoogle(true)">↻ AGGIORNA PREZZI</button><span id="prezziStatus" class="small" role="status">Premi “Carica prezzi” per leggere il foglio.</span></div>
+    <div class="form-grid" style="margin-bottom:14px">
+      <div class="field"><label for="prezziOrdine">Ordina per</label><select id="prezziOrdine" onchange="renderControlloPrezzi()"><option value="excl">Prezzo IVA esclusa: crescente</option><option value="incl">Prezzo IVA inclusa: crescente</option><option value="nome">Prodotto: A–Z</option></select></div>
+      <div class="field"><label for="prezziCampo">Cerca in</label><select id="prezziCampo" onchange="renderControlloPrezzi()"><option value="tutti">Tutti i campi</option><option value="0">Prodotto</option><option value="1">Fornitore</option><option value="2">Destinazione uso</option><option value="3">Destinazione uso 2</option><option value="4">Destinazione uso 3</option></select></div>
+    </div>
+    <div id="prezziConteggio" class="small" style="margin-bottom:10px"></div>
+    <div id="listaControlloPrezzi"><div class="empty">Carica i prezzi per visualizzare i risultati.</div></div>
+  </div>
+</section>
 </div>
 
 <div id="editModal" class="modal"><div class="modalCard"><button class="closeX" onclick="chiudiModal()">×</button><h2>✏️ Modifica prodotto</h2><div id="editForm"></div><div class="actions"><button class="primary" onclick="salvaModifica()">SALVA MODIFICHE</button><button class="secondary" onclick="chiudiModal()">ANNULLA</button></div></div></div>
@@ -263,7 +290,7 @@ const $=id=>document.getElementById(id);function today(){return new Date().toISO
 const REGOLE=[['FRESCO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','BANCO +4°C',3,'preparazione'],['SCONGELATO','FRIGORIFERO +4°C',3,'scongelamento'],['ABBATTUTO +3°C','FRIGORIFERO +4°C',6,'abbattimento'],['ABBATTUTO -18°C','CONGELATORE -16°C',90,'abbattimento']];
 function addDays(s,n){if(!s)return'';const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}function calcolaScadenza(d){if(d.maker)return{date:d.maker,source:'PRODUTTORE'};const r=REGOLE.find(x=>x[0]===d.state&&x[1]===d.storage);if(!r)return{date:'',source:'NON CALCOLATA'};let base=d.carico;if(r[3]==='preparazione')base=d.preparazione||d.carico;if(r[3]==='scongelamento')base=d.scongelamento||d.carico;if(r[3]==='abbattimento')base=d.abbattimento||d.preparazione||d.carico;return{date:addDays(base,r[2]),source:'CALCOLATA +'+r[2]+' GG'}}
 function ricalcolaScadenzaUI(){}
-function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici',fornitori:'btnFornitori',documentiFornitori:'btnDocumentiFornitori'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');if(id==='ingredienti'){if($('i_nome'))$('i_nome').value='';if($('i_tipo'))$('i_tipo').value='ALLERGENE';}renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
+function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici',fornitori:'btnFornitori',documentiFornitori:'btnDocumentiFornitori',controlloPrezzi:'btnControlloPrezzi'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');if(id==='controlloPrezzi'&&!righeControlloPrezzi.length)caricaPrezziGoogle();if(id==='ingredienti'){if($('i_nome'))$('i_nome').value='';if($('i_tipo'))$('i_tipo').value='ALLERGENE';}renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
 const pickerSelected={pc:[],nuovo:[],edit:[]};
 function normalizeIngredientNames(arr){
   const result=[];const seen=new Set();
@@ -1168,8 +1195,58 @@ function renderDocumentiFornitori(){const el=$('listaDocumentiFornitori');if(!el
 function aggiornaDocumentiProdotto(prefix,selectedId=''){const sid=$(prefix+'_fornitore')?.value||'';const el=$(prefix+'_documento');if(!el)return;const old=selectedId||el.value;const arr=[...documentiFornitori].filter(d=>d.supplierId===sid).sort((a,b)=>String(b.documentDate||'').localeCompare(String(a.documentDate||''))||String(b.deliveryDate||'').localeCompare(String(a.deliveryDate||'')));el.innerHTML='<option value="">Nessun documento</option>'+arr.map(d=>`<option value="${esc(d.id)}" ${d.id===old?'selected':''}>${esc(d.type)} n. ${esc(d.number)} — doc. ${fmtDate(d.documentDate)} — consegna ${fmtDate(d.deliveryDate)}</option>`).join('');if(old&&!arr.some(d=>d.id===old))el.value='';}
 function applicaDocumentoProdotto(prefix){const id=$(prefix+'_documento')?.value||'';const d=documentiFornitori.find(x=>x.id===id);if(!d)return;if($(prefix+'_fornitore'))$(prefix+'_fornitore').value=d.supplierId||'';aggiornaDocumentiProdotto(prefix,id);if($(prefix+'_dataConsegna'))$(prefix+'_dataConsegna').value=d.deliveryDate||'';if($(prefix+'_tipoDocumento'))$(prefix+'_tipoDocumento').value=d.type||'';if($(prefix+'_numeroDocumento'))$(prefix+'_numeroDocumento').value=d.number||'';}
 
+// Controllo prezzi: lettura pubblica del foglio Google Sheets, senza scrivere o modificare il foglio.
+const CONTROLLO_PREZZI_SHEET_ID='155XPy4VwDck5aKwEgRw3hOOa1yFKFIOFAdaOlmYpPzU';
+let righeControlloPrezzi=[];
+function numeroPrezzo(v){if(typeof v==='number')return v;let s=String(v??'').trim().replace(/[€\s]/g,'');if(!s)return null;if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');const n=Number(s);return Number.isFinite(n)?n:null;}
+function euroPrezzo(v){return v===null||v===undefined||v===''?'—':'€ '+Number(v).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:4});}
+async function caricaPrezziGoogle(force=false){
+ const status=$('prezziStatus'),target=$('listaControlloPrezzi');
+ if(status)status.textContent='Lettura del foglio Google in corso…';
+ if(target)target.innerHTML='<div class="empty">Caricamento prezzi…</div>';
+ try{
+   const url='https://docs.google.com/spreadsheets/d/'+CONTROLLO_PREZZI_SHEET_ID+'/gviz/tq?tqx=out:json';
+   const response=await fetch(url,{method:'GET',cache:force?'no-store':'default'});
+   if(!response.ok)throw new Error('Google Sheets ha risposto HTTP '+response.status);
+   const raw=await response.text();
+   const match=raw.match(/google\.visualization\.Query\.setResponse\((\{[\s\S]*\})\);?\s*$/);
+   if(!match)throw new Error('Risposta non leggibile. Verifica che il foglio sia condiviso con “Chiunque abbia il link – Visualizzatore”.');
+   const payload=JSON.parse(match[1]);
+   if(payload.status==='error')throw new Error((payload.errors||[]).map(e=>e.detailed_message||e.message).join(' ' )||'Google Sheets non ha restituito i dati.');
+   const table=payload.table;if(!table||!table.rows)throw new Error('Il foglio non contiene righe leggibili.');
+   const cells=table.rows.map(r=>(r.c||[]).map(c=>c?(c.v!==null&&c.v!==undefined?c.v:(c.f??'')) :''));
+   // Le colonne del file CONTROLLO PREZZI sono A:I, nell'ordine mostrato dall'utente.
+   righeControlloPrezzi=cells.slice(1).map(r=>({
+     prodotto:String(r[0]??'').trim(),fornitore:String(r[1]??'').trim(),uso:String(r[2]??'').trim(),uso2:String(r[3]??'').trim(),uso3:String(r[4]??'').trim(),
+     formato:String(r[5]??'').trim(),esclusa:numeroPrezzo(r[6]),iva:numeroPrezzo(r[7]),inclusa:numeroPrezzo(r[8])
+   })).filter(x=>x.prodotto||x.fornitore||x.uso||x.uso2||x.uso3);
+   if(status)status.textContent='Aggiornato: '+righeControlloPrezzi.length+' prodotti letti dal foglio.';
+   renderControlloPrezzi();
+ }catch(err){
+   console.error('Errore lettura CONTROLLO PREZZI:',err);
+   if(status)status.textContent='Impossibile leggere il foglio: '+err.message;
+   if(target)target.innerHTML='<div class="notice">Non riesco a leggere il foglio da questa pagina. Verifica la condivisione “Chiunque abbia il link – Visualizzatore”. Se è già attiva, potrebbe essere necessario collegare il foglio tramite Google Apps Script.</div>';
+ }
+}
+function renderControlloPrezzi(){
+ const el=$('listaControlloPrezzi');if(!el)return;
+ const q=String($('prezziQuery')?.value||'').trim().toLocaleLowerCase('it');
+ const campo=$('prezziCampo')?.value||'tutti';const ordine=$('prezziOrdine')?.value||'excl';
+ let arr=righeControlloPrezzi.filter(x=>{
+   const fields=[x.prodotto,x.fornitore,x.uso,x.uso2,x.uso3];
+   const values=campo==='tutti'?fields:[fields[Number(campo)]];
+   return !q||values.some(v=>String(v||'').toLocaleLowerCase('it').includes(q));
+ });
+ arr.sort((a,b)=>{
+   if(ordine==='nome')return a.prodotto.localeCompare(b.prodotto,'it');
+   const av=ordine==='incl'?a.inclusa:a.esclusa,bv=ordine==='incl'?b.inclusa:b.esclusa;
+   if(av===null&&bv===null)return a.prodotto.localeCompare(b.prodotto,'it');if(av===null)return 1;if(bv===null)return -1;
+   return av-bv||a.prodotto.localeCompare(b.prodotto,'it');
+ });
+ if($('prezziConteggio'))$('prezziConteggio').textContent=arr.length+' risultati'+(q?' per “'+q+'”':'');
+ if(!righeControlloPrezzi.length){el.innerHTML='<div class="empty">Nessun dato caricato. Premi AGGIORNA PREZZI.</div>';return;}
+ if(!arr.length){el.innerHTML='<div class="empty">Nessun prodotto trovato. Prova un altro termine di ricerca.</div>';return;}
+ el.innerHTML=arr.map((x,i)=>`<article class="price-card"><div class="price-head"><div><span class="price-rank">${i+1}° prezzo</span><div class="price-name">${esc(x.prodotto||'Prodotto senza nome')}</div><div class="price-meta"><b>Fornitore:</b> ${esc(x.fornitore||'—')}<br><b>Destinazioni:</b> ${[x.uso,x.uso2,x.uso3].filter(Boolean).map(esc).join(' · ')||'—'}<br><b>Pezzi/peso acquisto:</b> ${esc(x.formato||'—')}</div></div><div class="price-values"><div class="price-excl">${euroPrezzo(x.esclusa)} <span style="font-size:12px;font-weight:normal">IVA escl.</span></div><div class="price-incl">${euroPrezzo(x.inclusa)} IVA inclusa</div>${x.iva!==null?`<div class="small">IVA ${esc(x.iva)}%</div>`:''}</div></div></article>`).join('');
+}
 $('c_data').value=today();ricalcolaScadenzaUI();caricaDatabase();home();
 </script></body></html>
-```
-````
-`````
