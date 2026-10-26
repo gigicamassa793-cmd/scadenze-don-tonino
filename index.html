@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="theme-color" content="#8b1e1e">
-<title>Scadenze Don Tonino</title>
+<title>Scadenze Don Tonino - Acquisti e prezzi</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f1eb;color:#333}header{background:#8b1e1e;color:#fff;padding:18px 20px;text-align:center;box-shadow:0 3px 10px #0002;position:sticky;top:0;z-index:20}header h1{margin:0;font-size:26px}header p{margin:5px 0 0;font-size:14px}.container{max-width:1250px;margin:auto;padding:20px}.dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.card,.box{background:#fff;border-radius:16px;box-shadow:0 3px 12px #0001}.card{padding:18px;text-align:center;cursor:pointer}.card:hover{transform:translateY(-1px)}.number{font-size:31px;font-weight:bold;color:#8b1e1e}.label{margin-top:5px}.menu{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}.menu button,.homeBtn{border:0;border-radius:12px;padding:14px 7px;background:#fff;color:#8b1e1e;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px #0001}.menu button.active,.menu button:hover,.homeBtn:hover{background:#8b1e1e;color:#fff}.section{display:none}.section.active{display:block}.box{padding:22px;margin-bottom:20px}.box h2{margin-top:0;color:#8b1e1e}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field{display:flex;flex-direction:column}.field label{font-weight:bold;font-size:14px;margin-bottom:6px}.field input,.field select,.field textarea{padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:#fff}.field textarea{min-height:75px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
 .actions select{flex:1;min-width:0;width:100%;touch-action:manipulation}.primary,.secondary,.dangerBtn,.editBtn,.smallBtn{border:0;border-radius:10px;padding:11px 15px;font-size:14px;font-weight:bold;cursor:pointer}.primary{background:#8b1e1e;color:#fff}.secondary{background:#777;color:#fff}.dangerBtn{background:#c62828;color:#fff}.editBtn{background:#1976d2;color:#fff}.smallBtn{background:#eee;color:#333}.tableWrap{overflow-x:auto}table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;border-bottom:1px solid #eee;text-align:left;vertical-align:top}th{color:#8b1e1e}.warning{color:#d67b00;font-weight:bold}.danger{color:#c62828;font-weight:bold}.ok{color:#2e7d32;font-weight:bold}.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#eee;font-size:12px;font-weight:bold}.empty{text-align:center;padding:30px;color:#777}.notice{padding:12px 14px;border-radius:10px;background:#f7f0e6;margin-bottom:15px}.searchWrap{position:relative;margin-bottom:15px}.searchIcon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:18px;pointer-events:none}.search{width:100%;padding:12px 12px 12px 40px;border:1px solid #ccc;border-radius:9px;font-size:16px;margin-bottom:15px}.small{font-size:12px;color:#666}.ingredient-summary{max-width:100%;width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.45;margin-top:6px}.ingredient-summary b{white-space:nowrap}.escbar{display:flex;justify-content:flex-end;margin-bottom:10px}.subbox{border:1px solid #e5ded4;border-radius:12px;padding:15px;margin-top:15px;background:#fcfaf7}.subbox h3{margin:0 0 12px;color:#8b1e1e}.row3{display:grid;grid-template-columns:2fr 1fr auto;gap:10px;align-items:end;margin-bottom:10px}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:100;padding:15px}.modal.active{display:flex}.modalCard{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow:auto;padding:22px}.modalCard h2{margin-top:0;color:#8b1e1e}.closeX{float:right;border:0;background:#eee;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px}.chip{display:inline-block;background:#f1e5d8;border-radius:15px;padding:5px 9px;margin:3px;font-size:12px}.homeText{background:#fff;border-radius:16px;padding:22px;box-shadow:0 3px 12px #0001;margin-bottom:20px}.hidden{display:none!important}
@@ -46,6 +46,7 @@ th,td{font-size:13px}
 }
 .print-title{display:none}
 .supplier-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.supplier-grid .full{grid-column:1/-1}@media(max-width:560px){.supplier-grid{grid-template-columns:1fr}.supplier-grid .full{grid-column:auto}}.ingredient-picker{display:block}.ingredient-dropdown{position:relative;width:100%}.ingredient-dropdown-toggle{width:100%;padding:12px;border:1px solid #ccc;border-radius:9px;font-size:16px;background:#fff;text-align:left;color:#333;min-height:46px;cursor:pointer}.ingredient-dropdown-panel{display:block;border:1px solid #d7cec3;border-radius:10px;background:#fff;margin-top:7px;padding:10px;max-height:260px;overflow-y:auto;box-shadow:0 4px 12px #00000012}.ingredient-dropdown-panel.hidden{display:none!important}.ingredient-option{display:flex;align-items:center;gap:10px;padding:9px 6px;border-bottom:1px solid #f0ebe5;cursor:pointer;font-size:15px}.ingredient-option:last-child{border-bottom:0}.ingredient-option input{width:20px;height:20px;flex:0 0 auto;accent-color:#8b1e1e}.ingredient-option small{color:#777;margin-left:auto}.ingredient-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.ingredient-chip{display:inline-flex;align-items:center;gap:8px;background:#f1e5d8;border-radius:18px;padding:7px 10px;font-size:14px}.ingredient-chip button{border:0;border-radius:50%;width:22px;height:22px;background:#8b1e1e;color:#fff;font-weight:bold;cursor:pointer}.ingredient-summary{font-size:12px;color:#555;margin-top:5px;line-height:1.4}textarea[readonly]{background:#f8f5f0!important;min-height:58px!important}
+#datiAcquistoBox{border:2px solid #e3c58d;background:#fffaf1}#datiAcquistoBox h3{color:#8b1e1e}
 </style>
 
 </head>
@@ -61,7 +62,7 @@ th,td{font-size:13px}
 
 <div class="card" onclick="mostra('carica')">
 <div class="number">📦</div>
-<div class="label">NUOVO PRODOTTO</div>
+<div class="label">NUOVO ACQUISTO</div>
 </div>
 
 <div class="card" onclick="filtraConservazione('')">
@@ -134,36 +135,50 @@ th,td{font-size:13px}
         <button id="btnControlloPrezzi" onclick="mostra('controlloPrezzi')">
             💶<br>Controllo prezzi
         </button>
+        <button id="btnStoricoAcquisti" onclick="mostra('storicoAcquisti')">🧾<br>Storico acquisti</button>
 
 </div>
 </section>
 
-<section id="carica" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📦 Nuovo prodotto / carico</h2>
+<section id="carica" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>📦 NUOVO ACQUISTO</h2>
 
-<div class="subbox"><h3>📚 Seleziona dal catalogo Prodotti Classici</h3><div class="notice">Il nome e gli ingredienti del modello verranno copiati nel nuovo carico. Lotto, quantità e date si inseriscono qui sotto.</div><div class="actions"><select id="c_classico" onchange="applicaClassicoNuovo()"><option value="">Seleziona prodotto classico...</option></select><button class="secondary" type="button" onclick="applicaClassicoNuovo()">CARICA MODELLO</button></div></div>
+<div class="subbox"><h3>📚 Seleziona dal catalogo Prodotti Classici</h3><div class="notice">Il nome, le destinazioni, l’IVA, il formato di vendita e il prezzo di vendita vengono proposti dal modello. La quantità acquistata si inserisce ogni volta e alimenta lo Storico acquisti.</div><div class="actions"><select id="c_classico" onchange="applicaClassicoNuovo()"><option value="">Seleziona prodotto classico...</option></select><button class="secondary" type="button" onclick="applicaClassicoNuovo()">CARICA MODELLO</button></div></div>
 <div class="form-grid">
 <div class="field"><label>Nome prodotto *</label><input id="c_nome" list="listaNomiProdotti" placeholder="Es. Torta crema">
 <datalist id="listaNomiProdotti"></datalist></div><div class="field"><label>Lotto</label><input id="c_lotto" placeholder="Facoltativo"></div>
 <div class="field"><label>Fornitore (facoltativo)</label><select id="c_fornitore" onchange="aggiornaDocumentiProdotto('c')"><option value="">Produzione propria / nessun fornitore</option></select></div>
 <div class="field"><label>Documento fornitore (facoltativo)</label><select id="c_documento" onchange="applicaDocumentoProdotto('c')"><option value="">Nessun documento</option></select></div>
-<div class="field"><label>Data consegna</label><input id="c_dataConsegna" type="date"></div>
+<div class="field"><label>Data ingresso</label><input id="c_dataConsegna" type="date"></div>
 <div class="field"><label>Tipo documento</label><select id="c_tipoDocumento"><option value="">Nessuno</option><option>Fattura</option><option>DDT</option></select></div>
 <div class="field"><label>Numero documento</label><input id="c_numeroDocumento" placeholder="Numero fattura o DDT"></div>
 <div class="field"><label>Stato</label><select id="c_stato" onchange="ricalcolaScadenzaUI()"><option>FRESCO</option><option>COTTO</option><option>SCONGELATO</option><option>ABBATTUTO +3°C</option><option>ABBATTUTO -18°C</option></select></div>
 <div class="field"><label>Conservazione</label><select id="c_storage" onchange="ricalcolaScadenzaUI()"><option>FRIGORIFERO +4°C</option><option>BANCO +4°C</option><option>CONGELATORE -16°C</option><option>POZZETTO -16°C</option><option>DISPENSA</option><option>SCAFFALI</option></select></div>
-<div class="field"><label>Data carico / ingresso</label><input id="c_data" type="date" onchange="ricalcolaScadenzaUI()"></div><div class="field"><label>Scadenza produttore</label><input id="c_scadenzaProduttore" type="date" onchange="ricalcolaScadenzaUI()"></div>
+<div class="field"><label>Scadenza produttore</label><input id="c_scadenzaProduttore" type="date" onchange="ricalcolaScadenzaUI()"></div>
 <div class="field"><label>Data preparazione</label><input id="c_preparazione" type="date" onchange="ricalcolaScadenzaUI()"></div><div class="field"><label>Data abbattimento</label><input id="c_abbattimento" type="date" onchange="ricalcolaScadenzaUI()"></div>
 <div class="field"><label>Data scongelamento / ingresso frigo</label><input id="c_scongelamento" type="date" onchange="ricalcolaScadenzaUI()"></div><div class="field"><label>Scadenza</label><input id="c_scadenza" type="date"></div>
 <div class="field"><label>Formato</label><select id="c_formato"><option>CONFEZIONE</option><option>VASSOIO</option><option>VASCHETTA 6 PORZIONI</option><option>VASCHETTA 2 PORZIONI</option><option>VASCHETTA 1 PORZIONE</option><option>CARTONE</option><option>SFUSO</option></select></div>
-<div class="field"><label>Quantità *</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0"></div><div class="field"><label>Unità</label><select id="c_unit"><option>PZ</option><option>KG</option><option>G</option><option>L</option><option>ML</option></select></div>
+<div class="field"><label>Quantità acquistata *</label><input id="c_qty" type="number" min="0.01" step="0.01" placeholder="0"></div><div class="field"><label>Unità</label><select id="c_unit" onchange="ricalcolaEconomiaAcquisto()"><option>PZ</option><option>KG</option><option>G</option><option>L</option><option>ML</option></select></div>
 </div>
+<div class="subbox" id="datiAcquistoBox"><h3>💶 Dati acquisto e vendita</h3><div class="notice">I dati di acquisto possono essere precompilati dal foglio CONTROLLO PREZZI quando il prodotto classico o la destinazione d’uso corrispondono. Puoi completare o correggere i valori prima di salvare.</div>
+<div class="form-grid">
+<div class="field"><label>Destinazione uso</label><input id="c_destinazioneUso" placeholder="Da prodotto classico"></div>
+<div class="field"><label>Destinazione uso 2</label><input id="c_destinazioneUso2" placeholder="Da prodotto classico"></div>
+<div class="field"><label>Prezzo riferito a quantità</label><input id="c_pzPeso" type="text" inputmode="decimal" placeholder="Es. prezzo per 1 kg, 1 L o 1 Pz"></div>
+<div class="field"><label>Prezzo acquisto IVA esclusa (€ per unità di acquisto)</label><input id="c_prezzoAcq" type="number" min="0" step="0.0001" placeholder="0,00" oninput="ricalcolaEconomiaAcquisto()"></div>
+<div class="field"><label>IVA (%)</label><input id="c_ivaAcq" type="number" min="0" step="0.01" placeholder="22" oninput="ricalcolaEconomiaAcquisto()"></div>
+<div class="field"><label>Formato vendita — quantità (da modello, modificabile)</label><input id="c_formatoVendita" type="number" min="0.0001" step="0.0001" placeholder="Es. 250" oninput="ricalcolaEconomiaAcquisto()"></div><div class="field"><label>Formato vendita — unità</label><select id="c_formatoUnita" onchange="ricalcolaEconomiaAcquisto()"><option value="g">g</option><option value="kg">kg</option><option value="ml">ml</option><option value="L">L</option><option value="Pz">Pz</option></select></div>
+<div class="field"><label>Costo formato vendita (€)</label><input id="c_costoFormatoVendita" type="number" min="0" step="0.0001" placeholder="0,00" oninput="ricalcolaEconomiaAcquisto()"></div>
+<div class="field"><label>Prezzo di vendita (€)</label><input id="c_prezzoVendita" type="number" min="0" step="0.01" placeholder="Inserisci prezzo" oninput="ricalcolaEconomiaAcquisto()"></div>
+<div class="field"><label>Differenza (€)</label><input id="c_differenza" readonly placeholder="Calcolata automaticamente"></div>
+<div class="field"><label>Margine (%)</label><input id="c_margine" readonly placeholder="Calcolato automaticamente"></div>
+</div></div>
 <div class="subbox"><h3>🥚 Ingredienti / allergeni</h3><div class="notice">Apri una sola volta l'elenco e spunta tutti gli ingredienti della preparazione. Puoi cercarli e selezionarne quanti ne servono; il riepilogo si aggiorna automaticamente.</div><div id="ingredientiNuovo"><div class="ingredient-picker">
   <div class="field"><label for="nuovo_ingSearch">Filtra ingredienti</label><input id="nuovo_ingSearch" placeholder="Digita per trovare un ingrediente..." oninput="renderPickerOptions('nuovo')"></div>
   <div class="ingredient-dropdown"><button type="button" id="nuovo_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="false" onclick="togglePickerDropdown('nuovo')">☑️ Seleziona ingredienti</button><div id="nuovo_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
   <div id="nuovo_ingChips" class="ingredient-chips"></div><div class="actions" style="margin-top:10px"><button type="button" class="primary" onclick="confermaPicker('nuovo')">CONFERMA INGREDIENTI</button></div>
 </div></div><div class="field" style="margin-top:12px"><label>Riepilogo ingredienti selezionati</label><textarea id="c_ingredientiSintesi" readonly placeholder="Gli ingredienti selezionati appariranno qui, separati da virgole."></textarea></div></div><datalist id="ingredientList"></datalist>
 <div class="subbox"><h3>➖ Utilizza prodotti esistenti per questa preparazione</h3><div class="notice">Se, per esempio, la torta usa 30 pasticciotti su 100, alla conferma la giacenza diventa 70. Se utilizzi tutto, la giacenza va a zero e il movimento viene registrato come esaurito.</div><div id="utilizziNuovo"></div><button class="secondary" onclick="aggiungiUtilizzoRiga()">+ Utilizza prodotto esistente</button></div>
-<div class="actions"><button class="primary" onclick="caricaProdotto()">SALVA PRODOTTO</button></div></div></section>
+<div class="actions"><button class="primary" onclick="caricaProdotto()">REGISTRA ACQUISTO</button></div></div></section>
 
 
 <section id="fornitori" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🏢 Elenco fornitori</h2><div class="notice">Anagrafica aggiornabile. I prodotti di produzione propria possono rimanere senza fornitore.</div><div class="supplier-grid"><div class="field"><label>Nome *</label><input id="f_nome" placeholder="Ragione sociale / nome"></div><div class="field"><label>Indirizzo</label><input id="f_indirizzo" placeholder="Via, numero, città"></div><div class="field"><label>Partita IVA</label><input id="f_piva" placeholder="Partita IVA"></div><div class="field"><label>Telefono</label><input id="f_telefono" type="tel" placeholder="Telefono"></div><div class="field full"><label>Mail</label><input id="f_mail" type="email" placeholder="email@fornitore.it"></div></div><div class="actions"><button class="primary" onclick="salvaFornitore()">SALVA FORNITORE</button><button class="secondary" onclick="pulisciFornitoreForm()">NUOVO / ANNULLA</button></div><div class="searchWrap" style="margin-top:18px"><span class="searchIcon">🔍</span><input id="cercaFornitori" class="search" placeholder="Cerca fornitore..." oninput="renderFornitori()"></div><div id="listaFornitori"></div></div></section>
@@ -223,6 +238,15 @@ th,td{font-size:13px}
 <div class="subbox">
 <h3 id="titoloClassico">➕ Nuovo prodotto classico</h3>
 <div class="field"><label>Nome prodotto classico *</label><input id="pc_nome" placeholder="Es. Pasticciotto crema"></div>
+<div class="form-grid" style="margin-top:12px">
+<div class="field"><label>Destinazione uso</label><select id="pc_uso"><option value="Materia prima">Materia prima</option><option value="Costi di produzione">Costi di produzione</option></select></div>
+<div class="field"><label>Destinazione uso 2</label><input id="pc_uso2" list="pc_usi2Lista" placeholder="Scegli o inserisci una destinazione"><datalist id="pc_usi2Lista"></datalist></div>
+<div class="field"><label>Unità prezzo acquisto</label><select id="pc_unitaAcquisto"><option value="kg">kg</option><option value="L">litro (L)</option><option value="Pz">pezzo (Pz)</option></select></div>
+<div class="field"><label>IVA predefinita (%)</label><input id="pc_iva" type="number" min="0" step="0.01" placeholder="Es. 10"></div>
+<div class="field"><label>Formato vendita — quantità</label><input id="pc_formatoQta" type="number" min="0.0001" step="0.0001" placeholder="Es. 250"></div>
+<div class="field"><label>Formato vendita — unità</label><select id="pc_formatoUnita"><option value="g">grammi (g)</option><option value="kg">kg</option><option value="ml">millilitri (ml)</option><option value="L">litro (L)</option><option value="Pz">pezzo (Pz)</option></select></div>
+<div class="field"><label>Prezzo di vendita (€)</label><input id="pc_prezzoVendita" type="number" min="0" step="0.01" placeholder="Prezzo al pubblico"></div>
+</div><div class="notice" id="pc_riepilogoCosti">I costi minimo e ultimo acquisto saranno calcolati dallo storico.</div>
 <div style="margin-top:12px"><div class="ingredient-picker">
   <div class="field"><label for="pc_ingSearch">Filtra ingredienti</label><input id="pc_ingSearch" placeholder="Digita per trovare un ingrediente..." oninput="renderPickerOptions('pc')"></div>
   <div class="ingredient-dropdown"><button type="button" id="pc_ingToggle" class="ingredient-dropdown-toggle" aria-expanded="false" onclick="togglePickerDropdown('pc')">☑️ Seleziona ingredienti</button><div id="pc_ingOptions" class="ingredient-dropdown-panel hidden"></div></div>
@@ -236,6 +260,7 @@ th,td{font-size:13px}
 <div class="subbox"><h3>Prodotti classici registrati</h3><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="pc_cerca" oninput="renderListaProdottiClassici()" placeholder="Cerca prodotto classico..."></div><div id="pc_lista"></div></div>
 </div>
 </section>
+<section id="storicoAcquisti" class="section"><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🧾 Storico acquisti</h2><div class="notice">Ogni riga riporta la quantità acquistata, l’unità, il fornitore e il prezzo registrato. I dati provengono dai nuovi acquisti salvati in questa app.</div><div class="searchWrap"><span class="searchIcon">🔍</span><input class="search" id="storicoCerca" oninput="renderStoricoAcquisti()" placeholder="Cerca prodotto o fornitore..."></div><div id="storicoRiepilogo"></div><div id="storicoLista"></div></div></section>
 <section id="ingredienti" class="section">
 <div class="no-print" style="margin:8px 0"><button type="button" onclick="stampaSezione('Stampa ingredienti')">🖨️ Stampa ingredienti</button></div><div class="escbar"><button class="homeBtn" onclick="home()">ESC ← HOME</button></div><div class="box"><h2>🥚 Ingredienti / allergeni</h2><div class="notice">Questa anagrafica può essere alimentata anche indipendentemente dall'inserimento dei prodotti.</div><div class="form-grid"><div class="field"><label>Nome ingrediente / allergene</label><input id="i_nome" placeholder="Es. Latte"></div><div class="field"><label>Tipo</label><select id="i_tipo"><option>ALLERGENE</option><option>INGREDIENTE</option></select></div></div><div class="actions"><button class="primary" onclick="salvaIngredienteAnagrafica()">AGGIUNGI</button></div><div class="searchWrap" style="margin-top:18px"><span class="searchIcon">🔍</span><input class="search" id="cercaIngredienti" oninput="renderIngredienti()" placeholder="Cerca ingrediente o allergene..."></div><div id="listaIngredienti"></div></div></section>
 <section id="controlloPrezzi" class="section">
@@ -271,8 +296,8 @@ th,td{font-size:13px}
   </div>
 </div>
 <script>
-const KEY_STOCK='donToninoStock_v2',KEY_MOV='donToninoMovimenti_v2',KEY_TRACE='donToninoTracciabilita_v2',KEY_ING='donToninoIngredienti_v1',KEY_CLASSICI='donToninoClassici_v1',KEY_FORNITORI='donToninoFornitori_v1',KEY_DOC_FORNITORI='donToninoDocumentiFornitori_v1';
-let stock=JSON.parse(localStorage.getItem(KEY_STOCK)||'[]'),movimenti=JSON.parse(localStorage.getItem(KEY_MOV)||'[]'),tracciabilita=JSON.parse(localStorage.getItem(KEY_TRACE)||'[]'),ingredienti=JSON.parse(localStorage.getItem(KEY_ING)||'[]'),prodottiClassici=JSON.parse(localStorage.getItem(KEY_CLASSICI)||'[]'),fornitori=JSON.parse(localStorage.getItem(KEY_FORNITORI)||'[]'),documentiFornitori=JSON.parse(localStorage.getItem(KEY_DOC_FORNITORI)||'[]');let editingId=null, editingClassicoId=null, editingFornitoreId=null, editingDocumentoFornitoreId=null;
+const KEY_STOCK='donToninoStock_v2',KEY_MOV='donToninoMovimenti_v2',KEY_TRACE='donToninoTracciabilita_v2',KEY_ING='donToninoIngredienti_v1',KEY_CLASSICI='donToninoClassici_v1',KEY_FORNITORI='donToninoFornitori_v1',KEY_DOC_FORNITORI='donToninoDocumentiFornitori_v1',KEY_ACQUISTI='donToninoStoricoAcquisti_v1';
+let stock=JSON.parse(localStorage.getItem(KEY_STOCK)||'[]'),movimenti=JSON.parse(localStorage.getItem(KEY_MOV)||'[]'),tracciabilita=JSON.parse(localStorage.getItem(KEY_TRACE)||'[]'),ingredienti=JSON.parse(localStorage.getItem(KEY_ING)||'[]'),prodottiClassici=JSON.parse(localStorage.getItem(KEY_CLASSICI)||'[]'),fornitori=JSON.parse(localStorage.getItem(KEY_FORNITORI)||'[]'),documentiFornitori=JSON.parse(localStorage.getItem(KEY_DOC_FORNITORI)||'[]'),storicoAcquisti=JSON.parse(localStorage.getItem(KEY_ACQUISTI)||'[]');let editingId=null, editingClassicoId=null, editingFornitoreId=null, editingDocumentoFornitoreId=null;
 const $=id=>document.getElementById(id);function today(){return new Date().toISOString().slice(0,10)}function uid(){return Date.now()+'_'+Math.random().toString(36).slice(2,8)}function saveAll(){
   localStorage.setItem(KEY_STOCK,JSON.stringify(stock));
   localStorage.setItem(KEY_MOV,JSON.stringify(movimenti));
@@ -281,16 +306,17 @@ const $=id=>document.getElementById(id);function today(){return new Date().toISO
   localStorage.setItem(KEY_CLASSICI,JSON.stringify(prodottiClassici));
   localStorage.setItem(KEY_FORNITORI,JSON.stringify(fornitori));
   localStorage.setItem(KEY_DOC_FORNITORI,JSON.stringify(documentiFornitori));
+  localStorage.setItem(KEY_ACQUISTI,JSON.stringify(storicoAcquisti));
   fetch('https://script.google.com/macros/s/AKfycbzXW257ueOM8fajq3Szcc0StlA651wJ9uf3b8DX7NXXK5adwkyyCdl8fWNCj2PdaUZC/exec',{
     method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify({products:stock,ingredients:ingredienti,classicalProducts:prodottiClassici,movements:movimenti,traceability:tracciabilita,suppliers:fornitori,supplierDocuments:documentiFornitori})
+    body:JSON.stringify({products:stock,ingredients:ingredienti,classicalProducts:prodottiClassici,movements:movimenti,traceability:tracciabilita,suppliers:fornitori,supplierDocuments:documentiFornitori,purchaseHistory:storicoAcquisti})
   }).catch(e=>console.error('Errore salvataggio database:',e));
 }function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function fmtDate(v){if(!v)return '-';const s=String(v).trim();let m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return m[3]+'/'+m[2]+'/'+m[1];m=s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);if(m)return s;const d=new Date(s);if(!Number.isNaN(d.getTime()))return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();return s}function daysTo(v){if(!v)return null;const a=new Date();a.setHours(0,0,0,0);return Math.ceil((new Date(v+'T00:00:00')-a)/86400000)}function expiryState(v){const d=daysTo(v);if(d===null)return{text:'N/D',cls:''};if(d<0)return{text:'SCADUTO',cls:'danger'};if(d<=3)return{text:'URGENTE',cls:'danger'};if(d<=7)return{text:'IN SCADENZA',cls:'warning'};return{text:'OK',cls:'ok'}}
 // Regole interne presenti nel registro Don Tonino: vanno validate nel piano HACCP aziendale.
 const REGOLE=[['FRESCO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','FRIGORIFERO +4°C',3,'preparazione'],['COTTO','BANCO +4°C',3,'preparazione'],['SCONGELATO','FRIGORIFERO +4°C',3,'scongelamento'],['ABBATTUTO +3°C','FRIGORIFERO +4°C',6,'abbattimento'],['ABBATTUTO -18°C','CONGELATORE -16°C',90,'abbattimento']];
 function addDays(s,n){if(!s)return'';const d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}function calcolaScadenza(d){if(d.maker)return{date:d.maker,source:'PRODUTTORE'};const r=REGOLE.find(x=>x[0]===d.state&&x[1]===d.storage);if(!r)return{date:'',source:'NON CALCOLATA'};let base=d.carico;if(r[3]==='preparazione')base=d.preparazione||d.carico;if(r[3]==='scongelamento')base=d.scongelamento||d.carico;if(r[3]==='abbattimento')base=d.abbattimento||d.preparazione||d.carico;return{date:addDays(base,r[2]),source:'CALCOLATA +'+r[2]+' GG'}}
 function ricalcolaScadenzaUI(){}
-function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici',fornitori:'btnFornitori',documentiFornitori:'btnDocumentiFornitori',controlloPrezzi:'btnControlloPrezzi'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');if(id==='controlloPrezzi'&&!righeControlloPrezzi.length)caricaPrezziGoogle();if(id==='ingredienti'){if($('i_nome'))$('i_nome').value='';if($('i_tipo'))$('i_tipo').value='ALLERGENE';}renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
+function home(){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$('home').classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'))}function mostra(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));const m={carica:'btnCarica',magazzino:'btnMagazzino',scadenze:'btnScadenze',movimenti:'btnMovimenti',tracciabilita:'btnTraccia',ingredienti:'btnIngredienti',prodottiClassici:'btnClassici',fornitori:'btnFornitori',documentiFornitori:'btnDocumentiFornitori',controlloPrezzi:'btnControlloPrezzi',storicoAcquisti:'btnStoricoAcquisti'};if(m[id] && $(m[id]))$(m[id]).classList.add('active');if(id==='controlloPrezzi'&&!righeControlloPrezzi.length)caricaPrezziGoogle();if(id==='ingredienti'){if($('i_nome'))$('i_nome').value='';if($('i_tipo'))$('i_tipo').value='ALLERGENE';}renderAll()}document.addEventListener('keydown',e=>{if(e.key==='Escape')home()});
 const pickerSelected={pc:[],nuovo:[],edit:[]};
 function normalizeIngredientNames(arr){
   const result=[];const seen=new Set();
@@ -377,7 +403,7 @@ function aggiungiIngredienteRiga(data={}){const current=getPickerIngredients('nu
 function getIngredients(){return getPickerIngredients('nuovo');}function ensureIngredients(a){a.forEach(x=>{if(!ingredienti.some(i=>i.name.toLowerCase()===x.name.toLowerCase()))ingredienti.push({id:uid(),name:x.name,type:x.type})})}
 function elencoProdottiDuplicabili(){const m={};stock.forEach(x=>{if(!x.name)return;const k=x.name.trim().toLowerCase();if(!m[k]||((x.ingredients||[]).length>(m[k].ingredients||[]).length))m[k]=x});return Object.values(m).sort((a,b)=>a.name.localeCompare(b.name,'it'))}
 function renderDuplica(){const el=$('c_duplica');if(!el)return;const arr=elencoProdottiDuplicabili();el.innerHTML='<option value="">Seleziona un prodotto...</option>'+arr.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}${x.lotto?' · Lotto '+esc(x.lotto):''}</option>`).join('')}
-function duplicaProdottoSelezionato(){const id=$('c_duplica').value;const x=stock.find(p=>String(p.id)===String(id));if(!x)return alert('Seleziona prima un prodotto.');$('c_nome').value=x.name||'';$('c_lotto').value='';$('c_stato').value=x.state||'FRESCO';$('c_storage').value=x.storage||'FRIGORIFERO +4°C';$('c_formato').value=x.format||'CONFEZIONE';$('c_unit').value=x.unit||'PZ';$('c_qty').value='';$('c_data').value=today();$('c_scadenzaProduttore').value='';$('c_preparazione').value='';$('c_abbattimento').value='';$('c_scongelamento').value='';inizializzaPicker('nuovo',x.ingredients||[]);$('utilizziNuovo').innerHTML='';ricalcolaScadenzaUI();alert('Dati e ingredienti copiati. Inserisci quantità, lotto e date necessarie, poi salva il nuovo prodotto.')}
+function duplicaProdottoSelezionato(){const id=$('c_duplica').value;const x=stock.find(p=>String(p.id)===String(id));if(!x)return alert('Seleziona prima un prodotto.');$('c_nome').value=x.name||'';$('c_lotto').value='';$('c_stato').value=x.state||'FRESCO';$('c_storage').value=x.storage||'FRIGORIFERO +4°C';$('c_formato').value=x.format||'CONFEZIONE';$('c_unit').value=x.unit||'PZ';$('c_qty').value='';if($('c_dataConsegna')&&!$('c_dataConsegna').value)$('c_dataConsegna').value=today();$('c_scadenzaProduttore').value='';$('c_preparazione').value='';$('c_abbattimento').value='';$('c_scongelamento').value='';inizializzaPicker('nuovo',x.ingredients||[]);$('utilizziNuovo').innerHTML='';ricalcolaScadenzaUI();alert('Dati e ingredienti copiati. Inserisci quantità, lotto e date necessarie, poi salva il nuovo prodotto.')}
 function aggiungiUtilizzoRiga(data={}){const row=document.createElement('div');row.className='row3';const opts=stock.filter(x=>Number(x.qty)>0).sort((a,b)=>a.name.localeCompare(b.name)).map(x=>`<option value="${x.id}" ${data.stockId===x.id?'selected':''}>${esc(x.name)}${x.lotto?' — Lotto '+esc(x.lotto):''} — ${x.qty} ${esc(x.unit)}</option>`).join('');row.innerHTML=`<div class="field"><label>Prodotto / lotto</label><select class="useStock" onchange="aggiornaUtilizzo(this)"><option value="">Seleziona...</option>${opts}</select><span class="small useAvail"></span></div><div class="field"><label>Quantità da utilizzare</label><input class="useQty" type="number" min="0.01" step="0.01" value="${data.qty||''}"></div><button class="dangerBtn" type="button" onclick="this.parentElement.remove()">Rimuovi</button>`;$('utilizziNuovo').appendChild(row);aggiornaUtilizzo(row.querySelector('.useStock'))}function aggiornaUtilizzo(sel){const row=sel.closest('.row3'),x=stock.find(p=>p.id===sel.value);row.querySelector('.useAvail').textContent=x?`Disponibile: ${x.qty} ${x.unit}`:'';if(x)row.querySelector('.useQty').max=x.qty}function getUtilizzi(){return [...document.querySelectorAll('#utilizziNuovo .row3')].map(r=>({stockId:r.querySelector('.useStock').value,qty:Number(r.querySelector('.useQty').value)})).filter(x=>x.stockId&&x.qty>0)}
 async function caricaProdotto(){
   const name=$('c_nome').value.trim();
@@ -408,7 +434,7 @@ async function caricaProdotto(){
   const d={
     state:$('c_stato').value,
     storage:$('c_storage').value,
-    carico:$('c_data').value||today(),
+    carico:$('c_dataConsegna').value||today(),
     maker:$('c_scadenzaProduttore').value,
     preparazione:$('c_preparazione').value,
     abbattimento:$('c_abbattimento').value,
@@ -442,11 +468,16 @@ async function caricaProdotto(){
     deliveryDate:$('c_dataConsegna').value||'',
     documentType:$('c_tipoDocumento').value||'',
     documentNumber:$('c_numeroDocumento').value.trim(),
+    destinazioneUso:$('c_destinazioneUso').value.trim(),destinazioneUso2:$('c_destinazioneUso2').value.trim(),
+    datiAcquisto:{pezziPeso:$('c_pzPeso').value.trim(),prezzoAcquisto:Number($('c_prezzoAcq').value)||0,iva:Number($('c_ivaAcq').value)||0,formatoVendita:$('c_formatoVendita').value.trim(),costoFormatoVendita:Number($('c_costoFormatoVendita').value)||0,prezzoVendita:Number($('c_prezzoVendita').value)||0,differenza:Number($('c_differenza').value)||0,margine:Number($('c_margine').value)||0},
 
     createdAt:new Date().toISOString()
   };
 
   stock.push(item);
+  // Registro separato e immutabile dello storico acquisti: quantità effettiva, fornitore e valori applicati a questo acquisto.
+  const prezzoStorico=Number($('c_prezzoAcq').value);
+  storicoAcquisti.unshift({id:uid(),productName:name,date:item.date||today(),supplier:item.supplierName||'Fornitore non specificato',quantity:qty,unit:item.unit||'',priceExcl:Number.isFinite(prezzoStorico)?prezzoStorico:null,vat:Number($('c_ivaAcq').value)||0,saleFormat:($('c_formatoVendita').value||'')+' '+($('c_formatoUnita').value||''),saleFormatCost:Number($('c_costoFormatoVendita').value)||0,salePrice:Number($('c_prezzoVendita').value)||0,unitPriceBasis:$('c_pzPeso').value||'',destinazioneUso:item.destinazioneUso||'',destinazioneUso2:item.destinazioneUso2||'',createdAt:new Date().toISOString()});
 
   movimenti.unshift({
     id:uid(),
@@ -534,7 +565,7 @@ function getIngredientiDaSelezione(selettore){
 }
 function renderIngredientiClassici(){renderPickerOptions('pc');renderPickerChips('pc');}
 function resetFormProdottoClassico(){
-  editingClassicoId=null;$('pc_nome').value='';$('pc_ingSearch').value='';
+  editingClassicoId=null;$('pc_nome').value='';$('pc_uso').value='Materia prima';$('pc_uso2').value='';$('pc_unitaAcquisto').value='kg';$('pc_iva').value='';$('pc_formatoQta').value='';$('pc_formatoUnita').value='g';$('pc_prezzoVendita').value='';$('pc_ingSearch').value='';
   $('titoloClassico').textContent='➕ Nuovo prodotto classico';inizializzaPicker('pc',[]);
 }
 function salvaProdottoClassico(){
@@ -542,13 +573,13 @@ function salvaProdottoClassico(){
   const ing=getPickerIngredients('pc');
   const duplicato=prodottiClassici.find(p=>p.name.trim().toLowerCase()===name.toLowerCase()&&String(p.id)!==String(editingClassicoId));
   if(duplicato)return alert('Esiste già un prodotto classico con questo nome.');
-  if(editingClassicoId){const p=prodottiClassici.find(p=>String(p.id)===String(editingClassicoId));if(p){p.name=name;p.ingredients=ing;p.updatedAt=new Date().toISOString();}}
-  else prodottiClassici.push({id:uid(),name,ingredients:ing,createdAt:new Date().toISOString()});
+  if(editingClassicoId){const p=prodottiClassici.find(p=>String(p.id)===String(editingClassicoId));if(p){p.name=name;p.ingredients=ing;p.uso=$('pc_uso').value.trim();p.uso2=$('pc_uso2').value.trim();p.unitaAcquisto=$('pc_unitaAcquisto').value;p.iva=$('pc_iva').value;p.formatoQta=$('pc_formatoQta').value;p.formatoUnita=$('pc_formatoUnita').value;p.prezzoVendita=$('pc_prezzoVendita').value;p.updatedAt=new Date().toISOString();}}
+  else prodottiClassici.push({id:uid(),name,ingredients:ing,uso:$('pc_uso').value.trim(),uso2:$('pc_uso2').value.trim(),unitaAcquisto:$('pc_unitaAcquisto').value,iva:$('pc_iva').value,formatoQta:$('pc_formatoQta').value,formatoUnita:$('pc_formatoUnita').value,prezzoVendita:$('pc_prezzoVendita').value,createdAt:new Date().toISOString()});
   saveAll();resetFormProdottoClassico();renderAll();alert('Prodotto classico salvato.');
 }
 function modificaProdottoClassico(id){
   const p=prodottiClassici.find(x=>String(x.id)===String(id));if(!p)return;
-  editingClassicoId=p.id;$('pc_nome').value=p.name||'';$('pc_ingSearch').value='';$('titoloClassico').textContent='✏️ Modifica prodotto classico';
+  editingClassicoId=p.id;$('pc_nome').value=p.name||'';$('pc_uso').value=p.uso||'Materia prima';$('pc_uso2').value=p.uso2||'';$('pc_unitaAcquisto').value=p.unitaAcquisto||'kg';$('pc_iva').value=p.iva??'';$('pc_formatoQta').value=p.formatoQta??'';$('pc_formatoUnita').value=p.formatoUnita||'g';$('pc_prezzoVendita').value=p.prezzoVendita??'';$('pc_ingSearch').value='';$('titoloClassico').textContent='✏️ Modifica prodotto classico';
   inizializzaPicker('pc',p.ingredients||[]);$('pc_nome').scrollIntoView({behavior:'smooth',block:'center'});
 }
 function eliminaProdottoClassico(id){
@@ -561,7 +592,7 @@ function renderListaProdottiClassici(){
   const el=$('pc_lista');if(!el)return;
   const q=($('pc_cerca')?.value||'').trim().toLowerCase();
   const arr=[...prodottiClassici].filter(p=>String(p.name||'').toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name,'it'));
-  el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Ingredienti</th><th>Azioni</th></tr></thead><tbody>'+arr.map(p=>`<tr><td><b>${esc(p.name)}</b></td><td>${(p.ingredients||[]).map(i=>esc(i.name)).join(', ')||'—'}</td><td><button class="editBtn" onclick="modificaProdottoClassico('${p.id}')">Modifica</button> <button class="dangerBtn" onclick="eliminaProdottoClassico('${p.id}')">Elimina</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun prodotto classico registrato.</div>';
+  el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Prodotto</th><th>Destinazione uso</th><th>Destinazione uso 2</th><th>Unità acquisto</th><th>IVA</th><th>Formato vendita</th><th>Prezzo vendita</th><th>Ingredienti</th><th>Azioni</th></tr></thead><tbody>'+arr.map(p=>{const stats=riepilogoAcquistiProdotto(p.name);return `<tr><td><b>${esc(p.name)}</b><br><span class="small">${stats.count} acquisti · quantità anno ${stats.qtyYear===null?'unità miste':stats.qtyYear} ${esc(stats.yearUnit)} · prezzo minimo ${stats.min?euroPrezzo(stats.min.priceExcl)+' ('+esc(stats.min.supplier||'—')+')':'—'} · ultimo prezzo ${stats.last&&stats.last.priceExcl!=null?euroPrezzo(stats.last.priceExcl)+' ('+esc(stats.last.supplier||'—')+')':'—'} · costo formato minimo ${stats.minCost?euroPrezzo(stats.minCost.saleFormatCost)+' ('+esc(stats.minCost.supplier||'—')+')':'—'} · ultimo costo formato ${stats.lastCost?euroPrezzo(stats.lastCost.saleFormatCost)+' ('+esc(stats.lastCost.supplier||'—')+')':'—'}</span></td><td>${esc(p.uso||'—')}</td><td>${esc(p.uso2||'—')}</td><td>${esc(p.unitaAcquisto||'kg')}</td><td>${p.iva!==''&&p.iva!=null?esc(p.iva)+'%':'—'}</td><td>${esc(p.formatoQta||'—')} ${esc(p.formatoUnita||'')}</td><td>${p.prezzoVendita?euroPrezzo(p.prezzoVendita):'—'}</td><td>${(p.ingredients||[]).map(i=>esc(i.name)).join(', ')||'—'}</td><td><button class="editBtn" onclick="modificaProdottoClassico('${p.id}')">Modifica</button> <button class="dangerBtn" onclick="eliminaProdottoClassico('${p.id}')">Elimina</button></td></tr>`}).join('')+'</tbody></table></div>':'<div class="empty">Nessun prodotto classico registrato.</div>';
 }
 function renderCatalogoClassici(){
   const sel=$('c_classico');
@@ -570,19 +601,19 @@ function renderCatalogoClassici(){
     sel.innerHTML='<option value="">Seleziona prodotto classico...</option>'+[...prodottiClassici].sort((a,b)=>a.name.localeCompare(b.name,'it')).map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
     if(prodottiClassici.some(p=>String(p.id)===String(val)))sel.value=val;
   }
-  renderIngredientiClassici();renderListaProdottiClassici();
+  renderIngredientiClassici();renderListaProdottiClassici();aggiornaDestinazioniUso2();renderStoricoAcquisti();
 }
 function applicaClassicoNuovo(){
   const p=prodottiClassici.find(x=>String(x.id)===String($('c_classico')?.value));if(!p)return alert('Seleziona prima un prodotto classico.');
-  $('c_nome').value=p.name||'';inizializzaPicker('nuovo',p.ingredients||[]);alert('Nome e ingredienti del prodotto classico copiati. Puoi completare lotto, date e quantità.');
+  $('c_nome').value=p.name||'';$('c_destinazioneUso').value=p.uso||'';$('c_destinazioneUso2').value=p.uso2||'';$('c_unit').value=String(p.unitaAcquisto||'kg').toUpperCase();$('c_ivaAcq').value=p.iva??$('c_ivaAcq').value;$('c_formatoVendita').value=p.formatoQta??$('c_formatoVendita').value;$('c_formatoUnita').value=p.formatoUnita||'g';$('c_prezzoVendita').value=p.prezzoVendita??$('c_prezzoVendita').value;inizializzaPicker('nuovo',p.ingredients||[]);precompilaDatiAcquisto(p);alert('Nome, destinazioni d’uso e ingredienti copiati. Puoi completare lotto, date, quantità e dati economici.');
 }
 function applicaClassicoModifica(){
   const p=prodottiClassici.find(x=>String(x.id)===String($('e_classico')?.value));if(!p)return;
   $('e_nome').value=p.name||'';inizializzaPicker('edit',p.ingredients||[]);
 }
 function resetNuovo(){
-  ['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza','c_dataConsegna','c_numeroDocumento'].forEach(id=>{if($(id))$(id).value='';});
-  $('c_data').value=today();
+  ['c_nome','c_lotto','c_qty','c_scadenzaProduttore','c_preparazione','c_abbattimento','c_scongelamento','c_scadenza','c_dataConsegna','c_numeroDocumento','c_destinazioneUso','c_destinazioneUso2','c_pzPeso','c_prezzoAcq','c_ivaAcq','c_formatoVendita','c_costoFormatoVendita','c_prezzoVendita','c_differenza','c_margine'].forEach(id=>{if($(id))$(id).value='';});
+  if($('c_dataConsegna')&&!$('c_dataConsegna').value)$('c_dataConsegna').value=today();
   $('c_stato').value='FRESCO';
   $('c_storage').value='FRIGORIFERO +4°C';
   $('c_classico').value='';
@@ -1109,6 +1140,7 @@ ingredienti=data.ingredients||[];
 if(Array.isArray(data.classicalProducts)) prodottiClassici=data.classicalProducts;
 if(Array.isArray(data.suppliers)) fornitori=data.suppliers;
 if(Array.isArray(data.supplierDocuments)) documentiFornitori=data.supplierDocuments;
+if(Array.isArray(data.purchaseHistory)) storicoAcquisti=data.purchaseHistory;
 movimenti=data.movements||[];
 tracciabilita=data.traceability||[];
 
@@ -1119,6 +1151,7 @@ localStorage.setItem(KEY_ING,JSON.stringify(ingredienti));
 localStorage.setItem(KEY_CLASSICI,JSON.stringify(prodottiClassici));
 localStorage.setItem(KEY_FORNITORI,JSON.stringify(fornitori));
 localStorage.setItem(KEY_DOC_FORNITORI,JSON.stringify(documentiFornitori));
+  localStorage.setItem(KEY_ACQUISTI,JSON.stringify(storicoAcquisti));
 
     renderAll();
   }catch(e){
@@ -1154,6 +1187,23 @@ function renderIngredientList(){
     .map(nome=>`<option value="${esc(nome)}"></option>`)
     .join('');
 }
+function euroPrezzo(v){const n=Number(v);return Number.isFinite(n)?n.toLocaleString('it-IT',{style:'currency',currency:'EUR'}):'—';}
+function riepilogoAcquistiProdotto(nome){
+ const arr=storicoAcquisti.filter(x=>String(x.productName||'').trim().toLocaleLowerCase('it')===String(nome||'').trim().toLocaleLowerCase('it'));
+ const valid=arr.filter(x=>x.priceExcl!==null&&x.priceExcl!==undefined&&x.priceExcl!==''&&Number.isFinite(Number(x.priceExcl)));
+ const min=valid.reduce((a,x)=>!a||Number(x.priceExcl)<Number(a.priceExcl)?x:a,null);
+ const last=arr.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))||String(b.createdAt||'').localeCompare(String(a.createdAt||'')))[0]||null;
+ const validCost=arr.filter(x=>x.saleFormatCost!==null&&x.saleFormatCost!==undefined&&x.saleFormatCost!==''&&Number.isFinite(Number(x.saleFormatCost)));
+ const minCost=validCost.reduce((a,x)=>!a||Number(x.saleFormatCost)<Number(a.saleFormatCost)?x:a,null);
+ const lastCost=last&&last.saleFormatCost!==null&&last.saleFormatCost!==undefined&&last.saleFormatCost!==''?last:null;
+ const anno=String(new Date().getFullYear());
+ const yearRows=arr.filter(x=>String(x.date||'').startsWith(anno));
+ const units=[...new Set(yearRows.map(x=>String(x.unit||'').toUpperCase()).filter(Boolean))];
+ const qtyYear=units.length<=1?yearRows.reduce((t,x)=>t+Number(x.quantity||0),0):null;
+ return {count:arr.length,min,last,minCost,lastCost,qtyYear,yearUnit:units.length===1?units[0]:(units.length?'unità miste':'')};
+}
+function aggiornaDestinazioniUso2(){const dl=$('pc_usi2Lista');if(!dl)return;const values=[...new Set(prodottiClassici.map(p=>String(p.uso2||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'it'));dl.innerHTML=values.map(v=>`<option value="${esc(v)}"></option>`).join('');}
+function renderStoricoAcquisti(){const el=$('storicoLista');if(!el)return;const q=String($('storicoCerca')?.value||'').trim().toLocaleLowerCase('it');const arr=storicoAcquisti.filter(x=>(String(x.productName||'')+' '+String(x.supplier||'')).toLocaleLowerCase('it').includes(q)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));const anno=String(new Date().getFullYear());const totale=storicoAcquisti.filter(x=>String(x.date||'').startsWith(anno)).length;if($('storicoRiepilogo'))$('storicoRiepilogo').innerHTML=`<div class="notice">Acquisti registrati: <b>${storicoAcquisti.length}</b> · Acquisti nel ${anno}: <b>${totale}</b></div>`;el.innerHTML=arr.length?'<div class="tableWrap"><table><thead><tr><th>Data</th><th>Prodotto</th><th>Fornitore</th><th>Quantità acquistata dal fornitore</th><th>Prezzo acquisto IVA esclusa (unità di acquisto)</th><th>IVA</th><th>Formato vendita</th><th>Costo formato</th></tr></thead><tbody>'+arr.map(x=>`<tr><td>${fmtDate(x.date)}</td><td><b>${esc(x.productName||'—')}</b></td><td>${esc(x.supplier||'Fornitore non specificato')}</td><td><b>${esc(x.quantity)}</b> ${esc(x.unit||'')}</td><td>${x.priceExcl==null?'—':euroPrezzo(x.priceExcl)}${x.unitPriceBasis?' / '+esc(x.unitPriceBasis):' / '+esc(x.unit||'unità')}</td><td>${esc(x.vat??0)}%</td><td>${esc(x.saleFormat||'—')}</td><td>${euroPrezzo(x.saleFormatCost)}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Nessun acquisto registrato'+(q?' corrispondente alla ricerca':'')+'. I nuovi acquisti salvati appariranno qui.</div>';}
 function renderAll(){
   renderDashboard();
   renderMagazzino();
@@ -1162,7 +1212,7 @@ function renderAll(){
   renderMovimenti();
   renderTracciabilita();
   renderIngredienti();
-  renderCatalogoClassici();
+  renderCatalogoClassici();renderStoricoAcquisti();
   renderDuplica();
   renderPickerOptions('pc');renderPickerChips('pc');renderPickerOptions('nuovo');renderPickerChips('nuovo');
   renderNomiProdotti();
@@ -1248,5 +1298,49 @@ function renderControlloPrezzi(){
  if(!arr.length){el.innerHTML='<div class="empty">Nessun prodotto trovato. Prova un altro termine di ricerca.</div>';return;}
  el.innerHTML=arr.map((x,i)=>`<article class="price-card"><div class="price-head"><div><span class="price-rank">${i+1}° prezzo</span><div class="price-name">${esc(x.prodotto||'Prodotto senza nome')}</div><div class="price-meta"><b>Fornitore:</b> ${esc(x.fornitore||'—')}<br><b>Destinazioni:</b> ${[x.uso,x.uso2,x.uso3].filter(Boolean).map(esc).join(' · ')||'—'}<br><b>Pezzi/peso acquisto:</b> ${esc(x.formatoAcquisto||'—')}<br><b>Formato vendita:</b> ${esc(x.formatoVendita||'—')}<br><b>Costo formato vendita:</b> ${euroPrezzo(x.costoFormatoVendita)}</div></div><div class="price-values"><div class="price-excl">${euroPrezzo(x.esclusa)} <span style="font-size:12px;font-weight:normal">IVA escl.</span></div><div class="price-incl">${euroPrezzo(x.inclusa)} IVA inclusa</div>${x.iva!==null?`<div class="small">IVA ${esc(x.iva)}%</div>`:''}</div></div></article>`).join('');
 }
-$('c_data').value=today();ricalcolaScadenzaUI();caricaDatabase();home();
+function ricalcolaEconomiaAcquisto(){
+ const prezzoRaw=$('c_prezzoAcq')?.value??'',ivaRaw=$('c_ivaAcq')?.value??'',formatoRaw=$('c_formatoVendita')?.value??'';
+ const prezzo=Number(prezzoRaw),iva=Number(ivaRaw)||0,formato=Number(formatoRaw);
+ const unitaAcq=String($('c_unit')?.value||'').toUpperCase(),unitaVendita=String($('c_formatoUnita')?.value||'');
+ let fattore=null;
+ // Fattore di conversione: quante unità di acquisto contiene il formato di vendita.
+ if(unitaAcq==='KG'&&unitaVendita==='g')fattore=formato/1000;
+ else if(unitaAcq==='KG'&&unitaVendita==='kg')fattore=formato;
+ else if(unitaAcq==='G'&&unitaVendita==='g')fattore=formato;
+ else if(unitaAcq==='G'&&unitaVendita==='kg')fattore=formato*1000;
+ else if(unitaAcq==='L'&&unitaVendita==='ml')fattore=formato/1000;
+ else if(unitaAcq==='L'&&unitaVendita==='L')fattore=formato;
+ else if(unitaAcq==='ML'&&unitaVendita==='ml')fattore=formato;
+ else if(unitaAcq==='ML'&&unitaVendita==='L')fattore=formato*1000;
+ else if(unitaAcq==='PZ'&&unitaVendita==='Pz')fattore=formato;
+ const costoValido=prezzoRaw!==''&&Number.isFinite(prezzo)&&prezzo>=0&&formatoRaw!==''&&Number.isFinite(formato)&&formato>0&&fattore!==null;
+ const costo=costoValido?prezzo*fattore*(1+iva/100):null;
+ if($('c_costoFormatoVendita'))$('c_costoFormatoVendita').value=costo===null?'':costo.toFixed(4);
+ const venditaRaw=$('c_prezzoVendita')?.value??'',vendita=Number(venditaRaw),validVendita=venditaRaw!==''&&Number.isFinite(vendita);
+ const diff=costo!==null&&validVendita?vendita-costo:null;
+ if($('c_differenza'))$('c_differenza').value=diff===null?'':diff.toFixed(2);
+ if($('c_margine'))$('c_margine').value=diff!==null&&vendita>0?(diff/vendita*100).toFixed(2)+'%':'';
+}
+function interpretaFormatoVendita(valore){
+ const s=String(valore??'').trim().replace(',', '.');
+ const m=s.match(/([0-9]+(?:\.[0-9]+)?)\s*(kg|g|gr|grammi|l|lt|litri|ml|pz|pezzi|pezzo)?/i);
+ if(!m)return {quantita:'',unita:''};
+ let unita=(m[2]||'').toLowerCase();
+ if(['gr','grammi'].includes(unita))unita='g';
+ if(['lt','litri'].includes(unita))unita='L';
+ if(unita==='l')unita='L';
+ if(['pezzi','pezzo'].includes(unita))unita='Pz';
+ if(unita==='kg'||unita==='g'||unita==='ml'||unita==='L'||unita==='Pz'){}else unita='';
+ return {quantita:m[1],unita};
+}
+function precompilaDatiAcquisto(classico){
+ if(!Array.isArray(righeControlloPrezzi)||!righeControlloPrezzi.length)return;
+ const norm=v=>String(v||'').trim().toLocaleLowerCase('it');
+ const name=norm(classico?.name),uso=norm(classico?.uso),uso2=norm(classico?.uso2);
+ let r=righeControlloPrezzi.find(x=>name&&norm(x.prodotto)===name);
+ if(!r)r=righeControlloPrezzi.find(x=>(uso&&norm(x.uso)===uso)||(uso2&&norm(x.uso2)===uso2)||(uso&&norm(x.uso2)===uso)||(uso2&&norm(x.uso)===uso2));
+ if(!r)return;
+ $('c_pzPeso').value=r.formatoAcquisto||'';$('c_prezzoAcq').value=r.esclusa??'';$('c_ivaAcq').value=r.iva??'';const fv=interpretaFormatoVendita(r.formatoVendita);if(fv.quantita)$('c_formatoVendita').value=fv.quantita;if(fv.unita)$('c_formatoUnita').value=fv.unita;if(r.costoFormatoVendita!==null&&r.costoFormatoVendita!==undefined)$('c_costoFormatoVendita').value=r.costoFormatoVendita;ricalcolaEconomiaAcquisto();
+}
+$('c_dataConsegna').value=today();$('pc_uso').value='Materia prima';$('c_formatoUnita').value='g';aggiornaDestinazioniUso2();ricalcolaScadenzaUI();caricaDatabase();home();
 </script></body></html>
